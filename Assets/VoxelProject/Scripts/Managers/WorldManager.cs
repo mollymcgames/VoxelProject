@@ -7,8 +7,12 @@ public class WorldManager : MonoBehaviour
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;
+    public VoxelCell[] sourceData;
 
-
+/*    public int widthX = 0;
+    public int heightY = 0;
+    public int depthZ = 0;
+*/
     public Container container;
 
     void Start()
@@ -23,12 +27,22 @@ public class WorldManager : MonoBehaviour
             _instance = this;
         }
 
+        sourceData = SourceDataLoader.LoadSourceData();
         WorldSettings = worldSettings;
+        WorldSettings.maxWidthX = SourceDataLoader.widthX;
+        WorldSettings.maxHeightY = SourceDataLoader.heightY;
+        WorldSettings.maxDepthZ = SourceDataLoader.depthZ;
+
         ComputeManager.Instance.Initialize(1);
         GameObject cont = new GameObject("Container");
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
         container.Initialize(worldMaterial, Vector3.zero);
+
+
+        /*        int widthX = SourceDataLoader.widthX;
+                int heightY = SourceDataLoader.heightY;
+                int depthZ = SourceDataLoader.depthZ;*/
 
         ComputeManager.Instance.GenerateVoxelData(ref container);
     }
@@ -52,4 +66,7 @@ public class WorldSettings
 {
     public int containerSize = 16;
     public int maxHeight = 128;
+    public int maxWidthX = 0;
+    public int maxDepthZ = 0;
+    public int maxHeightY = 0;
 }

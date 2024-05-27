@@ -15,21 +15,22 @@ public class IndexedArray<T> where T : struct
 
     [SerializeField]
     [HideInInspector]
-    private Vector2Int size;
+    private Vector3Int size;
 
     public IndexedArray()
     {
-        Create(WorldManager.WorldSettings.containerSize, WorldManager.WorldSettings.maxHeight);
+//        Create(WorldManager.WorldSettings.containerSize, WorldManager.WorldSettings.maxHeight);
+        Create(WorldManager.WorldSettings.maxWidthX*2, WorldManager.WorldSettings.maxHeightY*2, WorldManager.WorldSettings.maxDepthZ*2);
     }
 
-    public IndexedArray(int sizeX, int sizeY)
+    public IndexedArray(int sizeX, int sizeY, int sizeZ)
     {
-        Create(sizeX, sizeY);
+        Create(sizeX, sizeY, sizeZ);
     }
 
-    private void Create(int sizeX, int sizeY)
+    private void Create(int sizeX, int sizeY, int sizeZ)
     {
-        size = new Vector2Int(sizeX + 3, sizeY + 1);
+        size = new Vector3Int(sizeX + 3, sizeY + 1, sizeZ + 3);
         array = new T[Count];
         initialized = true;
     }
@@ -48,13 +49,14 @@ public class IndexedArray<T> where T : struct
 
         for (int x = 0; x < size.x; x++)
             for (int y = 0; y < size.y; y++)
-                for (int z = 0; z < size.x; z++)
+                for (int z = 0; z < size.z; z++)
+                //for (int z = 0; z < size.x; z++)
                     array[x + (y * size.x) + (z * size.x * size.y)] = default(T);
     }
 
     public int Count
     {
-        get { return size.x * size.y * size.x; }
+        get { return size.x * size.y * size.z; }
     }
 
     public T[] GetData
@@ -69,11 +71,12 @@ public class IndexedArray<T> where T : struct
     {
         get
         {
+            //coord.z < 0 || coord.z > size.x)
             if (coord.x < 0 || coord.x > size.x ||
             coord.y < 0 || coord.y > size.y ||
-            coord.z < 0 || coord.z > size.x)
+            coord.z < 0 || coord.z > size.z)
             {
-                Debug.LogError($"Coordinates out of bounds! {coord}");
+                Debug.LogError($"Coordinates GET out of bounds! {coord}");
                 return default(T);
             }
             return array[IndexFromCoord(coord)];
@@ -82,9 +85,9 @@ public class IndexedArray<T> where T : struct
         {
             if (coord.x < 0 || coord.x >= size.x ||
             coord.y < 0 || coord.y >= size.y ||
-            coord.z < 0 || coord.z >= size.x)
+            coord.z < 0 || coord.z >= size.z)
             {
-                Debug.LogError($"Coordinates out of bounds! {coord}");
+                Debug.LogError($"Coordinates SET out of bounds! {coord}");
                 return;
             }
             array[IndexFromCoord(coord)] = value;
