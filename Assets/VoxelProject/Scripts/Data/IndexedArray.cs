@@ -17,10 +17,13 @@ public class IndexedArray<T> where T : struct
     [HideInInspector]
     private Vector3Int size;
 
+    public static readonly float MillimetersToUnityScale = 0.001f; // 1 millimeter = 0.001 Unity units
+
+
     public IndexedArray()
     {
 //        Create(WorldManager.WorldSettings.containerSize, WorldManager.WorldSettings.maxHeight);
-        Create(WorldManager.WorldSettings.maxWidthX*2, WorldManager.WorldSettings.maxHeightY*2, WorldManager.WorldSettings.maxDepthZ*2);
+        Create(WorldManager.WorldSettings.maxWidthX, WorldManager.WorldSettings.maxHeightY, WorldManager.WorldSettings.maxDepthZ);
     }
 
     public IndexedArray(int sizeX, int sizeY, int sizeZ)
@@ -30,7 +33,8 @@ public class IndexedArray<T> where T : struct
 
     private void Create(int sizeX, int sizeY, int sizeZ)
     {
-        size = new Vector3Int(sizeX + 3, sizeY + 1, sizeZ + 3);
+        //size = new Vector3Int(sizeX + 3, sizeY + 1, sizeZ + 3);
+        size = new Vector3Int(sizeX, sizeY, sizeZ);
         array = new T[Count];
         initialized = true;
     }
@@ -40,7 +44,6 @@ public class IndexedArray<T> where T : struct
     {
         return Mathf.RoundToInt(idx.x) + (Mathf.RoundToInt(idx.y) * size.x) + (Mathf.RoundToInt(idx.z) * size.x * size.y);
     }
-
 
     public void Clear()
     {
@@ -67,14 +70,22 @@ public class IndexedArray<T> where T : struct
         }
     }
 
+    // Convert millimeter coordinates to Unity scale
+    private Vector3 ConvertToUnityScale(Vector3 mmCoords)
+    {
+        return mmCoords * MillimetersToUnityScale;
+    }    
+
     public T this[Vector3 coord]
     {
         get
         {
+            Vector3 unityCoords = ConvertToUnityScale(coord);
+
             //coord.z < 0 || coord.z > size.x)
-            if (coord.x < 0 || coord.x > size.x ||
-                coord.y < 0 || coord.y > size.y ||
-                coord.z < 0 || coord.z > size.z)
+            if (unityCoords.x < 0 || unityCoords.x > size.x ||
+                unityCoords.y < 0 || unityCoords.y > size.y ||
+                unityCoords.z < 0 || unityCoords.z > size.z)
             {
                 Debug.LogError($"Coordinates GET out of bounds! {coord}");
                 return default(T);
@@ -83,9 +94,11 @@ public class IndexedArray<T> where T : struct
         }
         set
         {
-            if (coord.x < 0 || coord.x >= size.x ||
-                coord.y < 0 || coord.y >= size.y ||
-                coord.z < 0 || coord.z >= size.z)
+            Vector3 unityCoords = ConvertToUnityScale(coord);
+
+            if (unityCoords.x < 0 || unityCoords.x >= size.x ||
+                unityCoords.y < 0 || unityCoords.y >= size.y ||
+                unityCoords.z < 0 || unityCoords.z >= size.z)
             {
                 Debug.LogError($"Coordinates SET out of bounds! {coord}");
                 return;

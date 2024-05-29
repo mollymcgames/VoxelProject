@@ -68,7 +68,10 @@ public class Container : MonoBehaviour
             block = this[blockPos];
             //Only check on solid blocks
             if (!block.isSolid)
+            {
+                Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
                 continue;
+            }
 
             //voxelColor = WorldManager.Instance.WorldColors[block.ID - 1];
 

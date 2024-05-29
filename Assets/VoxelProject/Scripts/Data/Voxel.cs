@@ -9,7 +9,8 @@ public struct Voxel
     {
         get
         {
-            return ID != 0;
+            //return ID != 0;
+            return true;
         }
     }
 }
