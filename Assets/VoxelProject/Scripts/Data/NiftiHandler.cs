@@ -11,6 +11,7 @@ public class NiftiHandler : MonoBehaviour
         return NiftiFile.Read(niftiFilePath);
     }
 
+
     public static VoxelCell[] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
     {
         int numVoxels = width * height * depth;

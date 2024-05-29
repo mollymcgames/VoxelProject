@@ -73,8 +73,8 @@ public class IndexedArray<T> where T : struct
         {
             //coord.z < 0 || coord.z > size.x)
             if (coord.x < 0 || coord.x > size.x ||
-            coord.y < 0 || coord.y > size.y ||
-            coord.z < 0 || coord.z > size.z)
+                coord.y < 0 || coord.y > size.y ||
+                coord.z < 0 || coord.z > size.z)
             {
                 Debug.LogError($"Coordinates GET out of bounds! {coord}");
                 return default(T);
@@ -84,8 +84,8 @@ public class IndexedArray<T> where T : struct
         set
         {
             if (coord.x < 0 || coord.x >= size.x ||
-            coord.y < 0 || coord.y >= size.y ||
-            coord.z < 0 || coord.z >= size.z)
+                coord.y < 0 || coord.y >= size.y ||
+                coord.z < 0 || coord.z >= size.z)
             {
                 Debug.LogError($"Coordinates SET out of bounds! {coord}");
                 return;

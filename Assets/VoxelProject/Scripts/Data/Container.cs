@@ -105,8 +105,9 @@ public class Container : MonoBehaviour
             for (int i = 0; i < 6; i++)
             {
                 //Check if there's a solid block against this face
-                if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
-                    continue;
+                //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
+                // if (checkVoxelIsSolid(blockPos))                
+                //     continue;
 
                 //Draw this face
 
