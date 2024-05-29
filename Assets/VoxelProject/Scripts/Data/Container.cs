@@ -55,8 +55,8 @@ public class Container : MonoBehaviour
         //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
         foreach (VoxelCell vc in WorldManager.Instance.sourceData)
         {
-/*            if (breaker >= 900000)
-                break;*/
+            // if (breaker >= 100000)
+            //     break;
             breaker++;
 
             blockPos = new Vector3(vc.widthX, vc.heightY, vc.depthZ);
@@ -74,31 +74,35 @@ public class Container : MonoBehaviour
             }
 
             //voxelColor = WorldManager.Instance.WorldColors[block.ID - 1];
+            //float grayScaleValue = 255f-(float)(Mathf.RoundToInt(vc.value / 5f) * 5f);
+            float grayScaleValue = vc.value/255f;
+            voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
+            //voxelColor = new VoxelColor(0.25f,0.25f,0.25f);
 
-            if (vc.value > 220)//650)
-            {
-                voxelColor = WorldManager.Instance.WorldColors[5]; //0 is air so index this way so not to get out of bounds error
-            }
-            else if (vc.value > 178)//600)
-            {
-                voxelColor = WorldManager.Instance.WorldColors[4]; //0 is air so index this way so not to get out of bounds error
-            }
-            else if (vc.value > 126)//550)
-            {
-                voxelColor = WorldManager.Instance.WorldColors[3]; //0 is air so index this way so not to get out of bounds error
-            }
-            else if (vc.value > 84)//350)
-            {
-                voxelColor = WorldManager.Instance.WorldColors[2]; //0 is air so index this way so not to get out of bounds error
-            }
-            else if (vc.value > 42)//200)
-            {
-                voxelColor = WorldManager.Instance.WorldColors[1]; //0 is air so index this way so not to get out of bounds error
-            }
-            else
-            {
-                voxelColor = WorldManager.Instance.WorldColors[0]; //block.ID - 1//0 is air so index this way so not to get out of bounds error
-            }
+            // if (vc.value > 245)//650)
+            // {
+            //     voxelColor = WorldManager.Instance.WorldColors[5]; //0 is air so index this way so not to get out of bounds error
+            // }
+            // else if (vc.value > 178)//600)
+            // {
+            //     voxelColor = WorldManager.Instance.WorldColors[4]; //0 is air so index this way so not to get out of bounds error
+            // }
+            // else if (vc.value > 126)//550)
+            // {
+            //     voxelColor = WorldManager.Instance.WorldColors[3]; //0 is air so index this way so not to get out of bounds error
+            // }
+            // else if (vc.value > 84)//350)
+            // {
+            //     voxelColor = WorldManager.Instance.WorldColors[2]; //0 is air so index this way so not to get out of bounds error
+            // }
+            // else if (vc.value > 42)//200)
+            // {
+            //     voxelColor = WorldManager.Instance.WorldColors[1]; //0 is air so index this way so not to get out of bounds error
+            // }
+            // else
+            // {
+            //     voxelColor = WorldManager.Instance.WorldColors[0]; //block.ID - 1//0 is air so index this way so not to get out of bounds error
+            // }
 
 
             voxelColorAlpha = voxelColor.color;
@@ -111,6 +115,8 @@ public class Container : MonoBehaviour
                 //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
                 // if (checkVoxelIsSolid(blockPos))                
                 //     continue;
+                if ( vc.value < 18)
+                    continue;
 
                 //Draw this face
 
@@ -200,6 +206,7 @@ public class Container : MonoBehaviour
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
+        meshCollider.convex = false;
     }
     public bool checkVoxelIsSolid(Vector3 point)
     {

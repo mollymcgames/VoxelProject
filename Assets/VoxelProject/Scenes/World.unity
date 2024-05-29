@@ -428,7 +428,7 @@ MonoBehaviour:
   - color: {r: 0.5471698, g: 0.29994953, b: 0, a: 0}
     metallic: 0.6
     smoothness: 0.2
-  - color: {r: 0.25616756, g: 0.54901963, b: 0, a: 0}
+  - color: {r: 0.18257429, g: 0.46226418, b: 0.05015131, a: 0}
     metallic: 0.6
     smoothness: 0.2
   - color: {r: 0, g: 0, b: 0, a: 0}
