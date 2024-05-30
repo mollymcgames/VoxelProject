@@ -51,50 +51,65 @@ public class Container : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
-        for (int x = 1; x < WorldManager.WorldSettings.containerSize + 1; x++)
-            for (int y = 0; y < WorldManager.WorldSettings.maxHeight; y++)
-                for (int z = 1; z < WorldManager.WorldSettings.containerSize + 1; z++)
+        int breaker = 0;
+        //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
+        foreach (VoxelCell vc in WorldManager.Instance.sourceData)
+        {
+            // if (breaker >= 100000)
+            //     break;
+            breaker++;
+
+            blockPos = new Vector3(vc.widthX, vc.heightY, vc.depthZ);
+            if (vc.widthX < 0 || vc.heightY < 0 || vc.depthZ < 0)
+            {
+                Debug.Log("Weird voxel encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
+                continue;
+            }
+            block = this[blockPos];
+            //Only check on solid blocks
+            if (!block.isSolid)
+            {
+                Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
+                continue;
+            }
+
+            float grayScaleValue = vc.value/255f;
+            voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
+
+            voxelColorAlpha = voxelColor.color;
+            voxelColorAlpha.a = 1;
+            voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+            //Iterate over each face direction
+            for (int i = 0; i < 6; i++)
+            {
+                //Check if there's a solid block against this face
+                //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
+                // if (checkVoxelIsSolid(blockPos))                
+                //     continue;
+                if ( vc.value < 18)
+                    continue;
+
+                //Draw this face
+
+                //Collect the appropriate vertices from the default vertices and add the block position
+                for (int j = 0; j < 4; j++)
                 {
+                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
+                    faceUVs[j] = voxelUVs[j];
+                }
 
-                    blockPos = new Vector3(x, y, z);
-                    block = this[blockPos];
-                    //Only check on solid blocks
-                    if (!block.isSolid)
-                        continue;
+                for (int j = 0; j < 6; j++)
+                {
+                    meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
+                    meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
+                    meshData.colors.Add(voxelColorAlpha);
+                    meshData.UVs2.Add(voxelSmoothness);
 
-                    voxelColor = WorldManager.Instance.WorldColors[block.ID - 1];
-                    voxelColorAlpha = voxelColor.color;
-                    voxelColorAlpha.a = 1;
-                    voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
-                    //Iterate over each face direction
-                    for (int i = 0; i < 6; i++)
-                    {
-                        //Check if there's a solid block against this face
-                        if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
-                            continue;
-
-                        //Draw this face
-
-                        //Collect the appropriate vertices from the default vertices and add the block position
-                        for (int j = 0; j < 4; j++)
-                        {
-                            faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
-                            faceUVs[j] = voxelUVs[j];
-                        }
-
-                        for (int j = 0; j < 6; j++)
-                        {
-                            meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
-                            meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
-                            meshData.colors.Add(voxelColorAlpha);
-                            meshData.UVs2.Add(voxelSmoothness);
-
-                            meshData.triangles.Add(counter++);
-
-                        }
-                    }
+                    meshData.triangles.Add(counter++);
 
                 }
+            }
+        }
     }
 
 
@@ -116,10 +131,11 @@ public class Container : MonoBehaviour
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
+        meshCollider.convex = false;
     }
     public bool checkVoxelIsSolid(Vector3 point)
     {
-        if (point.y < 0 || (point.x > WorldManager.WorldSettings.containerSize + 2) || (point.z > WorldManager.WorldSettings.containerSize + 2))
+        if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
             return true;
         else
             return this[point].isSolid;
