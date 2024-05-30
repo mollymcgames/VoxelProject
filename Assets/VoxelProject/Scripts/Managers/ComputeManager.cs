@@ -15,33 +15,6 @@ public class ComputeManager : MonoBehaviour
     private int yThreads;
     private int zThreads;
 
-    /*    public void Initialize(int count = 256)
-        {
-            xThreads = WorldManager.WorldSettings.containerSize / 8 + 1;
-            yThreads = WorldManager.WorldSettings.maxHeight / 8;
-
-            noiseShader.SetInt("containerSizeX", WorldManager.WorldSettings.containerSize);
-            noiseShader.SetInt("containerSizeY", WorldManager.WorldSettings.maxHeight);
-
-            noiseShader.SetBool("generateCaves", true);
-            noiseShader.SetBool("forceFloor", true);
-
-            noiseShader.SetInt("maxHeight", WorldManager.WorldSettings.maxHeight);
-            noiseShader.SetInt("oceanHeight", 42);
-
-            noiseShader.SetFloat("noiseScale", 0.004f);
-            noiseShader.SetFloat("caveScale", 0.01f);
-            noiseShader.SetFloat("caveThreshold", 0.8f);
-
-            noiseShader.SetInt("surfaceVoxelID", 1);
-            noiseShader.SetInt("subSurfaceVoxelID", 2);
-
-            for (int i = 0; i < count; i++)
-            {
-                CreateNewNoiseBuffer();
-            }
-        }*/
-
     public void Initialize(int count = 256)
     {
         xThreads = WorldManager.WorldSettings.maxWidthX / 8 + 1;
@@ -52,7 +25,7 @@ public class ComputeManager : MonoBehaviour
         noiseShader.SetInt("containerSizeY", WorldManager.WorldSettings.maxHeightY);
         noiseShader.SetInt("containerSizeZ", WorldManager.WorldSettings.maxDepthZ);
 
-        // noiseShader.SetBool("generateCaves", true);
+        // noiseShader.SetBool("generateCaves", true); no noise parameters
         // noiseShader.SetBool("forceFloor", true);
 
         // noiseShader.SetInt("maxHeight", WorldManager.WorldSettings.maxHeight);

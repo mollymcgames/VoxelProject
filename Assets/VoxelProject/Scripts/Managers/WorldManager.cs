@@ -9,10 +9,6 @@ public class WorldManager : MonoBehaviour
     public WorldSettings worldSettings;
     public VoxelCell[] sourceData;
 
-/*    public int widthX = 0;
-    public int heightY = 0;
-    public int depthZ = 0;
-*/
     public Container container;
 
     void Start()
@@ -38,11 +34,6 @@ public class WorldManager : MonoBehaviour
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
         container.Initialize(worldMaterial, Vector3.zero);
-
-
-        /*        int widthX = SourceDataLoader.widthX;
-                int heightY = SourceDataLoader.heightY;
-                int depthZ = SourceDataLoader.depthZ;*/
 
         ComputeManager.Instance.GenerateVoxelData(ref container);
     }

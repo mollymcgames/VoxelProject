@@ -73,37 +73,8 @@ public class Container : MonoBehaviour
                 continue;
             }
 
-            //voxelColor = WorldManager.Instance.WorldColors[block.ID - 1];
-            //float grayScaleValue = 255f-(float)(Mathf.RoundToInt(vc.value / 5f) * 5f);
             float grayScaleValue = vc.value/255f;
             voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
-            //voxelColor = new VoxelColor(0.25f,0.25f,0.25f);
-
-            // if (vc.value > 245)//650)
-            // {
-            //     voxelColor = WorldManager.Instance.WorldColors[5]; //0 is air so index this way so not to get out of bounds error
-            // }
-            // else if (vc.value > 178)//600)
-            // {
-            //     voxelColor = WorldManager.Instance.WorldColors[4]; //0 is air so index this way so not to get out of bounds error
-            // }
-            // else if (vc.value > 126)//550)
-            // {
-            //     voxelColor = WorldManager.Instance.WorldColors[3]; //0 is air so index this way so not to get out of bounds error
-            // }
-            // else if (vc.value > 84)//350)
-            // {
-            //     voxelColor = WorldManager.Instance.WorldColors[2]; //0 is air so index this way so not to get out of bounds error
-            // }
-            // else if (vc.value > 42)//200)
-            // {
-            //     voxelColor = WorldManager.Instance.WorldColors[1]; //0 is air so index this way so not to get out of bounds error
-            // }
-            // else
-            // {
-            //     voxelColor = WorldManager.Instance.WorldColors[0]; //block.ID - 1//0 is air so index this way so not to get out of bounds error
-            // }
-
 
             voxelColorAlpha = voxelColor.color;
             voxelColorAlpha.a = 1;
@@ -139,52 +110,6 @@ public class Container : MonoBehaviour
                 }
             }
         }
-
-
-         /*for (int x = 1; x < WorldManager.WorldSettings.containerSize + 1; x++)
-            for (int y = 0; y < WorldManager.WorldSettings.maxHeight; y++)
-                for (int z = 1; z < WorldManager.WorldSettings.containerSize + 1; z++)
-                {
-
-                    blockPos = new Vector3(x, y, z);
-                    block = this[blockPos];
-                    //Only check on solid blocks
-                    if (!block.isSolid)
-                        continue;
-
-                    voxelColor = WorldManager.Instance.WorldColors[block.ID - 1];
-                    voxelColorAlpha = voxelColor.color;
-                    voxelColorAlpha.a = 1;
-                    voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
-                    //Iterate over each face direction
-                    for (int i = 0; i < 6; i++)
-                    {
-                        //Check if there's a solid block against this face
-                        if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
-                            continue;
-
-                        //Draw this face
-
-                        //Collect the appropriate vertices from the default vertices and add the block position
-                        for (int j = 0; j < 4; j++)
-                        {
-                            faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
-                            faceUVs[j] = voxelUVs[j];
-                        }
-
-                        for (int j = 0; j < 6; j++)
-                        {
-                            meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
-                            meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
-                            meshData.colors.Add(voxelColorAlpha);
-                            meshData.UVs2.Add(voxelSmoothness);
-
-                            meshData.triangles.Add(counter++);
-
-                        }
-                    }
-
-                }*/
     }
 
 
@@ -210,7 +135,6 @@ public class Container : MonoBehaviour
     }
     public bool checkVoxelIsSolid(Vector3 point)
     {
-        //if (point.y < 0 || (point.x > WorldManager.WorldSettings.containerSize + 2) || (point.z > WorldManager.WorldSettings.containerSize + 2))
         if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
             return true;
         else
