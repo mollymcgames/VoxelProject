@@ -17,9 +17,6 @@ public class IndexedArray<T> where T : struct
     [HideInInspector]
     private Vector3Int size;
 
-    public static readonly float MillimetersToUnityScale = 0.001f; // 1 millimeter = 0.001 Unity units
-
-
     public IndexedArray()
     {
 //        Create(WorldManager.WorldSettings.containerSize, WorldManager.WorldSettings.maxHeight); - original size
@@ -50,11 +47,7 @@ public class IndexedArray<T> where T : struct
         if (!initialized)
             return;
 
-        for (int x = 0; x < size.x; x++)
-            for (int y = 0; y < size.y; y++)
-                for (int z = 0; z < size.z; z++)
-                //for (int z = 0; z < size.x; z++)
-                    array[x + (y * size.x) + (z * size.x * size.y)] = default(T);
+        Array.Clear(array, 0, array.Length);
     }
 
     public int Count
@@ -68,19 +61,13 @@ public class IndexedArray<T> where T : struct
         {
             return array;
         }
-    }
-
-    // Convert millimeter coordinates to Unity scale
-    private Vector3 ConvertToUnityScale(Vector3 mmCoords)
-    {
-        return mmCoords * MillimetersToUnityScale;
-    }    
+    }  
 
     public T this[Vector3 coord]
     {
         get
         {
-            Vector3 unityCoords = ConvertToUnityScale(coord);
+            Vector3 unityCoords = coord;
 
             //coord.z < 0 || coord.z > size.x)
             if (unityCoords.x < 0 || unityCoords.x > size.x ||
@@ -94,7 +81,7 @@ public class IndexedArray<T> where T : struct
         }
         set
         {
-            Vector3 unityCoords = ConvertToUnityScale(coord);
+            Vector3 unityCoords = (coord);
 
             if (unityCoords.x < 0 || unityCoords.x >= size.x ||
                 unityCoords.y < 0 || unityCoords.y >= size.y ||

@@ -26,7 +26,6 @@ public class NiftiHandler : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    // Access the voxel value at (x, y, z)
                     voxelValue[index] = new VoxelCell(z, y, x, niftiData.Data[index]);
                     index++;
                 }
