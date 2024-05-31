@@ -55,7 +55,7 @@ public class Container : MonoBehaviour
         //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
         foreach (VoxelCell vc in WorldManager.Instance.sourceData)
         {
-            // if (breaker >= 100000)
+            // if (breaker >= 10000)
             //     break;
             breaker++;
 
