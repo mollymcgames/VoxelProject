@@ -75,10 +75,19 @@ public class OuterContainer : MonoBehaviour
                 continue;
             }
 
-            float grayScaleValue = vc.value/255f;
-            voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
+            // float grayScaleValue = float.Parse(vc.value)/255f;
+            // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
+            voxelColor = new VoxelColor();
 
-            voxelColorAlpha = voxelColor.color;
+
+            Color color;
+            if (!ColorUtility.TryParseHtmlString("#" + vc.value, out color))
+            {
+                Debug.LogError($"Invalid color value in line: {vc.value}");
+                continue;
+            }            
+
+            voxelColorAlpha = color;
             voxelColorAlpha.a = 1;
             voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
             //Iterate over each face direction
@@ -88,8 +97,8 @@ public class OuterContainer : MonoBehaviour
                 //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
                 // if (checkVoxelIsSolid(blockPos))                
                 //     continue;
-                if ( vc.value < 18)
-                    continue;
+                // if ( float.Parse(vc.value) < 18)
+                //     continue;
 
                 //Draw this face
 
@@ -113,7 +122,6 @@ public class OuterContainer : MonoBehaviour
             }
         }
     }
-
 
 
     public void UploadMesh()

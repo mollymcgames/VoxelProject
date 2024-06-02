@@ -73,7 +73,7 @@ public class Container : MonoBehaviour
                 continue;
             }
 
-            float grayScaleValue = vc.value/255f;
+            float grayScaleValue = float.Parse(vc.value)/255f;
             voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
 
             voxelColorAlpha = voxelColor.color;
@@ -86,7 +86,7 @@ public class Container : MonoBehaviour
                 //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
                 // if (checkVoxelIsSolid(blockPos))                
                 //     continue;
-                if ( vc.value < 18)
+                if ( float.Parse(vc.value) < 18)
                     continue;
 
                 //Draw this face

@@ -26,7 +26,7 @@ public class NiftiHandler : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    voxelValue[index] = new VoxelCell(z, y, x, niftiData.Data[index]);
+                    voxelValue[index] = new VoxelCell(z, y, x, niftiData.Data[index].ToString());
                     index++;
                 }
             }

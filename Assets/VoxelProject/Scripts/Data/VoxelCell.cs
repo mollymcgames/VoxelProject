@@ -3,7 +3,7 @@
 */
 public class VoxelCell
 {
-    public float value { get; }
+    public string value { get; }
 
     public int depthZ { get; }
 
@@ -11,7 +11,7 @@ public class VoxelCell
 
     public int widthX { get; }
 
-    public VoxelCell(int depthZ, int heightY, int widthX, float inputValue)
+    public VoxelCell(int depthZ, int heightY, int widthX, string inputValue)
     {
         this.depthZ = depthZ;
         this.heightY = heightY;
