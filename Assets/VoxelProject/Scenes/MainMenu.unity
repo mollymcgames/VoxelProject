@@ -1176,7 +1176,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 756612807}
         m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
-        m_MethodName: LoadNextScene
+        m_MethodName: LoadZoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -30,4 +30,9 @@ public class MenuHandler : MonoBehaviour
         Debug.Log("Dimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2]);
         Debug.Log("Filename, " + niftiFilePath);
     }
+
+    public void LoadZoom()
+    {
+        SceneManager.LoadScene("Zooming");
+    }
 }

@@ -33,9 +33,12 @@ public class OuterWorldManager : MonoBehaviour
         GameObject cont = new GameObject("OuterContainer");
         cont.transform.parent = transform;
         container = cont.AddComponent<OuterContainer>();
-        container.Initialize(worldMaterial, Vector3.zero);
+        container.Initialize(worldMaterial, Vector3.zero);    
 
         OuterComputeManager.Instance.GenerateVoxelData(ref container);
+
+        // // Correct rotation if needed
+        cont.transform.Rotate(270, 0, 0); // Adjust this as necessary to correct the orientation        
     }
 
     public static OuterWorldSettings WorldSettings;

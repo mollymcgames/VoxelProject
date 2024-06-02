@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class VoxelTextHandler : MonoBehaviour
 {
-    public string voxelDataFilePath = "Assets/Resources/voxtest.txt";
+    public string voxelDataFilePath = "Assets/Resources/blue.txt";
 
     public static string[] ReadVoxelTextFile(string voxelTextFilePath)
     {
-        // Load the NIfTI file
+        // Load the file
         return File.ReadAllLines(voxelTextFilePath);
     }
 
