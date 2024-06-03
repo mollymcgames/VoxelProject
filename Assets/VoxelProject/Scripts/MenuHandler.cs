@@ -35,4 +35,9 @@ public class MenuHandler : MonoBehaviour
     {
         SceneManager.LoadScene("Zooming");
     }
+
+    public void BackButton()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }
