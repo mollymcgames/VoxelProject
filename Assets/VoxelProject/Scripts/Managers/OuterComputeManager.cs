@@ -78,7 +78,7 @@ public class OuterComputeManager : MonoBehaviour
 
     #region Compute Helpers
 
-    public void GenerateVoxelData(ref OuterContainer cont)
+    public void GenerateVoxelData(ref OuterContainer cont, bool renderOuter = false)
     {
         noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
         noiseShader.SetBuffer(0, "count", cont.data.countBuffer);
@@ -92,7 +92,7 @@ public class OuterComputeManager : MonoBehaviour
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
         {
             callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.container.data.voxelArray.array);
-            OuterWorldManager.Instance.container.RenderMesh();
+            OuterWorldManager.Instance.container.RenderMesh(renderOuter);
         });    
     }
 

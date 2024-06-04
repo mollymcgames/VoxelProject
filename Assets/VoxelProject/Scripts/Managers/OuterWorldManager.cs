@@ -7,9 +7,14 @@ public class OuterWorldManager : MonoBehaviour
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
     public OuterWorldSettings worldSettings;
-    public VoxelCell[] sourceData;
+    public VoxelCell[] sourceDataInner;
+
+    public VoxelCell[] sourceDataOuter;
 
     public OuterContainer container;
+
+    private string filepathInner = "Assets/Resources/blue.txt";
+    private string filepathOuter = "Assets/Resources/voxtest.txt";
 
     void Start()
     {
@@ -23,7 +28,8 @@ public class OuterWorldManager : MonoBehaviour
             _instance = this;
         }
 
-        sourceData = SourceDataTextFileLoader.LoadSourceData();
+        sourceDataInner = SourceDataTextFileLoader.LoadSourceData(filepathInner);
+        sourceDataOuter = SourceDataTextFileLoader.LoadSourceData(filepathOuter);
         WorldSettings = worldSettings;
         WorldSettings.maxWidthX = SourceDataTextFileLoader.widthX;
         WorldSettings.maxHeightY = SourceDataTextFileLoader.heightY;
@@ -35,10 +41,21 @@ public class OuterWorldManager : MonoBehaviour
         container = cont.AddComponent<OuterContainer>();
         container.Initialize(worldMaterial, Vector3.zero);    
 
-        OuterComputeManager.Instance.GenerateVoxelData(ref container);
+        OuterComputeManager.Instance.GenerateVoxelData(ref container, true);
 
         // // Correct rotation if needed
         cont.transform.Rotate(270, 0, 0); // Adjust this as necessary to correct the orientation        
+    }
+
+    bool isGeneratingOuter = true;
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            isGeneratingOuter = !isGeneratingOuter;                
+            container.ClearData();
+            OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
+        }
     }
 
     public static OuterWorldSettings WorldSettings;

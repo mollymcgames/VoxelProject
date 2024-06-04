@@ -36,7 +36,7 @@ public class SourceDataTextFileLoader : MonoBehaviour
         }
     }
 
-    static string voxelFilePath = "Assets/Resources/blue.txt";
+    // static string voxelFilePath = "Assets/Resources/blue.txt";
 
     static string[] voxelFileLines = null;
 
@@ -48,8 +48,14 @@ public class SourceDataTextFileLoader : MonoBehaviour
     public static VoxelCell[] LoadSourceData()
     {
         Debug.Log("Loading source data...");
-        return LoadVoxelFile();
+        return LoadVoxelFile("Assets/Resources/blue.txt");
     }
+
+    public static VoxelCell[] LoadSourceData(string filepath)
+    {
+        Debug.Log("Loading source data...");
+        return LoadVoxelFile(filepath);
+    }    
 
 
     public static string[] GetHeader()
@@ -57,43 +63,11 @@ public class SourceDataTextFileLoader : MonoBehaviour
         return voxelFileLines;
     }
     
-    public static void OpenNiftiFile(string filePath)
-    {
-        voxelFileLines = null;
-        voxelFileLines = VoxelTextHandler.ReadVoxelTextFile(voxelFilePath);
-    }
 
-    public static VoxelCell[] LoadVoxelFile()
+    public static VoxelCell[] LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
     {
         // Load default file
-        if (voxelFileLines == null)
-        {
-            voxelFileLines = VoxelTextHandler.ReadVoxelTextFile(voxelFilePath);
-        }
-
-        // Get the dimensions
-        widthX = 255;//voxelFileLines.Dimensions[0];
-        heightY = 255;//voxelFileLines.Dimensions[1];
-        depthZ = 255;//voxelFileLines.Dimensions[2];
-
-
-        Debug.Log("NII width:" + widthX);
-        Debug.Log("NII height:" + heightY);
-        Debug.Log("NII depth:" + depthZ);
-
-        // Calculate the number of voxels
-        //int numVoxels = width * height * depth;
-
-        // Read the voxel data
-        voxelData = VoxelTextHandler.ReadVoxelData(voxelFileLines, widthX, heightY, depthZ);
-        Debug.Log("Data now read in");
-
-        return voxelData;
-    }
-
-    public static VoxelCell[] LoadNiftiFile(string filePath)
-    {
-        SourceDataLoader.OpenNiftiFile(filePath);            
+        voxelFileLines = VoxelTextHandler.ReadVoxelTextFile(voxelFilePath);
 
         // Get the dimensions
         widthX = 255;//voxelFileLines.Dimensions[0];

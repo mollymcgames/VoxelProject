@@ -31,14 +31,14 @@ public class OuterContainer : MonoBehaviour
         OuterComputeManager.Instance.ClearAndRequeueBuffer(data);
     }
 
-    public void RenderMesh()
+    public void RenderMesh(bool renderOuter = true)
     {
         meshData.ClearData();
-        GenerateMesh();
+        GenerateMesh(renderOuter);
         UploadMesh();
     }
 
-    public void GenerateMesh()
+    public void GenerateMesh(bool renderOuter = true)
     {
         Vector3 blockPos;
         Voxel block;
@@ -51,9 +51,16 @@ public class OuterContainer : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
+        VoxelCell[] sourceData = null;
+        if (renderOuter)
+        {
+            sourceData = OuterWorldManager.Instance.sourceDataOuter;
+        } else {
+            sourceData = OuterWorldManager.Instance.sourceDataInner;
+        }
         int breaker = 0;
         //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
-        foreach (VoxelCell vc in OuterWorldManager.Instance.sourceData)
+        foreach (VoxelCell vc in sourceData)
         {
             // if (breaker >= 10000)
             //     break;
