@@ -17,7 +17,7 @@ public class OuterWorldManager : MonoBehaviour
     private string filepathOuter = "Assets/Resources/voxtest.txt";
 
     private GameObject cameraColliderObject;
-    private Camera mainCamera;
+    public Camera mainCamera;
 
     void Start()
     {
@@ -76,6 +76,15 @@ public class OuterWorldManager : MonoBehaviour
             container.ClearData();
             OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
         }
+
+        Debug.Log("Camera position: " + mainCamera.transform.position);
+        //if the camera is a certain distance away from the container, switch to the other container
+        if (!isGeneratingOuter && Vector3.Distance(mainCamera.transform.position, container.transform.position) > 18)
+        {
+            isGeneratingOuter = !isGeneratingOuter;
+            container.ClearData();
+            OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
+        }
     }
     
     //check for a collision with the MainCamera to switch between the two voxel meshes
@@ -83,7 +92,7 @@ public class OuterWorldManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger detected: " + other.tag + " - " + other.name);
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag("MainCamera") && isGeneratingOuter)
         {
             // Toggle the voxel data generation
             isGeneratingOuter = !isGeneratingOuter;

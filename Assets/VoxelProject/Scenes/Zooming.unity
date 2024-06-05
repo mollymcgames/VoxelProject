@@ -441,6 +441,7 @@ MonoBehaviour:
     maxDepthZ: 255
     maxHeightY: 255
   container: {fileID: 0}
+  mainCamera: {fileID: 1264490928}
 --- !u!114 &1517145016
 MonoBehaviour:
   m_ObjectHideFlags: 0
