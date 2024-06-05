@@ -16,6 +16,9 @@ public class OuterWorldManager : MonoBehaviour
     private string filepathInner = "Assets/Resources/blue.txt";
     private string filepathOuter = "Assets/Resources/voxtest.txt";
 
+    private GameObject cameraColliderObject;
+    private Camera mainCamera;
+
     void Start()
     {
         if (_instance != null)
@@ -37,14 +40,31 @@ public class OuterWorldManager : MonoBehaviour
 
         OuterComputeManager.Instance.Initialize(1);
         GameObject cont = new GameObject("OuterContainer");
+      
         cont.transform.parent = transform;
         container = cont.AddComponent<OuterContainer>();
         container.Initialize(worldMaterial, Vector3.zero);    
+        // Set the tag for collision detection
+        cont.tag = "OuterContainer";
+  
+
+        // Add a collider to the container for collision detection
+        BoxCollider collider = cont.AddComponent<BoxCollider>();
+        collider.isTrigger = true; // Enable IsTrigger   
+        collider.size = new Vector3(11, 9, 9); // Adjust the size as needed
+
+        
+        // Tag the inner container
+        GameObject outerContainer = GameObject.FindWithTag("OuterContainer");
+        if (outerContainer == null)
+        {
+            Debug.LogError("OuterContainer tag not found. Make sure the inner container is tagged correctly.");
+        }
 
         OuterComputeManager.Instance.GenerateVoxelData(ref container, true);
-
-        // // Correct rotation if needed
-        cont.transform.Rotate(270, 0, 0); // Adjust this as necessary to correct the orientation        
+        
+        // Correct rotation if needed
+        cont.transform.Rotate(270, 0, 0); // Adjust this as necessary to correct the orientation                
     }
 
     bool isGeneratingOuter = true;
@@ -53,6 +73,20 @@ public class OuterWorldManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             isGeneratingOuter = !isGeneratingOuter;                
+            container.ClearData();
+            OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
+        }
+    }
+    
+    //check for a collision with the MainCamera to switch between the two voxel meshes
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger detected: " + other.tag + " - " + other.name);
+        if (other.CompareTag("MainCamera"))
+        {
+            // Toggle the voxel data generation
+            isGeneratingOuter = !isGeneratingOuter;
             container.ClearData();
             OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
         }
