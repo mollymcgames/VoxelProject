@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class OuterWorldManager : MonoBehaviour
@@ -13,8 +14,12 @@ public class OuterWorldManager : MonoBehaviour
 
     public OuterContainer container;
 
-    private string filepathInner = "Assets/Resources/blue.txt";
-    private string filepathOuter = "Assets/Resources/voxtest.txt";
+
+    //Use streaming assets for the file path
+    private string filepathInner = Path.Combine(Application.streamingAssetsPath, "blue.txt");
+    // private string filepathInner = "Assets/Resources/blue.txt";
+    private string filepathOuter = Path.Combine(Application.streamingAssetsPath, "voxtest.txt");
+    // private string filepathOuter = "Assets/Resources/voxtest.txt";
 
     public Camera mainCamera;
 

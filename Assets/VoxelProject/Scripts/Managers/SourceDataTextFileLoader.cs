@@ -48,6 +48,7 @@ public class SourceDataTextFileLoader : MonoBehaviour
     public static VoxelCell[] LoadSourceData()
     {
         Debug.Log("Loading source data...");
+        //use streaming assets for the file path
         return LoadVoxelFile("Assets/Resources/blue.txt");
     }
 

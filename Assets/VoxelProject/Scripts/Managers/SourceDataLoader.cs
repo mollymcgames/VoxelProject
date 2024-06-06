@@ -1,5 +1,6 @@
 using Nifti.NET;
 using System.Collections;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
@@ -39,7 +40,10 @@ public class SourceDataLoader : MonoBehaviour
     //static string niftiFilePath = "Assets/Resources/la_007.nii";
     static string niftiFilePath = "Assets/Resources/avg152T1_LR_nifti.nii";
     //static string niftiFilePath = "Assets/Resources/jhu.nii";
-    static string niftiFilePath2 = "Assets/Resources/JHU-WhiteMatter-labels-2mm.nii"; //small datafile 
+
+    //Use Steaming Assets folder to load the file
+    static string niftiFilePath2 = Path.Combine(Application.streamingAssetsPath, "JHU-WhiteMatter-labels-2mm.nii");
+    // static string niftiFilePath2 = "Assets/Resources/JHU-WhiteMatter-labels-2mm.nii"; //small datafile 
 
     static Nifti.NET.Nifti niftiFile = null;
 

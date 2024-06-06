@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,7 +13,9 @@ public class MenuHandler : MonoBehaviour
 
     public void LoadHeartFile()
     {
-        string niftiFilePath = "Assets/Resources/JHU-WhiteMatter-labels-2mm.nii"; 
+        //Use Steaming Assets folder to load the file
+        string niftiFilePath = Path.Combine(Application.streamingAssetsPath, "JHU-WhiteMatter-labels-2mm.nii");
+        // string niftiFilePath = "Assets/Resources/JHU-WhiteMatter-labels-2mm.nii"; 
         SourceDataLoader.OpenNiftiFile(niftiFilePath);
         Nifti.NET.Nifti niftiFile = SourceDataLoader.GetHeader();
         Debug.Log("Description, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip));
@@ -22,7 +25,8 @@ public class MenuHandler : MonoBehaviour
 
     public void LoadLRFile()
     {
-        string niftiFilePath = "Assets/Resources/avg152T1_LR_nifti.nii"; 
+        string niftiFilePath = Path.Combine(Application.streamingAssetsPath, "avg152T1_LR_nifti.nii");
+        // string niftiFilePath = "Assets/Resources/avg152T1_LR_nifti.nii"; 
         SourceDataLoader.OpenNiftiFile(niftiFilePath);
         Nifti.NET.Nifti niftiFile = SourceDataLoader.GetHeader();
 
