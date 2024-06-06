@@ -52,8 +52,14 @@ public class SourceDataLoader : MonoBehaviour
     {
         Debug.Log("Loading source data...");
         return LoadNiftiFile();
-        //return LoadNiftiFile(niftiFilePath);
     }
+
+    
+    public static VoxelCell[] LoadSourceData(string filepath)
+    {
+        Debug.Log("Loading source data...");
+        return LoadNiftiFile(filepath);
+    }    
 
 
     public static Nifti.NET.Nifti GetHeader()

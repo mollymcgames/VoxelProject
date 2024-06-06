@@ -25,19 +25,6 @@ public class OuterComputeManager : MonoBehaviour
         noiseShader.SetInt("containerSizeY", OuterWorldManager.WorldSettings.maxHeightY);
         noiseShader.SetInt("containerSizeZ", OuterWorldManager.WorldSettings.maxDepthZ);
 
-        // noiseShader.SetBool("generateCaves", true); no noise parameters
-        // noiseShader.SetBool("forceFloor", true);
-
-        // noiseShader.SetInt("maxHeight", WorldManager.WorldSettings.maxHeight);
-        // noiseShader.SetInt("oceanHeight", 42);
-
-        // noiseShader.SetFloat("noiseScale", 0.004f);
-        // noiseShader.SetFloat("caveScale", 0.01f);
-        // noiseShader.SetFloat("caveThreshold", 0.8f);
-
-        // noiseShader.SetInt("surfaceVoxelID", 1);
-        // noiseShader.SetInt("subSurfaceVoxelID", 2);
-
         for (int i = 0; i < count; i++)
         {
             CreateNewNoiseBuffer();

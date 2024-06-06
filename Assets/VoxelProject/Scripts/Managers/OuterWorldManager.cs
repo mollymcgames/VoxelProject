@@ -16,7 +16,6 @@ public class OuterWorldManager : MonoBehaviour
     private string filepathInner = "Assets/Resources/blue.txt";
     private string filepathOuter = "Assets/Resources/voxtest.txt";
 
-    private GameObject cameraColliderObject;
     public Camera mainCamera;
 
     void Start()
