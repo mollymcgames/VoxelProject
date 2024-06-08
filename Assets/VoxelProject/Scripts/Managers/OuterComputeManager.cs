@@ -65,22 +65,54 @@ public class OuterComputeManager : MonoBehaviour
 
     #region Compute Helpers
 
-    public void GenerateVoxelData(ref OuterContainer cont, bool renderOuter = false)
+    public void GenerateVoxelData(ref OuterContainer container, ref Camera mainCamera, bool renderOuter = false)
     {
-        noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
-        noiseShader.SetBuffer(0, "count", cont.data.countBuffer);
-
-        noiseShader.SetVector("chunkPosition", cont.containerPosition);
-        noiseShader.SetVector("seedOffset", Vector3.zero);
-
-        noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
-        noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
-
-        AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
+        if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.container != null && !OuterWorldManager.Instance.quitting)
         {
-            callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.container.data.voxelArray.array);
-            OuterWorldManager.Instance.container.RenderMesh(renderOuter);
-        });    
+            noiseShader.SetBuffer(0, "voxelArray", container.data.noiseBuffer);
+            noiseShader.SetBuffer(0, "count", container.data.countBuffer);
+
+            noiseShader.SetVector("chunkPosition", container.containerPosition);
+            noiseShader.SetVector("seedOffset", Vector3.zero);
+
+            noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
+            noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
+
+            float transparencyValue = AdjustMaterialTransparency(ref container, ref mainCamera);
+            Debug.Log("New Transparency Value: " + transparencyValue);
+
+            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+            {
+                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.container != null)
+                {
+                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.container.data.voxelArray.array);
+                    OuterWorldManager.Instance.container.RenderMesh(renderOuter, transparencyValue);
+                }
+            });
+        }
+    }
+
+
+    private float AdjustMaterialTransparency(ref OuterContainer container, ref Camera mainCamera)
+    {
+        float distance = Vector3.Distance(mainCamera.transform.position, container.transform.position);
+        float maxDistance = 30f;
+        float minDistance = 2f;
+
+        // Adjust the transparency of the material based on the camera distance
+        // alpha should be 0 if close and 1 if far
+        float alpha = Mathf.InverseLerp(minDistance, maxDistance, distance);
+
+        if (container != null)
+        {
+            Debug.Log("Adjusting transparency with alpha: " + alpha);
+        }
+        else
+        {
+            Debug.LogWarning("No Renderer found on the container.");
+        }
+
+        return alpha;
     }
 
     private void ClearVoxelData(OuterNoiseBuffer buffer)

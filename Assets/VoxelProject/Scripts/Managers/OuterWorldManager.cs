@@ -65,29 +65,42 @@ public class OuterWorldManager : MonoBehaviour
             Debug.LogError("OuterContainer tag not found. Make sure the inner container is tagged correctly.");
         }
 
-        OuterComputeManager.Instance.GenerateVoxelData(ref container, true);
+        OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, true);
         
         // Correct rotation if needed
         cont.transform.Rotate(270, 0, 0); // Adjust this as necessary to correct the orientation                
     }
 
+    public bool quitting = false;
+    void OnApplicationQuit()
+    {
+        Debug.Log("Application ending after " + Time.time + " seconds");
+        quitting = true;
+    }
+
     bool isGeneratingOuter = true;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            isGeneratingOuter = !isGeneratingOuter;                
-            container.ClearData();
-            OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
-        }
+        if (quitting == false) {
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                isGeneratingOuter = !isGeneratingOuter;
+                container.ClearData();
+                OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, isGeneratingOuter);
+            }
 
-        Debug.Log("Camera position: " + mainCamera.transform.position);
-        //if the camera is a certain distance away from the container, switch to the other container
-        if (!isGeneratingOuter && Vector3.Distance(mainCamera.transform.position, container.transform.position) > 18)
-        {
-            isGeneratingOuter = !isGeneratingOuter;
-            container.ClearData();
-            OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
+            //Debug.Log("Camera position: " + mainCamera.transform.position);
+            //if the camera is a certain distance away from the container, switch to the other container
+            if (!isGeneratingOuter && Vector3.Distance(mainCamera.transform.position, container.transform.position) > 18)
+            {
+                isGeneratingOuter = !isGeneratingOuter;
+                container.ClearData();
+                OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, isGeneratingOuter);
+            }
+            else
+            {
+                OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, isGeneratingOuter);
+            }
         }
     }
     
@@ -101,7 +114,7 @@ public class OuterWorldManager : MonoBehaviour
             // Toggle the voxel data generation
             isGeneratingOuter = !isGeneratingOuter;
             container.ClearData();
-            OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
+            OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, isGeneratingOuter);
         }
     }
 
