@@ -95,7 +95,7 @@ public class OuterContainer : MonoBehaviour
             }            
 
             voxelColorAlpha = color;
-            voxelColorAlpha.a = 1;
+            voxelColorAlpha.a = 1f; //THIS IS WHERE THE ALPHA VALUE IS SET 
             voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
             //Iterate over each face direction
             for (int i = 0; i < 6; i++)
