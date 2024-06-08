@@ -12,8 +12,8 @@ public class OuterWorldManager : MonoBehaviour
 
     public VoxelCell[] sourceDataOuter;
 
-    public OuterContainer containerInner;
     public OuterContainer containerOuter;
+    public OuterContainer containerInner;
 
 
     //Use streaming assets for the file path
@@ -54,16 +54,16 @@ public class OuterWorldManager : MonoBehaviour
         //The firsts container initilised
         GameObject contInner = InstantiateContainerPosition("InnerContainer", Vector3.zero);
         contInner.tag = "InnerContainer";     // Set the tag for collision detection
-        containerInner = contInner.AddComponent<OuterContainer>();
-        containerInner.Initialize(worldMaterial, Vector3.zero);
+        containerOuter = contInner.AddComponent<OuterContainer>();
+        containerOuter.Initialize(worldMaterial, Vector3.zero);
         SetCollider(contInner);
 
 
         //The second container initialised
         GameObject contOuter = InstantiateContainerPosition("OuterContainer", Vector3.zero);
         contOuter.tag = "OuterContainer";
-        containerOuter = contOuter.AddComponent<OuterContainer>();
-        containerOuter.Initialize(worldMaterial, Vector3.zero);
+        containerInner = contOuter.AddComponent<OuterContainer>();
+        containerInner.Initialize(worldMaterial, Vector3.zero);
         SetCollider(contOuter);
   
         
@@ -121,9 +121,9 @@ public class OuterWorldManager : MonoBehaviour
             // if (!isGeneratingOuter && Vector3.Distance(mainCamera.transform.position, container.transform.position) > 18)
             // {
                 // isGeneratingOuter = !isGeneratingOuter;
-                containerInner.ClearData();
                 containerOuter.ClearData();
-                OuterComputeManager.Instance.GenerateVoxelData(ref containerInner, ref mainCamera, true);
+                containerInner.ClearData();
+                OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, true);
                 // OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, false);
             // }
             // else

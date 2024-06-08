@@ -67,7 +67,7 @@ public class OuterComputeManager : MonoBehaviour
 
     public void GenerateVoxelData(ref OuterContainer container, ref Camera mainCamera, bool renderOuter = false)
     {
-        if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null && !OuterWorldManager.Instance.quitting)
+        if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null && !OuterWorldManager.Instance.quitting)
         {
             noiseShader.SetBuffer(0, "voxelArray", container.data.noiseBuffer);
             noiseShader.SetBuffer(0, "count", container.data.countBuffer);
@@ -83,19 +83,19 @@ public class OuterComputeManager : MonoBehaviour
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
-                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
+                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerInner.RenderMesh(false, transparencyValue);
+                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuter.data.voxelArray.array);
+                    OuterWorldManager.Instance.containerOuter.RenderMesh(true, transparencyValue);
                 }
             });
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
-                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null)
+                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuter.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerOuter.RenderMesh(true, 1f - transparencyValue);
+                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
+                    OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
                 }
             });            
         }
