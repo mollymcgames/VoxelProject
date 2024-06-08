@@ -675,7 +675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e65ef4e51bde8429033f2ff79c2aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldMaterial: {fileID: 2100000, guid: d41578d92bc26b04bb2355aed476d2cb, type: 2}
+  worldMaterial: {fileID: 2100000, guid: e8294481300e5844abcc6eaf40cda598, type: 2}
   WorldColors:
   - color: {r: 0, g: 0.4716981, b: 0.016664108, a: 0}
     metallic: 0.2
@@ -727,7 +727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95192a62fe0c30468a8bc857c07d4f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  voxelDataFilePath: Assets/Resources/voxtest.txt
 --- !u!1 &1755438928
 GameObject:
   m_ObjectHideFlags: 0

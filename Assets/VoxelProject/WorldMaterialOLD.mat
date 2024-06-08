@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WorldMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 3219d407b8861754f8307562691cbc98,
+  m_Name: WorldMaterialOLD
+  m_Shader: {fileID: -6465566751694194690, guid: cf25e8b2f6fcc174eac2db592cc599de,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -83,7 +83,6 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaClip: 0
-    - _AlphaValue: 1
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
