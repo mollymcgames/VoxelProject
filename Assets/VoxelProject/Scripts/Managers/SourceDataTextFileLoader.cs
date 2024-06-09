@@ -31,12 +31,10 @@ public class SourceDataTextFileLoader : MonoBehaviour
         get
         {
             if (_instance == null)
-                _instance = FindObjectOfType<SourceDataTextFileLoader>();
+                _instance = FindFirstObjectByType<SourceDataTextFileLoader>();
             return _instance;
         }
     }
-
-    // static string voxelFilePath = "Assets/Resources/blue.txt";
 
     static string[] voxelFileLines = null;
 

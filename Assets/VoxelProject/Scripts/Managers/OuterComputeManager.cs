@@ -128,7 +128,6 @@ public class OuterComputeManager : MonoBehaviour
     {
         buffer.countBuffer.SetData(new int[] { 0 });
         noiseShader.SetBuffer(1, "voxelArray", buffer.noiseBuffer);
-        //noiseShader.Dispatch(1, xThreads, yThreads, xThreads);
         noiseShader.Dispatch(1, xThreads, yThreads, zThreads);
     }
     #endregion
@@ -153,7 +152,7 @@ public class OuterComputeManager : MonoBehaviour
         get
         {
             if (_instance == null)
-                _instance = FindObjectOfType<OuterComputeManager>();
+                _instance = FindFirstObjectByType<OuterComputeManager>();
             return _instance;
         }
     }

@@ -87,7 +87,6 @@ public class ComputeManager : MonoBehaviour
     {
         buffer.countBuffer.SetData(new int[] { 0 });
         noiseShader.SetBuffer(1, "voxelArray", buffer.noiseBuffer);
-        //noiseShader.Dispatch(1, xThreads, yThreads, xThreads);
         noiseShader.Dispatch(1, xThreads, yThreads, zThreads);
     }
     #endregion
@@ -112,7 +111,7 @@ public class ComputeManager : MonoBehaviour
         get
         {
             if (_instance == null)
-                _instance = FindObjectOfType<ComputeManager>();
+                _instance = FindFirstObjectByType<ComputeManager>();
             return _instance;
         }
     }
