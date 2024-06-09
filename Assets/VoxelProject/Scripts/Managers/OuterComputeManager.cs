@@ -106,7 +106,7 @@ public class OuterComputeManager : MonoBehaviour
     {
         float distance = Vector3.Distance(mainCamera.transform.position, container.transform.position);
         float maxDistance = 30f;
-        float minDistance = 2f;
+        float minDistance = 10f;
 
         // Adjust the transparency of the material based on the camera distance
         // alpha should be 0 if close and 1 if far
