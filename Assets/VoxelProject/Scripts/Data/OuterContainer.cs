@@ -38,6 +38,13 @@ public class OuterContainer : MonoBehaviour
         UploadMesh();
     }
 
+    public void RenderMeshDictionary(bool renderOuter = true, float transparencyValue = 1f)
+    {
+        meshData.ClearData();
+        GenerateMeshDictionary(renderOuter, transparencyValue);
+        UploadMesh();
+    }
+
     public void GenerateMesh(bool renderOuter = true, float transparencyValue = 1f)
     {
         Vector3 blockPos;
@@ -130,6 +137,97 @@ public class OuterContainer : MonoBehaviour
         }
     }
 
+    public void GenerateMeshDictionary(bool renderOuter = true, float transparencyValue = 1f)
+    {
+        Vector3 blockPos;
+        Voxel block;
+
+        int counter = 0;
+        Vector3[] faceVertices = new Vector3[4];
+        Vector2[] faceUVs = new Vector2[4];
+
+        VoxelColor voxelColor;
+        Color voxelColorAlpha;
+        Vector2 voxelSmoothness;
+
+        Dictionary<Vector3Int, Chunk> sourceData = null;
+        if (renderOuter)
+        {
+            sourceData = OuterWorldManager.Instance.sourceDataOuterDictionary;
+        }
+        else
+        {
+            sourceData = OuterWorldManager.Instance.sourceDataInnerDictionary;
+        }
+        int breaker = 0;
+        //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
+        //foreach (VoxelCell vc in sourceData)
+        foreach(KeyValuePair<Vector3Int, Chunk> nextChunk in sourceData)
+        {
+            // do something with entry.Value or entry.Key
+            if (breaker >= 1)
+                break;
+            breaker++;
+
+            foreach(VoxelElement nextVoxelElement in nextChunk.Value.voxels)
+            {
+
+                blockPos = nextVoxelElement.position; // new Vector3(vc.widthX, vc.heightY, vc.depthZ);
+                block = this[blockPos];
+                //Only check on solid blocks
+                if (!block.isSolid)
+                {
+                    Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
+                    continue;
+                }
+
+                // float grayScaleValue = float.Parse(vc.value)/255f;
+                // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
+                voxelColor = new VoxelColor();
+
+                Color color;
+                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.colorString, out color))
+                {
+                    Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
+                    continue;
+                }
+
+                voxelColorAlpha = color;
+                voxelColorAlpha.a = transparencyValue; //THIS IS WHERE THE ALPHA VALUE IS SET 
+                voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+                //Iterate over each face direction
+                for (int i = 0; i < 6; i++)
+                {
+                    //Check if there's a solid block against this face
+                    //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
+                    // if (checkVoxelIsSolid(blockPos))                
+                    //     continue;
+                    // if ( float.Parse(vc.value) < 18)
+                    //     continue;
+
+                    //Draw this face
+
+                    //Collect the appropriate vertices from the default vertices and add the block position
+                    for (int j = 0; j < 4; j++)
+                    {
+                        faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
+                        faceUVs[j] = voxelUVs[j];
+                    }
+
+                    for (int j = 0; j < 6; j++)
+                    {
+                        meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
+                        meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
+                        meshData.colors.Add(voxelColorAlpha);
+                        meshData.UVs2.Add(voxelSmoothness);
+
+                        meshData.triangles.Add(counter++);
+
+                    }
+                }
+            }
+        }
+    }
 
     public void UploadMesh()
     {

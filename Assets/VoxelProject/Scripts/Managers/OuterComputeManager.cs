@@ -97,7 +97,17 @@ public class OuterComputeManager : MonoBehaviour
                     callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
                     OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
                 }
-            });            
+            });
+
+            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+            {
+                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInnerDic != null)
+                {
+                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInnerDic.data.voxelArray.array);
+                    OuterWorldManager.Instance.containerInnerDic.RenderMeshDictionary(false, 1f - transparencyValue);
+                }
+            });
+
         }
     }
 
