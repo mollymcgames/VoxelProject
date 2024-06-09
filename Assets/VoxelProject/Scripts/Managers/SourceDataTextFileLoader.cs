@@ -36,8 +36,6 @@ public class SourceDataTextFileLoader : MonoBehaviour
         }
     }
 
-    // static string voxelFilePath = "Assets/Resources/blue.txt";
-
     static string[] voxelFileLines = null;
 
     static VoxelCell[] voxelData = null;

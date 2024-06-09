@@ -67,9 +67,6 @@ public class OuterWorldManager : MonoBehaviour
     
 
         OuterComputeManager.Instance.Initialize(1);
-
-        // OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, true);
-
     }
 
     GameObject InstantiateContainerPosition(string name, Vector3 position)
@@ -104,7 +101,6 @@ public class OuterWorldManager : MonoBehaviour
                 containerOuter.ClearData();
                 containerInner.ClearData();
                 OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, true);
-                // OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, false);
         }
     }
     
