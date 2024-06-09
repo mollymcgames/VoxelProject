@@ -46,7 +46,7 @@ public class WorldManager : MonoBehaviour
         get
         {
             if (_instance == null)
-                _instance = FindObjectOfType<WorldManager>();
+                _instance = FindFirstObjectByType<WorldManager>();
             return _instance;
         }
     }

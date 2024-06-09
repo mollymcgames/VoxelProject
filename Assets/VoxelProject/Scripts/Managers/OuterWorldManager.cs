@@ -18,9 +18,7 @@ public class OuterWorldManager : MonoBehaviour
 
     //Use streaming assets for the file path
     private string filepathInner = Path.Combine(Application.streamingAssetsPath, "blue.txt");
-    // private string filepathInner = "Assets/Resources/blue.txt";
     private string filepathOuter = Path.Combine(Application.streamingAssetsPath, "voxtest.txt");
-    // private string filepathOuter = "Assets/Resources/voxtest.txt";
 
     public Camera mainCamera;
 
@@ -53,7 +51,7 @@ public class OuterWorldManager : MonoBehaviour
 
         //The firsts container initilised
         GameObject contInner = InstantiateContainerPosition("InnerContainer", Vector3.zero);
-        contInner.tag = "InnerContainer";     // Set the tag for collision detection
+        contInner.tag = "InnerContainer"; // Tag the inner container for collision detection
         containerOuter = contInner.AddComponent<OuterContainer>();
         containerOuter.Initialize(worldMaterial, Vector3.zero);
         SetCollider(contInner);
@@ -61,21 +59,14 @@ public class OuterWorldManager : MonoBehaviour
 
         //The second container initialised
         GameObject contOuter = InstantiateContainerPosition("OuterContainer", Vector3.zero);
-        contOuter.tag = "OuterContainer";
+        contOuter.tag = "OuterContainer"; //Tag the outer container for collision detection
         containerInner = contOuter.AddComponent<OuterContainer>();
         containerInner.Initialize(worldMaterial, Vector3.zero);
         SetCollider(contOuter);
   
-        
-        // // Tag the inner container
-        // GameObject outerContainer = GameObject.FindWithTag("OuterContainer");
-        // if (outerContainer == null)
-        // {
-        //     Debug.LogError("OuterContainer tag not found. Make sure the inner container is tagged correctly.");
-        // }
+    
 
         OuterComputeManager.Instance.Initialize(1);
-
 
         // OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, true);
 
@@ -109,43 +100,15 @@ public class OuterWorldManager : MonoBehaviour
     private void Update()
     {
         if (quitting == false) {
-            // if (Input.GetKeyDown(KeyCode.Z))
-            // {
-            //     isGeneratingOuter = !isGeneratingOuter;
-            //     container.ClearData();
-            //     OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, isGeneratingOuter);
-            // }
 
-            //Debug.Log("Camera position: " + mainCamera.transform.position);
-            //if the camera is a certain distance away from the container, switch to the other container
-            // if (!isGeneratingOuter && Vector3.Distance(mainCamera.transform.position, container.transform.position) > 18)
-            // {
-                // isGeneratingOuter = !isGeneratingOuter;
                 containerOuter.ClearData();
                 containerInner.ClearData();
                 OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, true);
                 // OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, false);
-            // }
-            // else
-            // {
-            //     OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, isGeneratingOuter);
-            // }
         }
     }
     
     //check for a collision with the MainCamera to switch between the two voxel meshes
-
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     Debug.Log("Trigger detected: " + other.tag + " - " + other.name);
-    //     if (other.CompareTag("MainCamera") && isGeneratingOuter)
-    //     {
-    //         // Toggle the voxel data generation
-    //         isGeneratingOuter = !isGeneratingOuter;
-    //         container.ClearData();
-    //         OuterComputeManager.Instance.GenerateVoxelData(ref container, ref mainCamera, isGeneratingOuter);
-    //     }
-    // }
 
     public static OuterWorldSettings WorldSettings;
     private static OuterWorldManager _instance;
@@ -155,7 +118,7 @@ public class OuterWorldManager : MonoBehaviour
         get
         {
             if (_instance == null)
-                _instance = FindObjectOfType<OuterWorldManager>();
+                _instance = FindFirstObjectByType<OuterWorldManager>();
             return _instance;
         }
     }
