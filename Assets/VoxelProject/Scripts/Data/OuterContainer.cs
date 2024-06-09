@@ -31,14 +31,14 @@ public class OuterContainer : MonoBehaviour
         OuterComputeManager.Instance.ClearAndRequeueBuffer(data);
     }
 
-    public void RenderMesh(bool renderOuter = true)
+    public void RenderMesh(bool renderOuter = true, float transparencyValue = 1f)
     {
         meshData.ClearData();
-        GenerateMesh(renderOuter);
+        GenerateMesh(renderOuter, transparencyValue);
         UploadMesh();
     }
 
-    public void GenerateMesh(bool renderOuter = true)
+    public void GenerateMesh(bool renderOuter = true, float transparencyValue = 1f)
     {
         Vector3 blockPos;
         Voxel block;
@@ -95,7 +95,7 @@ public class OuterContainer : MonoBehaviour
             }            
 
             voxelColorAlpha = color;
-            voxelColorAlpha.a = 1;
+            voxelColorAlpha.a = transparencyValue; //THIS IS WHERE THE ALPHA VALUE IS SET 
             voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
             //Iterate over each face direction
             for (int i = 0; i < 6; i++)

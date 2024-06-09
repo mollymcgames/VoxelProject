@@ -209,13 +209,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1264490926}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -30.21977, y: -17.742495, z: 27.772842}
+  m_LocalRotation: {x: 0.21001785, y: -0.37032983, z: 0.08634879, w: 0.9007176}
+  m_LocalPosition: {x: 15.63208, y: 16.84969, z: -19.77949}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 26.25, y: -44.7, z: 0}
 --- !u!114 &1264490930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,7 +335,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1517145014}
   - component: {fileID: 1517145013}
-  - component: {fileID: 1517145017}
   - component: {fileID: 1517145012}
   - component: {fileID: 1517145015}
   - component: {fileID: 1517145016}
@@ -440,8 +439,10 @@ MonoBehaviour:
     maxWidthX: 255
     maxDepthZ: 255
     maxHeightY: 255
-  container: {fileID: 0}
+  containerOuter: {fileID: 0}
+  containerInner: {fileID: 0}
   mainCamera: {fileID: 1264490928}
+  quitting: 0
 --- !u!114 &1517145016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,18 +456,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noiseShader: {fileID: 7200000, guid: 2f02a6167301c774d83b7600a477ddac, type: 3}
---- !u!114 &1517145017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517145011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7ff48776f50bc141ba04b437fcf196a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1517145018
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -974,7 +963,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
