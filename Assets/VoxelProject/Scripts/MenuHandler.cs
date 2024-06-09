@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuHandler : MonoBehaviour
 {
+    public static Vector3 containerPosition = Vector3.zero; //Static field to store the container position
     public void LoadNextScene()
     {
         SceneManager.LoadScene("World");
@@ -13,6 +14,7 @@ public class MenuHandler : MonoBehaviour
 
     public void LoadHeartFile()
     {
+        containerPosition = new Vector3(0, -55, 0); //Set the position of the container
         //Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, "JHU-WhiteMatter-labels-2mm.nii");
         // string niftiFilePath = "Assets/Resources/JHU-WhiteMatter-labels-2mm.nii"; 
@@ -25,6 +27,7 @@ public class MenuHandler : MonoBehaviour
 
     public void LoadLRFile()
     {
+        containerPosition = new Vector3(10, -50, 130); //Set the position of the container
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, "avg152T1_LR_nifti.nii");
         // string niftiFilePath = "Assets/Resources/avg152T1_LR_nifti.nii"; 
         SourceDataLoader.OpenNiftiFile(niftiFilePath);

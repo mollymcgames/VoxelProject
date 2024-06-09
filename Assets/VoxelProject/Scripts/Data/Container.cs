@@ -23,7 +23,8 @@ public class Container : MonoBehaviour
         ConfigureComponents();
         data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
-        containerPosition = position;
+        // containerPosition = position;
+        SetContainerPosition(position);
     }
 
     public void ClearData()
@@ -131,6 +132,12 @@ public class Container : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
         meshCollider.convex = false;
+    }
+
+    private void SetContainerPosition(Vector3 position)
+    {
+        containerPosition = position;
+        transform.position = position;
     }
     public bool checkVoxelIsSolid(Vector3 point)
     {

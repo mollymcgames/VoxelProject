@@ -33,7 +33,7 @@ public class WorldManager : MonoBehaviour
         GameObject cont = new GameObject("Container");
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
-        container.Initialize(worldMaterial, Vector3.zero);
+        container.Initialize(worldMaterial, MenuHandler.containerPosition); //Use the menu handler to set the container position
 
         ComputeManager.Instance.GenerateVoxelData(ref container);
     }
