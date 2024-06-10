@@ -10,36 +10,6 @@ public class SourceDataTextFileLoaderAsDictionary
 {
     public int chunkSize = 8;
 
-/*    public void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
-
-    private static SourceDataTextFileLoaderAsDictionary _instance;
-
-    void Start()
-    {
-        if (_instance != null)
-        {
-            if (_instance != this)
-                Destroy(this);
-        }
-        else
-        {
-            _instance = this;
-        }
-        get
-        {
-    }
-
-    public static SourceDataTextFileLoaderAsDictionary Instance
-    {
-            if (_instance == null)
-                _instance = FindFirstObjectByType<SourceDataTextFileLoaderAsDictionary>();
-            return _instance;
-        }
-    }*/
-
     string[] voxelFileLines = null;
 
     VoxelCell[] voxelData = null;
@@ -77,9 +47,9 @@ public class SourceDataTextFileLoaderAsDictionary
         Debug.Log("Data now read in, data list size: "+voxelDataList.Count);
 
         // Get the dimensions
-        widthX = maxX - minX; //255;//voxelFileLines.Dimensions[0];
-        heightY = maxY - minY; //255;//voxelFileLines.Dimensions[1];
-        depthZ = maxZ - minZ; //255;//voxelFileLines.Dimensions[2];
+        widthX = maxX - minX; //voxelFileLines.Dimensions[0];
+        heightY = maxY - minY; //voxelFileLines.Dimensions[1];
+        depthZ = maxZ - minZ; //voxelFileLines.Dimensions[2];
 
         Debug.Log("DICTIONARY width:" + widthX);
         Debug.Log("DICTIONARY height:" + heightY);
@@ -118,9 +88,9 @@ public class SourceDataTextFileLoaderAsDictionary
     private Vector3Int GetChunkCoordinates(Vector3Int voxelPosition)
     {
         // Calculate chunk coordinates
-        int chunkX = Mathf.FloorToInt((float)voxelPosition.x / chunkSize);
-        int chunkY = Mathf.FloorToInt((float)voxelPosition.y / chunkSize);
-        int chunkZ = Mathf.FloorToInt((float)voxelPosition.z / chunkSize);
+        int chunkX = Mathf.FloorToInt((float)voxelPosition.x / chunkSize)*chunkSize;
+        int chunkY = Mathf.FloorToInt((float)voxelPosition.y / chunkSize)*chunkSize;
+        int chunkZ = Mathf.FloorToInt((float)voxelPosition.z / chunkSize)*chunkSize;
 
         return new Vector3Int(chunkX, chunkY, chunkZ);
     }

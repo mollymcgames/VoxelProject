@@ -61,7 +61,6 @@ public class OuterWorldManager : MonoBehaviour
         {
             Debug.LogError(e.ToString());
         }
-        //StartCoroutine(LoadData());
 
         WorldSettings = worldSettings;
         WorldSettings = worldSettings;
@@ -71,16 +70,6 @@ public class OuterWorldManager : MonoBehaviour
 
         //Initialize the outer containers
         InitialiseContainers();
-
-        /*        int breakout = 0;
-                //while (filesLoaded == false || breakout < 100 )
-                while (breakout < 300)
-                {
-                    Debug.Log("Waiting for files to load...:"+filesLoaded);
-                    breakout++;
-                }
-                chunksDictionary = ConstructChunks(sourceDataInner);
-        */
 
         Debug.Log("Voxels ready check starting...");
         while (sourceDataInner == null &&
@@ -97,18 +86,14 @@ public class OuterWorldManager : MonoBehaviour
         voxelsReady = true;
     }
 
-    IEnumerator LoadData()
+    private void Update()
     {
-        filesLoaded = false;
-        Debug.Log("Waiting for files to load...");
-        yield return new WaitUntil( () => 
-            sourceDataInner != null && 
-            sourceDataOuter != null &&
-            sourceDataInner.Length > 0 &&
-            sourceDataOuter.Length > 0 );
-        Debug.Log("Files loaded!");
-        filesLoaded = true;
-    }
+        if (quitting == false && voxelsReady == true) {
+            containerOuter.ClearData();
+            containerInner.ClearData();
+            OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, true);
+        }
+    }    
 
     void InitialiseContainers()
     {
@@ -127,7 +112,7 @@ public class OuterWorldManager : MonoBehaviour
         containerOuter.Initialize(worldMaterial, Vector3.zero);
         SetCollider(contOuter);
 
-        //The firsts container initilised
+        //The chunnk container initilised
         GameObject contInnerDic = InstantiateContainerPosition("InnerContainerDic", Vector3.zero);
         contInnerDic.tag = "InnerContainerDic"; // Tag the inner container for collision detection
         containerInnerDic = contInnerDic.AddComponent<OuterContainer>();
@@ -160,16 +145,6 @@ public class OuterWorldManager : MonoBehaviour
     {
         Debug.Log("Application ending after " + Time.time + " seconds");
         quitting = true;
-    }
-
-    bool isGeneratingOuter = true;
-    private void Update()
-    {
-        if (quitting == false && voxelsReady == true) {
-            containerOuter.ClearData();
-            containerInner.ClearData();
-            OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, true);
-        }
     }
     
     //check for a collision with the MainCamera to switch between the two voxel meshes

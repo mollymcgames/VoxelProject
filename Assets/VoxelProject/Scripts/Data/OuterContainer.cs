@@ -18,6 +18,12 @@ public class OuterContainer : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
 
+    private Camera mainCamera;
+
+    public void Start(){
+        mainCamera = Camera.main;
+    }
+
     public void Initialize(Material mat, Vector3 position)
     {
         ConfigureComponents();
@@ -162,6 +168,9 @@ public class OuterContainer : MonoBehaviour
         int breaker = 0;
         //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
         //foreach (VoxelCell vc in sourceData)
+
+        Debug.Log("We need to render a chunk for this camera position: "+mainCamera.transform.position);
+
         foreach(KeyValuePair<Vector3Int, Chunk> nextChunk in sourceData)
         {
             // do something with entry.Value or entry.Key

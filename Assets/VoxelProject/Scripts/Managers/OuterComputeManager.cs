@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class OuterComputeManager : MonoBehaviour
 {
@@ -90,21 +91,21 @@ public class OuterComputeManager : MonoBehaviour
                 }
             });
 
-            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
-            {
-                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
-                {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
-                }
-            });
+            // AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+            // {
+            //     if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
+            //     {
+            //         callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
+            //         OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
+            //     }
+            // });
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInnerDic != null)
                 {
                     callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInnerDic.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerInnerDic.RenderMeshDictionary(false, 1f - transparencyValue);
+                    OuterWorldManager.Instance.containerInnerDic.RenderMeshDictionary(false, 1f - transparencyValue);                   
                 }
             });
 
