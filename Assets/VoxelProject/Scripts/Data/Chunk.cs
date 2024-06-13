@@ -11,8 +11,6 @@ public class Chunk
     public Vector3Int chunkCoordinates { get; private set; }
     public List<VoxelElement> voxels { get; private set; }
 
-    private int chunkSize = 8;
-
     public Chunk(Vector3Int chunkCoordinates)
     {
         this.chunkCoordinates = chunkCoordinates;

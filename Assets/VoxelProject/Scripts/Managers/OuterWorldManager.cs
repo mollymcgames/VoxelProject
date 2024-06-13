@@ -17,8 +17,9 @@ public class OuterWorldManager : MonoBehaviour
     public OuterContainer containerInner;
     public OuterContainer containerInnerDic;
 
-    public Dictionary<Vector3Int, Chunk> sourceDataInnerDictionary;// = new Dictionary<Vector3Int, Chunk>();
-    public Dictionary<Vector3Int, Chunk> sourceDataOuterDictionary;// = new Dictionary<Vector3Int, Chunk>();
+    // Vector3Int's are used as they use up less memory
+    public Dictionary<Vector3Int, Chunk> sourceDataInnerDictionary;
+    public Dictionary<Vector3Int, Chunk> sourceDataOuterDictionary;
 
     //Use streaming assets for the file path
     private string filepathInner = Path.Combine(Application.streamingAssetsPath, "blue.txt");
@@ -34,7 +35,7 @@ public class OuterWorldManager : MonoBehaviour
     public int tempheightY = 0;
     public int tempdepthZ = 0;
 
-    public int chunkSize = 8;
+    public int chunkSize = 2;
 
     void Start()
     {

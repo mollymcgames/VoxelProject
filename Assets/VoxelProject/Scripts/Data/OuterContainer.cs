@@ -22,8 +22,6 @@ public class OuterContainer : MonoBehaviour
 
     public int chunkSize = OuterWorldManager.Instance.chunkSize;
 
-
-
     public void Start(){
         mainCamera = Camera.main;
     }
@@ -146,6 +144,29 @@ public class OuterContainer : MonoBehaviour
             }
         }
     }
+    
+    private Dictionary<Vector3Int, Chunk> GetSurroundingChunks(Vector3Int position, int chunkDistance, Dictionary<Vector3Int, Chunk> sourceData)
+    {
+        Dictionary<Vector3Int, Chunk> renderVectors = new Dictionary<Vector3Int, Chunk>();
+        List<Vector3Int> points = new List<Vector3Int>();
+
+        for (int x = -chunkDistance; x <= chunkDistance; x += chunkDistance)
+        {
+            for (int y = -chunkDistance; y <= chunkDistance; y += chunkDistance)
+            {
+                for (int z = -chunkDistance; z <= chunkDistance; z += chunkDistance)
+                {
+                    //if (x == 0 && y == 0 && z == 0) 
+                    //    continue; // Skip the current position
+                    Vector3Int newPoint = new Vector3Int(position.x + x, position.y + y, position.z + z);
+                    sourceData.TryGetValue(newPoint, out Chunk chunk);
+                    if ( chunk != null)
+                        renderVectors.Add(newPoint, chunk);
+                }
+            }
+        }
+        return renderVectors;
+    }
 
     public void GenerateMeshDictionary(bool renderOuter = true, float transparencyValue = 1f)
     {
@@ -170,25 +191,23 @@ public class OuterContainer : MonoBehaviour
             sourceData = OuterWorldManager.Instance.sourceDataInnerDictionary;
         }
         int breaker = 0;
-        //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
-        //foreach (VoxelCell vc in sourceData)
 
+        // Using the current camera position, calculate the relevant chunk coordinates.
+        // This is going to form the centre point for the selection of chunks we're going to render....
         Debug.Log("We need to render a chunk for this camera position: "+mainCamera.transform.position);
         Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkSize);
 
-        sourceData.TryGetValue(chunkCoordinates, out Chunk chunk);
+        // Now using that centre point, get the surrounding chunks.
+        // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
+        Dictionary<Vector3Int, Chunk> renderVectors = GetSurroundingChunks(chunkCoordinates, chunkSize, sourceData);
+        Debug.Log("Number of chunks selected: "+renderVectors.Count);
 
-        // foreach(KeyValuePair<Vector3Int, Chunk> nextChunk in sourceData)
-        // {
-        //     // do something with entry.Value or entry.Key
-        //     if (breaker >= 1)
-        //         break;
-        //     breaker++;
-
-            foreach(VoxelElement nextVoxelElement in chunk.voxels)
+        // Now prep those 27 chunks for rendering....
+        foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
+        {
+            foreach (VoxelElement nextVoxelElement in nextChunk.Value.voxels)
             {
-
-                blockPos = nextVoxelElement.position; // new Vector3(vc.widthX, vc.heightY, vc.depthZ);
+                blockPos = nextVoxelElement.position;
                 block = this[blockPos];
                 //Only check on solid blocks
                 if (!block.isSolid)
@@ -238,11 +257,11 @@ public class OuterContainer : MonoBehaviour
                         meshData.UVs2.Add(voxelSmoothness);
 
                         meshData.triangles.Add(counter++);
-
                     }
                 }
+                breaker++;
             }
-        // }
+        }
     }
 
     public void UploadMesh()

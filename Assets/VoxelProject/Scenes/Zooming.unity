@@ -447,6 +447,7 @@ MonoBehaviour:
   tempwidthX: 0
   tempheightY: 0
   tempdepthZ: 0
+  chunkSize: 4
 --- !u!114 &1517145016
 MonoBehaviour:
   m_ObjectHideFlags: 0

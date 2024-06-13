@@ -62,6 +62,7 @@ public class SourceDataTextFileLoaderAsDictionary
     private Dictionary<Vector3Int, Chunk> ConstructChunks(List<VoxelElement> sourceData)
     {
         Debug.Log("INNER Data now read in, data list size: " + sourceData.Count);
+        Debug.Log("Creating chunks of size ["+chunkSize+"] cubed.");
 
         Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
 
@@ -82,6 +83,7 @@ public class SourceDataTextFileLoaderAsDictionary
             voxelsProcessed++;
         }
         Debug.Log("Voxels processed:" + voxelsProcessed);
+        Debug.Log("Number of chunks created: "+chunks.Count);
         return chunks;
     }
 
