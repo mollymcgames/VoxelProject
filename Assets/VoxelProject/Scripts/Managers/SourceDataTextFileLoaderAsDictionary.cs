@@ -8,7 +8,7 @@ using UnityEngine.Analytics;
 
 public class SourceDataTextFileLoaderAsDictionary
 {
-    public int chunkSize = 8;
+    public int chunkSize = OuterWorldManager.Instance.chunkSize;
 
     string[] voxelFileLines = null;
 
@@ -68,7 +68,7 @@ public class SourceDataTextFileLoaderAsDictionary
         int voxelsProcessed = 0;
         foreach (VoxelElement nextVoxelElement in sourceData)
         {
-            Vector3Int chunkCoordinates = GetChunkCoordinates(nextVoxelElement.position);
+            Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
 
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
@@ -85,15 +85,6 @@ public class SourceDataTextFileLoaderAsDictionary
         return chunks;
     }
 
-    private Vector3Int GetChunkCoordinates(Vector3Int voxelPosition)
-    {
-        // Calculate chunk coordinates
-        int chunkX = Mathf.FloorToInt((float)voxelPosition.x / chunkSize)*chunkSize;
-        int chunkY = Mathf.FloorToInt((float)voxelPosition.y / chunkSize)*chunkSize;
-        int chunkZ = Mathf.FloorToInt((float)voxelPosition.z / chunkSize)*chunkSize;
-
-        return new Vector3Int(chunkX, chunkY, chunkZ);
-    }
 
     public string[] ReadVoxelTextFile(string voxelTextFilePath)
     {

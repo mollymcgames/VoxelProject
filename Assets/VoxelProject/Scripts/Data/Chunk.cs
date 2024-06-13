@@ -28,39 +28,13 @@ public class Chunk
     {
         voxels.Add(voxel);
     }
+    public static Vector3Int GetChunkCoordinates(Vector3 voxelPosition, int chunkSize)
+    {
+        // Calculate chunk coordinates
+        int chunkX = Mathf.FloorToInt((float)voxelPosition.x / chunkSize)*chunkSize;
+        int chunkY = Mathf.FloorToInt((float)voxelPosition.y / chunkSize)*chunkSize;
+        int chunkZ = Mathf.FloorToInt((float)voxelPosition.z / chunkSize)*chunkSize;
 
-/*    void OnDrawGizmos()
-    {
-        if (voxels != null)
-        {
-            for (int x = 0; x < chunkSize; x++)
-            {
-                for (int y = 0; y < chunkSize; y++)
-                {
-                    for (int z = 0; z < chunkSize; z++)
-                    {
-                        if (voxels[x, y, z].isActive)
-                        {
-                            Gizmos.color = voxels[x, y, z].color;
-                            Gizmos.DrawCube(transform.position + new Vector3(x, y, z), Vector3.one);
-                        }
-                    }
-                }
-            }
-        }
-    }*/
-/*
-    private void InitializeVoxels()
-    {
-        for (int x = 0; x < chunkSize; x++)
-        {
-            for (int y = 0; y < chunkSize; y++)
-            {
-                for (int z = 0; z < chunkSize; z++)
-                {
-                    voxels[x, y, z] = new Voxel(transform.position + new Vector3(x, y, z), Color.white);
-                }
-            }
-        }
-    }*/
+        return new Vector3Int(chunkX, chunkY, chunkZ);
+    }
 }

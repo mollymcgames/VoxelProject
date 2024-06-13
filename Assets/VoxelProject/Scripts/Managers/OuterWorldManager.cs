@@ -34,6 +34,8 @@ public class OuterWorldManager : MonoBehaviour
     public int tempheightY = 0;
     public int tempdepthZ = 0;
 
+    public int chunkSize = 8;
+
     void Start()
     {
         if (_instance != null)

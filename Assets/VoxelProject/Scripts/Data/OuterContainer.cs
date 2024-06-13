@@ -20,6 +20,10 @@ public class OuterContainer : MonoBehaviour
 
     private Camera mainCamera;
 
+    public int chunkSize = OuterWorldManager.Instance.chunkSize;
+
+
+
     public void Start(){
         mainCamera = Camera.main;
     }
@@ -170,15 +174,18 @@ public class OuterContainer : MonoBehaviour
         //foreach (VoxelCell vc in sourceData)
 
         Debug.Log("We need to render a chunk for this camera position: "+mainCamera.transform.position);
+        Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkSize);
 
-        foreach(KeyValuePair<Vector3Int, Chunk> nextChunk in sourceData)
-        {
-            // do something with entry.Value or entry.Key
-            if (breaker >= 1)
-                break;
-            breaker++;
+        sourceData.TryGetValue(chunkCoordinates, out Chunk chunk);
 
-            foreach(VoxelElement nextVoxelElement in nextChunk.Value.voxels)
+        // foreach(KeyValuePair<Vector3Int, Chunk> nextChunk in sourceData)
+        // {
+        //     // do something with entry.Value or entry.Key
+        //     if (breaker >= 1)
+        //         break;
+        //     breaker++;
+
+            foreach(VoxelElement nextVoxelElement in chunk.voxels)
             {
 
                 blockPos = nextVoxelElement.position; // new Vector3(vc.widthX, vc.heightY, vc.depthZ);
@@ -235,7 +242,7 @@ public class OuterContainer : MonoBehaviour
                     }
                 }
             }
-        }
+        // }
     }
 
     public void UploadMesh()
