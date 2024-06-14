@@ -15,9 +15,11 @@ public class OuterWorldManager : MonoBehaviour
 
     public OuterContainer containerOuter;
     public OuterContainer containerInner;
+    public OuterContainer containerOuterDic;
     public OuterContainer containerInnerDic;
 
-    // Vector3Int's are used as they use up less memory
+    // Vector3Int's are used as they use up less memory and also
+    // implement the IEquatable interface making searching the Dictionary nice and fast
     public Dictionary<Vector3Int, Chunk> sourceDataInnerDictionary;
     public Dictionary<Vector3Int, Chunk> sourceDataOuterDictionary;
 
@@ -35,7 +37,12 @@ public class OuterWorldManager : MonoBehaviour
     public int tempheightY = 0;
     public int tempdepthZ = 0;
 
-    public int chunkSize = 2;
+    public int chunkOuterSize = 16;
+    public int chunkInnerSize = 2;
+
+    public int chunkFieldOfViewMultiplierInner = 1;
+    public int chunkFieldOfViewMultiplierOuter = 1;
+
 
     void Start()
     {
@@ -54,11 +61,27 @@ public class OuterWorldManager : MonoBehaviour
 
         try
         {
-            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary();
+            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(chunkInnerSize);
             sourceDataInnerDictionary = loader.LoadSourceData(filepathInner);
             tempwidthX = loader.widthX;
             tempheightY = loader.heightY;
             tempdepthZ = loader.depthZ;
+
+            sourceDataOuterDictionary = loader.LoadSourceData(filepathOuter);
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.ToString());
+        }
+
+        try
+        {
+            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(chunkOuterSize);
+            sourceDataOuterDictionary = loader.LoadSourceData(filepathOuter);
+            tempwidthX = loader.widthX;
+            tempheightY = loader.heightY;
+            tempdepthZ = loader.depthZ;                       
         }
         catch (Exception e)
         {
@@ -80,7 +103,9 @@ public class OuterWorldManager : MonoBehaviour
             sourceDataInner.Length <= 0 &&
             sourceDataOuter.Length <= 0 &&
             sourceDataInnerDictionary == null &&
-            sourceDataInnerDictionary.Count <= 0)
+            sourceDataInnerDictionary.Count <= 0 &&
+            sourceDataOuterDictionary == null &&
+            sourceDataOuterDictionary.Count <= 0)
         {
             Debug.Log("Voxels not yet ready...");
             voxelsReady = false;
@@ -94,6 +119,8 @@ public class OuterWorldManager : MonoBehaviour
         if (quitting == false && voxelsReady == true) {
             containerOuter.ClearData();
             containerInner.ClearData();
+            containerOuterDic.ClearData();
+            containerInnerDic.ClearData();
             OuterComputeManager.Instance.GenerateVoxelData(ref containerOuter, ref mainCamera, true);
         }
     }    
@@ -101,32 +128,39 @@ public class OuterWorldManager : MonoBehaviour
     void InitialiseContainers()
     {
         //The firsts container initilised
-        GameObject contInner = InstantiateContainerPosition("InnerContainer", Vector3.zero);
+        GameObject contInner = InstantiateContainerPosition("InnerContainer", Vector3Int.zero);
         contInner.tag = "InnerContainer"; // Tag the inner container for collision detection
         containerInner = contInner.AddComponent<OuterContainer>();
         containerInner.Initialize(worldMaterial, Vector3.zero);
         SetCollider(contInner);
 
-
         //The second container initialised
-        GameObject contOuter = InstantiateContainerPosition("OuterContainer", Vector3.zero);
+        GameObject contOuter = InstantiateContainerPosition("OuterContainer", Vector3Int.zero);
         contOuter.tag = "OuterContainer"; //Tag the outer container for collision detection
         containerOuter = contOuter.AddComponent<OuterContainer>();
         containerOuter.Initialize(worldMaterial, Vector3.zero);
         SetCollider(contOuter);
 
-        //The chunnk container initilised
-        GameObject contInnerDic = InstantiateContainerPosition("InnerContainerDic", Vector3.zero);
+        //The INNER chunk container initialised
+        GameObject contInnerDic = InstantiateContainerPosition("InnerContainerDic", Vector3Int.zero);
         contInnerDic.tag = "InnerContainerDic"; // Tag the inner container for collision detection
         containerInnerDic = contInnerDic.AddComponent<OuterContainer>();
-        containerInnerDic.Initialize(worldMaterial, Vector3.zero);
+        containerInnerDic.Initialize(worldMaterial, Vector3Int.zero);
         SetCollider(contInnerDic);
+
+        //The OUTER chunk container initialised
+        GameObject contOuterDic = InstantiateContainerPosition("OuterContainerDic", Vector3Int.zero);
+        contOuterDic.tag = "OuterContainerDic"; // Tag the outer container for collision detection
+        containerOuterDic = contOuterDic.AddComponent<OuterContainer>();
+        containerOuterDic.Initialize(worldMaterial, Vector3Int.zero);
+        SetCollider(contOuterDic);
+
 
         OuterComputeManager.Instance.Initialize(1);
     }
 
 
-    GameObject InstantiateContainerPosition(string name, Vector3 position)
+    GameObject InstantiateContainerPosition(string name, Vector3Int position)
     {
         GameObject cont = new GameObject(name);
         cont.transform.parent = transform;
@@ -140,7 +174,7 @@ public class OuterWorldManager : MonoBehaviour
         // // Add a collider to the container for collision detection
         BoxCollider collider = container.AddComponent<BoxCollider>();
         collider.isTrigger = true; // Enable IsTrigger
-        collider.size = new Vector3(11, 9, 9); // Adjust the size as needed
+        collider.size = new Vector3Int(11, 9, 9); // Adjust the size as needed
     }
 
     

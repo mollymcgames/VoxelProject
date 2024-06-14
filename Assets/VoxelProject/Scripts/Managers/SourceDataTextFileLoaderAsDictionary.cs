@@ -8,7 +8,12 @@ using UnityEngine.Analytics;
 
 public class SourceDataTextFileLoaderAsDictionary
 {
-    public int chunkSize = OuterWorldManager.Instance.chunkSize;
+    public int chunkSize = 0;
+
+    public SourceDataTextFileLoaderAsDictionary(int chunkSize)
+    {
+        this.chunkSize = chunkSize;
+    }
 
     string[] voxelFileLines = null;
 

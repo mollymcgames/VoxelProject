@@ -82,14 +82,14 @@ public class OuterComputeManager : MonoBehaviour
             float transparencyValue = AdjustMaterialTransparency(ref container, ref mainCamera);
             Debug.Log("New Transparency Value: " + transparencyValue);
 
-            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+/*            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null)
                 {
                     callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuter.data.voxelArray.array);
                     OuterWorldManager.Instance.containerOuter.RenderMesh(true, transparencyValue);
                 }
-            });
+            });*/
 
             // AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             // {
@@ -99,6 +99,15 @@ public class OuterComputeManager : MonoBehaviour
             //         OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
             //     }
             // });
+
+            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+            {
+                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuterDic != null)
+                {
+                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuterDic.data.voxelArray.array);
+                    OuterWorldManager.Instance.containerOuterDic.RenderMeshDictionary(true, transparencyValue);
+                }
+            });
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {

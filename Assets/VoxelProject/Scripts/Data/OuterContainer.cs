@@ -20,7 +20,12 @@ public class OuterContainer : MonoBehaviour
 
     private Camera mainCamera;
 
-    public int chunkSize = OuterWorldManager.Instance.chunkSize;
+    public int chunkInnerSize = OuterWorldManager.Instance.chunkInnerSize;
+    public int chunkOuterSize = OuterWorldManager.Instance.chunkOuterSize;
+
+    public int chunkFieldOfViewMultiplierInner = OuterWorldManager.Instance.chunkFieldOfViewMultiplierInner;
+    public int chunkFieldOfViewMultiplierOuter = OuterWorldManager.Instance.chunkFieldOfViewMultiplierOuter;
+
 
     public void Start(){
         mainCamera = Camera.main;
@@ -145,16 +150,16 @@ public class OuterContainer : MonoBehaviour
         }
     }
     
-    private Dictionary<Vector3Int, Chunk> GetSurroundingChunks(Vector3Int position, int chunkDistance, Dictionary<Vector3Int, Chunk> sourceData)
+    private Dictionary<Vector3Int, Chunk> GetSurroundingChunks(Vector3Int position, int chunkDistanceMultiplier, int chunkSize, Dictionary<Vector3Int, Chunk> sourceData)
     {
         Dictionary<Vector3Int, Chunk> renderVectors = new Dictionary<Vector3Int, Chunk>();
         List<Vector3Int> points = new List<Vector3Int>();
 
-        for (int x = -chunkDistance; x <= chunkDistance; x += chunkDistance)
+        for (int x = -chunkDistanceMultiplier * chunkSize; x <= chunkDistanceMultiplier * chunkSize; x += chunkSize)
         {
-            for (int y = -chunkDistance; y <= chunkDistance; y += chunkDistance)
+            for (int y = -chunkDistanceMultiplier * chunkSize; y <= chunkDistanceMultiplier * chunkSize; y += chunkSize)
             {
-                for (int z = -chunkDistance; z <= chunkDistance; z += chunkDistance)
+                for (int z = -chunkDistanceMultiplier * chunkSize; z <= chunkDistanceMultiplier * chunkSize; z += chunkSize)
                 {
                     //if (x == 0 && y == 0 && z == 0) 
                     //    continue; // Skip the current position
@@ -170,37 +175,50 @@ public class OuterContainer : MonoBehaviour
 
     public void GenerateMeshDictionary(bool renderOuter = true, float transparencyValue = 1f)
     {
-        Vector3 blockPos;
+        Vector3Int blockPos;
         Voxel block;
 
         int counter = 0;
-        Vector3[] faceVertices = new Vector3[4];
+        Vector3Int[] faceVertices = new Vector3Int[4];
         Vector2[] faceUVs = new Vector2[4];
 
         VoxelColor voxelColor;
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
+        Vector3Int chunkCoordinates = Vector3Int.zero;
+        Dictionary<Vector3Int, Chunk> renderVectors = null;
         Dictionary<Vector3Int, Chunk> sourceData = null;
         if (renderOuter)
         {
+            Debug.Log("[OUTER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
+
+            // Using the current camera position, calculate the relevant chunk coordinates.
+            // This is going to form the centre point for the selection of chunks we're going to render....
+            chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkOuterSize);
+
             sourceData = OuterWorldManager.Instance.sourceDataOuterDictionary;
+            // Now using that centre point, get the surrounding chunks.
+            // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
+            renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplierOuter, chunkOuterSize, sourceData);
         }
         else
         {
+            Debug.Log("[INNER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
+
+            // Using the current camera position, calculate the relevant chunk coordinates.
+            // This is going to form the centre point for the selection of chunks we're going to render....
+            chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkInnerSize);
+
             sourceData = OuterWorldManager.Instance.sourceDataInnerDictionary;
+            // Now using that centre point, get the surrounding chunks.
+            // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
+            renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplierInner, chunkInnerSize, sourceData);
+
         }
+        Debug.Log(renderOuter?"[OUTER]":"[INNER]"+" Number of chunks selected: "+renderVectors.Count );
+
         int breaker = 0;
-
-        // Using the current camera position, calculate the relevant chunk coordinates.
-        // This is going to form the centre point for the selection of chunks we're going to render....
-        Debug.Log("We need to render a chunk for this camera position: "+mainCamera.transform.position);
-        Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkSize);
-
-        // Now using that centre point, get the surrounding chunks.
-        // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
-        Dictionary<Vector3Int, Chunk> renderVectors = GetSurroundingChunks(chunkCoordinates, chunkSize, sourceData);
-        Debug.Log("Number of chunks selected: "+renderVectors.Count);
 
         // Now prep those 27 chunks for rendering....
         foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
@@ -283,7 +301,7 @@ public class OuterContainer : MonoBehaviour
         meshCollider = GetComponent<MeshCollider>();
         meshCollider.convex = false;
     }
-    public bool checkVoxelIsSolid(Vector3 point)
+    public bool checkVoxelIsSolid(Vector3Int point)
     {
         if (point.y + 2 < 0 || (point.x > OuterWorldManager.WorldSettings.maxWidthX + 2) || (point.z > OuterWorldManager.WorldSettings.maxDepthZ + 2))
             return true;
@@ -363,17 +381,17 @@ public class OuterContainer : MonoBehaviour
     #endregion
 
     #region Static Variables
-    static readonly Vector3[] voxelVertices = new Vector3[8]
+    static readonly Vector3Int[] voxelVertices = new Vector3Int[8]
     {
-            new Vector3(0,0,0),//0
-            new Vector3(1,0,0),//1
-            new Vector3(0,1,0),//2
-            new Vector3(1,1,0),//3
+            new Vector3Int(0,0,0),//0
+            new Vector3Int(1,0,0),//1
+            new Vector3Int(0,1,0),//2
+            new Vector3Int(1,1,0),//3
 
-            new Vector3(0,0,1),//4
-            new Vector3(1,0,1),//5
-            new Vector3(0,1,1),//6
-            new Vector3(1,1,1),//7
+            new Vector3Int(0,0,1),//4
+            new Vector3Int(1,0,1),//5
+            new Vector3Int(0,1,1),//6
+            new Vector3Int(1,1,1),//7
     };
 
     static readonly Vector3[] voxelFaceChecks = new Vector3[6]
