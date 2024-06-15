@@ -33,6 +33,9 @@ public class VoxelContainer : MonoBehaviour
         Debug.Log("VOXEL-CONTAINER Trigger detected: " + other.tag + " - " + other.name);
         if (other.CompareTag("MainCamera"))
         {
+            Debug.Log("Switching scene!");
+            VoxelWorldManager.Instance.sceneSwitchName = "Zooming";
+            VoxelWorldManager.Instance.doSceneSwitch = true;
             // Toggle the voxel data generation
             /*            isGeneratingOuter = !isGeneratingOuter;
                         container.ClearData();

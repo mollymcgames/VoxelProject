@@ -42,6 +42,11 @@ public class VoxelWorldManager : MonoBehaviour
     public int offsetYBackToZero = 0;
     public int offsetZBackToZero = 0;
 
+    [HideInInspector]
+    public bool doSceneSwitch = false;
+    [HideInInspector]
+    public string sceneSwitchName = "";
+
     public static VoxelWorldManager Instance
     {
         get
