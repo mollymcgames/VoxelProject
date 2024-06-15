@@ -133,7 +133,7 @@ public class VoxelWorldManager : MonoBehaviour
 */        }
     }
 
-    void InitialiseContainers(string meshContainerName = "OuterContainerDic")
+    void InitialiseContainers(string meshContainerName)
     {
         // Initialise an individual Voxel mesh container
         GameObject meshContainer = InstantiateContainerPosition(meshContainerName, Vector3Int.zero);
@@ -156,7 +156,8 @@ public class VoxelWorldManager : MonoBehaviour
         GameObject cont = new GameObject(name);
         cont.transform.parent = transform;
         cont.transform.position = position;
-        cont.transform.Rotate(270, 0, 0); // Adjust this as necessary to correct the orientation
+        // Adjust this as necessary to correct the orientation
+        cont.transform.Rotate(270, 0, 0); 
         return cont;
     }
 
@@ -164,11 +165,12 @@ public class VoxelWorldManager : MonoBehaviour
     {
         // Add a collider to the container for collision detection
         BoxCollider collider = container.AddComponent<BoxCollider>();
-        collider.isTrigger = true; // Enable IsTrigger
-        collider.size = new Vector3Int(21, 18, 7); // Adjust the size as needed
+        // Enable IsTrigger
+        collider.isTrigger = true;
+        // Adjust the size as needed
+        collider.size = new Vector3Int(21, 18, 7);
         collider.center = 
               new Vector3Int(VoxelWorldManager.Instance.offsetXBackToZero, VoxelWorldManager.Instance.offsetYBackToZero, VoxelWorldManager.Instance.offsetZBackToZero)
-            + new Vector3Int(VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetX, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetY, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetZ);
-        //collider.transform.position = new Vector3Int(VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetX, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetY, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetZ);
+            + new Vector3Int(VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetX, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetY, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetZ);     
     }
 }

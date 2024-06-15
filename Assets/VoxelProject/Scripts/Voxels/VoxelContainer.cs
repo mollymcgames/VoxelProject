@@ -28,6 +28,19 @@ public class VoxelContainer : MonoBehaviour
         mainCamera = Camera.main;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("VOXEL-CONTAINER Trigger detected: " + other.tag + " - " + other.name);
+        if (other.CompareTag("MainCamera"))
+        {
+            // Toggle the voxel data generation
+            /*            isGeneratingOuter = !isGeneratingOuter;
+                        container.ClearData();
+                        OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
+            */
+        }
+    }
+
     public void Initialise(Material mat, Vector3Int position)
     {
         ConfigureComponents();
