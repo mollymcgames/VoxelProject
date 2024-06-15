@@ -17,8 +17,8 @@ public class VoxelWorldManager : MonoBehaviour
     // implement the IEquatable interface making searching the Dictionary nice and fast
     public Dictionary<Vector3Int, Chunk> voxelSourceDataDictionary;
 
-    [Header("Voxel Camera, drag in the Main Camera")]
-    public Camera mainCamera;
+    //[Header("Voxel Camera, drag in the Main Camera")]
+    //public Camera mainCamera;
 
     private bool filesLoaded = false;
 
@@ -44,8 +44,6 @@ public class VoxelWorldManager : MonoBehaviour
 
     [HideInInspector]
     public bool doSceneSwitch = false;
-    [HideInInspector]
-    public string sceneSwitchName = "";
 
     public static VoxelWorldManager Instance
     {
@@ -135,7 +133,7 @@ public class VoxelWorldManager : MonoBehaviour
         // Don't attempt any update loop if unity is either quitting or the voxel load isn't complete, it's just not worth it!
         if (quitting == false && voxelsReady == true) {
             voxelMeshContainer.ClearData();
-            VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer, ref mainCamera);
+            VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer);
         }
     }
 

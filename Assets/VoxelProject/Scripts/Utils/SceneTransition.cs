@@ -19,6 +19,7 @@ public class SceneTransition : MonoBehaviour
  //           Vector3.Distance(playerCamera.transform.position, greenCube.position) < transitionDistance)
         if (VoxelWorldManager.Instance.doSceneSwitch)
         {
+            VoxelWorldManager.Instance.doSceneSwitch = false;
             StartCoroutine(ZoomAndTransition());
         }
     }
@@ -44,7 +45,7 @@ public class SceneTransition : MonoBehaviour
         }
 
         // Load second scene
-        SceneManager.LoadScene(VoxelWorldManager.Instance.sceneSwitchName);
+        SceneManager.LoadScene(VoxelWorldManager.Instance.voxelMeshConfigurationSettings.sceneTargetName);
 
         // Fade in
         while (fadeGroup.alpha > 0)

@@ -34,7 +34,6 @@ public class VoxelContainer : MonoBehaviour
         if (other.CompareTag("MainCamera"))
         {
             Debug.Log("Switching scene!");
-            VoxelWorldManager.Instance.sceneSwitchName = "Cell";
             VoxelWorldManager.Instance.doSceneSwitch = true;
             // Toggle the voxel data generation
             /*            isGeneratingOuter = !isGeneratingOuter;
@@ -87,6 +86,10 @@ public class VoxelContainer : MonoBehaviour
 
     public void GenerateMesh(float transparencyValue = 1f)
     {
+        // Due to scene switching, the mainCamera variable can go null!
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+
         Vector3Int blockPos;
         Voxel block;
 

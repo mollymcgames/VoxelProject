@@ -24,6 +24,8 @@ public class VoxelMeshConfigurationSettings
     public int domainOffsetY = 0;
     public int domainOffsetZ = 0;
 
+    public string sceneTargetName;
+
     [HideInInspector]
     public string voxelDataFilePath
     {

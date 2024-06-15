@@ -80,7 +80,8 @@ public class VoxelComputeManager : MonoBehaviour
 
     #region Compute Helpers
 
-    public void GenerateVoxelData(ref VoxelContainer container, ref Camera mainCamera)
+    //public void GenerateVoxelData(ref VoxelContainer container, ref Camera mainCamera)
+    public void GenerateVoxelData(ref VoxelContainer container)
     {
         // Do not attempt to schedule rendering of a mesh if the container is null or the unity game is currently quitting
         if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null && !VoxelWorldManager.Instance.quitting)
@@ -98,7 +99,7 @@ public class VoxelComputeManager : MonoBehaviour
             noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
             noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
 
-            float transparencyValue = AdjustMaterialTransparency(ref container, ref mainCamera);
+            float transparencyValue = AdjustMaterialTransparency(ref container);
             Debug.Log("New Transparency Value: " + transparencyValue);
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
@@ -115,9 +116,9 @@ public class VoxelComputeManager : MonoBehaviour
     }
 
 
-    private float AdjustMaterialTransparency(ref VoxelContainer container, ref Camera mainCamera)
+    private float AdjustMaterialTransparency(ref VoxelContainer container)
     {
-        float distance = Vector3.Distance(mainCamera.transform.position, container.transform.position);
+        float distance = Vector3.Distance(Camera.main.transform.position, container.transform.position);
         float maxDistance = 30f;
         float minDistance = 10f;
 
