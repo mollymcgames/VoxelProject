@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class VoxelWorldManager : MonoBehaviour
 {
@@ -23,13 +24,6 @@ public class VoxelWorldManager : MonoBehaviour
     [HideInInspector]
     public bool quitting = false;
     private bool voxelsReady = false;
-
-    [HideInInspector]
-    public int tempwidthX = 0;
-    [HideInInspector]
-    public int tempheightY = 0;
-    [HideInInspector]
-    public int tempdepthZ = 0;
 
     public static VoxelWorldSettings WorldSettings;
     private static VoxelWorldManager _instance;
@@ -67,24 +61,21 @@ public class VoxelWorldManager : MonoBehaviour
 
         try
         {
-            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(voxelMeshConfigurationSettings.voxelChunkSize);
+            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(voxelMeshConfigurationSettings.voxelChunkSize);                        
             voxelSourceDataDictionary = loader.LoadSourceData(voxelMeshConfigurationSettings.voxelDataFilePath);
-            tempwidthX = loader.widthX;
-            tempheightY = loader.heightY;
-            tempdepthZ = loader.depthZ;
+            WorldSettings = worldSettings;
+            WorldSettings.maxWidthX = loader.widthX;
+            WorldSettings.maxHeightY = loader.heightY;
+            WorldSettings.maxDepthZ = loader.depthZ;
         }
         catch (Exception e)
         {
             Debug.LogError(e.ToString());
         }
 
-        WorldSettings = worldSettings;
-        WorldSettings.maxWidthX = SourceDataTextFileLoader.widthX;
-        WorldSettings.maxHeightY = SourceDataTextFileLoader.heightY;
-        WorldSettings.maxDepthZ = SourceDataTextFileLoader.depthZ;
-
-        //Initialise the voxel containers
-        InitialiseContainers(voxelMeshConfigurationSettings.voxelMeshContainerTagName);
+        Debug.Log("World x:" + WorldSettings.maxWidthX);
+        Debug.Log("World y:" + WorldSettings.maxHeightY);
+        Debug.Log("World z:" + WorldSettings.maxDepthZ);
 
         Debug.Log("Voxels ready check starting...");
         while (voxelSourceDataDictionary == null && voxelSourceDataDictionary.Count <= 0)
@@ -94,6 +85,9 @@ public class VoxelWorldManager : MonoBehaviour
         }
         Debug.Log("Voxels now ready...");
         voxelsReady = true;
+
+        //Initialise the voxel containers
+        InitialiseContainers(voxelMeshConfigurationSettings.voxelMeshContainerTagName);
     }
 
     void OnApplicationQuit()
@@ -107,7 +101,7 @@ public class VoxelWorldManager : MonoBehaviour
         // Don't attempt any update loop if unity is either quitting or the voxel load isn't complete, it's just not worth it!
         if (quitting == false && voxelsReady == true) {
             voxelMeshContainer.ClearData();
-            VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer, ref mainCamera, true);
+            VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer, ref mainCamera);
         }
     }    
 
@@ -124,7 +118,7 @@ public class VoxelWorldManager : MonoBehaviour
 
         // Attach the new meshContainer to the main scene's mesh container
         voxelMeshContainer = meshContainer.AddComponent<VoxelContainer>();
-        voxelMeshContainer.Initialize(worldMaterial, Vector3Int.zero);
+        voxelMeshContainer.Initialise(worldMaterial, Vector3Int.zero);
 
         VoxelComputeManager.Instance.Initialise(1);
     }

@@ -27,6 +27,7 @@ public struct VoxelNoiseBuffer
 
         Initialized = false;
     }
+
     public Voxel this[Vector3 index]
     {
         get

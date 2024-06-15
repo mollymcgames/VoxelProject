@@ -71,7 +71,7 @@ public class VoxelIndexedArray<T> where T : struct
                 unityCoords.y < 0 || unityCoords.y > size.y ||
                 unityCoords.z < 0 || unityCoords.z > size.z)
             {
-                Debug.LogError($"Coordinates GET out of bounds! {coord}");
+                //Debug.LogError($"Coordinates GET out of bounds! {coord}");
                 return default(T);
             }
             return array[IndexFromCoord(coord)];

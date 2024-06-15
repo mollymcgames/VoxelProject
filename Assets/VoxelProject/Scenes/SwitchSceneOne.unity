@@ -395,10 +395,7 @@ MonoBehaviour:
   voxelMeshContainer: {fileID: 0}
   mainCamera: {fileID: 1264490928}
   quitting: 0
-  tempwidthX: 0
-  tempheightY: 0
-  tempdepthZ: 0
-  worldMaterial: {fileID: 0}
+  worldMaterial: {fileID: 2100000, guid: d41578d92bc26b04bb2355aed476d2cb, type: 2}
   WorldColors:
   - color: {r: 0.78490204, g: 0.8962264, b: 0.097232126, a: 0}
     metallic: 0
@@ -410,7 +407,7 @@ MonoBehaviour:
     maxDepthZ: 0
     maxHeightY: 0
   voxelMeshConfigurationSettings:
-    voxelDataFileName: 
+    voxelDataFileName: voxtest.txt
     voxelChunkSize: 16
     voxelChunkFieldOfViewMultiplier: 1
     voxelMeshContainerTagName: OuterContainerDic

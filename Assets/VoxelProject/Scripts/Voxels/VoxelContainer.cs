@@ -9,7 +9,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshCollider))]
 public class VoxelContainer : MonoBehaviour
 {
-    public Vector3 containerPosition;
+    public Vector3Int containerPosition;
 
     public VoxelNoiseBuffer data;
     private MeshData meshData = new MeshData();
@@ -28,7 +28,7 @@ public class VoxelContainer : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    public void Initialize(Material mat, Vector3 position)
+    public void Initialise(Material mat, Vector3Int position)
     {
         ConfigureComponents();
         data = VoxelComputeManager.Instance.GetNoiseBuffer();
@@ -92,7 +92,7 @@ public class VoxelContainer : MonoBehaviour
         // This is going to form the centre point for the selection of chunks we're going to render....
         chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), voxelChunkSize);
 
-        sourceData = OuterWorldManager.Instance.sourceDataOuterDictionary;
+        sourceData = VoxelWorldManager.Instance.voxelSourceDataDictionary;
         // Now using that centre point, get the surrounding chunks.
         // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
         renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, sourceData);
@@ -184,7 +184,7 @@ public class VoxelContainer : MonoBehaviour
     }
     public bool checkVoxelIsSolid(Vector3Int point)
     {
-        if (point.y + 2 < 0 || (point.x > OuterWorldManager.WorldSettings.maxWidthX + 2) || (point.z > OuterWorldManager.WorldSettings.maxDepthZ + 2))
+        if (point.y + 2 < 0 || (point.x > VoxelWorldManager.WorldSettings.maxWidthX + 2) || (point.z > VoxelWorldManager.WorldSettings.maxDepthZ + 2))
             return true;
         else
             return this[point].isSolid;

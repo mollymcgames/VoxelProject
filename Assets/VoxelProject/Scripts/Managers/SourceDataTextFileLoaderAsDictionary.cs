@@ -8,7 +8,14 @@ using UnityEngine.Analytics;
 
 public class SourceDataTextFileLoaderAsDictionary
 {
-    public int chunkSize = 0;
+    private int chunkSize = 0;
+    
+    private int maxX = 0;
+    private int maxY = 0;
+    private int maxZ = 0;
+    private int minX = 0;
+    private int minY = 0;
+    private int minZ = 0;
 
     public SourceDataTextFileLoaderAsDictionary(int chunkSize)
     {
@@ -18,16 +25,10 @@ public class SourceDataTextFileLoaderAsDictionary
     string[] voxelFileLines = null;
 
     VoxelCell[] voxelData = null;
+
     public int widthX = 0;
     public int heightY = 0;
     public int depthZ = 0;
-
-    public Dictionary<Vector3Int, Chunk> LoadSourceData()
-    {
-        Debug.Log("Loading source data...");
-        //use streaming assets for the file path
-        return LoadVoxelFile("Assets/Resources/blue.txt");
-    }
 
     public Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
     {
@@ -35,12 +36,10 @@ public class SourceDataTextFileLoaderAsDictionary
         return LoadVoxelFile(filepath);
     }    
 
-
     public string[] GetHeader()
     {
         return voxelFileLines;
     }
-    
 
     public Dictionary<Vector3Int, Chunk> LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
     {
@@ -66,7 +65,7 @@ public class SourceDataTextFileLoaderAsDictionary
   
     private Dictionary<Vector3Int, Chunk> ConstructChunks(List<VoxelElement> sourceData)
     {
-        Debug.Log("INNER Data now read in, data list size: " + sourceData.Count);
+        Debug.Log("Data now read in, data list size: " + sourceData.Count);
         Debug.Log("Creating chunks of size ["+chunkSize+"] cubed.");
 
         Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
@@ -98,13 +97,6 @@ public class SourceDataTextFileLoaderAsDictionary
         // Load the text file
         return File.ReadAllLines(voxelTextFilePath);
     }
-
-    private int maxX = 0;
-    private int maxY = 0;
-    private int maxZ = 0;
-    private int minX = 0;
-    private int minY = 0;
-    private int minZ = 0;
 
     private List<VoxelElement> ReadVoxelData(string[] lines)
     {

@@ -12,15 +12,29 @@ public class VoxelComputeManager : MonoBehaviour
     private List<VoxelNoiseBuffer> allNoiseComputeBuffers = new List<VoxelNoiseBuffer>();
     private Queue<VoxelNoiseBuffer> availableNoiseComputeBuffers = new Queue<VoxelNoiseBuffer>();
 
-    private int xThreads;
-    private int yThreads;
-    private int zThreads;
+    private int xThreads=0;
+    private int yThreads=0;
+    private int zThreads=0;
 
     public void Initialise(int count = 256)
     {
+        Debug.Log("INIT x:" + VoxelWorldManager.WorldSettings.maxWidthX);
+        Debug.Log("INIT y:" + VoxelWorldManager.WorldSettings.maxHeightY);
+        Debug.Log("INIT z:" + VoxelWorldManager.WorldSettings.maxDepthZ);
+
         xThreads = VoxelWorldManager.WorldSettings.maxWidthX / 8 + 1;
         yThreads = VoxelWorldManager.WorldSettings.maxHeightY / 8;
         zThreads = VoxelWorldManager.WorldSettings.maxDepthZ / 8;
+        if (xThreads <= 0)
+            xThreads = 1;
+        if (yThreads <= 0)
+            yThreads = 1;
+        if (zThreads <= 0 )
+            zThreads = 1;
+
+        Debug.Log("POST INIT x:" + xThreads);
+        Debug.Log("POST INIT y:" + yThreads);
+        Debug.Log("POST INIT z:" + zThreads);
 
         noiseShader.SetInt("containerSizeX", VoxelWorldManager.WorldSettings.maxWidthX);
         noiseShader.SetInt("containerSizeY", VoxelWorldManager.WorldSettings.maxHeightY);
@@ -66,7 +80,7 @@ public class VoxelComputeManager : MonoBehaviour
 
     #region Compute Helpers
 
-    public void GenerateVoxelData(ref VoxelContainer container, ref Camera mainCamera, bool renderOuter = false)
+    public void GenerateVoxelData(ref VoxelContainer container, ref Camera mainCamera)
     {
         // Do not attempt to schedule rendering of a mesh if the container is null or the unity game is currently quitting
         if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null && !VoxelWorldManager.Instance.quitting)
@@ -74,8 +88,12 @@ public class VoxelComputeManager : MonoBehaviour
             noiseShader.SetBuffer(0, "voxelArray", container.data.noiseBuffer);
             noiseShader.SetBuffer(0, "count", container.data.countBuffer);
 
-            noiseShader.SetVector("chunkPosition", container.containerPosition);
+            noiseShader.SetVector("chunkPosition", (Vector3)container.containerPosition);
             noiseShader.SetVector("seedOffset", Vector3.zero);
+
+            Debug.Log("World xThreads:" + xThreads);
+            Debug.Log("World yThreads:" + yThreads);
+            Debug.Log("World zThreads:" + zThreads);
 
             noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
             noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
@@ -121,6 +139,15 @@ public class VoxelComputeManager : MonoBehaviour
 
     private void ClearVoxelData(VoxelNoiseBuffer buffer)
     {
+        Debug.Log("World CLEAR xThreads:" + xThreads);
+        Debug.Log("World CLEAR yThreads:" + yThreads);
+        Debug.Log("World CLEAR zThreads:" + zThreads);
+
+        if (xThreads==0 || yThreads==0 || zThreads==0)
+        { 
+            return; 
+        }
+
         buffer.countBuffer.SetData(new int[] { 0 });
         noiseShader.SetBuffer(1, "voxelArray", buffer.noiseBuffer);
         noiseShader.Dispatch(1, xThreads, yThreads, zThreads);
