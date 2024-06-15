@@ -399,16 +399,21 @@ MonoBehaviour:
   tempheightY: 0
   tempdepthZ: 0
   worldMaterial: {fileID: 0}
-  WorldColors: []
+  WorldColors:
+  - color: {r: 0.78490204, g: 0.8962264, b: 0.097232126, a: 0}
+    metallic: 0
+    smoothness: 0
   worldSettings:
     containerSize: 16
     maxHeight: 128
     maxWidthX: 0
     maxDepthZ: 0
     maxHeightY: 0
-  voxelChunkSize: 16
-  voxelChunkFieldOfViewMultiplier: 1
-  voxelMeshContainerTagName: OuterContainerDic
+  voxelMeshConfigurationSettings:
+    voxelDataFileName: 
+    voxelChunkSize: 16
+    voxelChunkFieldOfViewMultiplier: 1
+    voxelMeshContainerTagName: OuterContainerDic
 --- !u!114 &1517145020
 MonoBehaviour:
   m_ObjectHideFlags: 0

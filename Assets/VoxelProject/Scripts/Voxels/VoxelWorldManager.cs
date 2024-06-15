@@ -16,9 +16,6 @@ public class VoxelWorldManager : MonoBehaviour
     // implement the IEquatable interface making searching the Dictionary nice and fast
     public Dictionary<Vector3Int, Chunk> voxelSourceDataDictionary;
 
-    //Use streaming assets for the file path. e.g. "blue.txt" "voxtest.txt"
-    private string voxelDataFilePath = Path.Combine(Application.streamingAssetsPath, "voxtest.txt");
-
     [Header("Voxel Camera, drag in the Main Camera")]
     public Camera mainCamera;
 
@@ -42,10 +39,9 @@ public class VoxelWorldManager : MonoBehaviour
     public VoxelColor[] WorldColors;
     public VoxelWorldSettings worldSettings;
 
-    [Header("Voxel Configuration Attributes")]
-    public int voxelChunkSize = 16;
-    public int voxelChunkFieldOfViewMultiplier = 1;
-    public string voxelMeshContainerTagName;
+    [Header("Voxel Mesh Settings")]
+    [SerializeField]
+    public VoxelMeshConfigurationSettings voxelMeshConfigurationSettings;
 
     public static VoxelWorldManager Instance
     {
@@ -71,8 +67,8 @@ public class VoxelWorldManager : MonoBehaviour
 
         try
         {
-            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(voxelChunkSize);
-            voxelSourceDataDictionary = loader.LoadSourceData(voxelDataFilePath);
+            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(voxelMeshConfigurationSettings.voxelChunkSize);
+            voxelSourceDataDictionary = loader.LoadSourceData(voxelMeshConfigurationSettings.voxelDataFilePath);
             tempwidthX = loader.widthX;
             tempheightY = loader.heightY;
             tempdepthZ = loader.depthZ;
@@ -87,8 +83,8 @@ public class VoxelWorldManager : MonoBehaviour
         WorldSettings.maxHeightY = SourceDataTextFileLoader.heightY;
         WorldSettings.maxDepthZ = SourceDataTextFileLoader.depthZ;
 
-        //Initialize the voxel containers
-        InitialiseContainers(voxelMeshContainerTagName);
+        //Initialise the voxel containers
+        InitialiseContainers(voxelMeshConfigurationSettings.voxelMeshContainerTagName);
 
         Debug.Log("Voxels ready check starting...");
         while (voxelSourceDataDictionary == null && voxelSourceDataDictionary.Count <= 0)
@@ -130,7 +126,7 @@ public class VoxelWorldManager : MonoBehaviour
         voxelMeshContainer = meshContainer.AddComponent<VoxelContainer>();
         voxelMeshContainer.Initialize(worldMaterial, Vector3Int.zero);
 
-        VoxelComputeManager.Instance.Initialize(1);
+        VoxelComputeManager.Instance.Initialise(1);
     }
 
     GameObject InstantiateContainerPosition(string name, Vector3Int position)

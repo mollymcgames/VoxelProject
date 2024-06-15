@@ -5,7 +5,7 @@ using Unity.Collections;
 using UnityEngine;
 
 [System.Serializable]
-public class IndexedArray<T> where T : struct
+public class VoxelIndexedArray<T> where T : struct
 {
     private bool initialized = false;
 
@@ -17,24 +17,22 @@ public class IndexedArray<T> where T : struct
     [HideInInspector]
     private Vector3Int size;
 
-    public IndexedArray()
+    public VoxelIndexedArray()
     {
-        Create(WorldManager.WorldSettings.maxWidthX, WorldManager.WorldSettings.maxHeightY, WorldManager.WorldSettings.maxDepthZ);
+        Create(VoxelWorldManager.WorldSettings.maxWidthX, VoxelWorldManager.WorldSettings.maxHeightY, VoxelWorldManager.WorldSettings.maxDepthZ);
     }
 
-    public IndexedArray(int sizeX, int sizeY, int sizeZ)
+    public VoxelIndexedArray(int sizeX, int sizeY, int sizeZ)
     {
         Create(sizeX, sizeY, sizeZ);
     }
 
     private void Create(int sizeX, int sizeY, int sizeZ)
     {
-        //size = new Vector3Int(sizeX + 3, sizeY + 1, sizeZ + 3); - original size
         size = new Vector3Int(sizeX, sizeY, sizeZ);
         array = new T[Count];
         initialized = true;
     }
-
 
     int IndexFromCoord(Vector3 idx)
     {

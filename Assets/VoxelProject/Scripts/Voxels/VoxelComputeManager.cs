@@ -16,15 +16,15 @@ public class VoxelComputeManager : MonoBehaviour
     private int yThreads;
     private int zThreads;
 
-    public void Initialize(int count = 256)
+    public void Initialise(int count = 256)
     {
-        xThreads = OuterWorldManager.WorldSettings.maxWidthX / 8 + 1;
-        yThreads = OuterWorldManager.WorldSettings.maxHeightY / 8;
-        zThreads = OuterWorldManager.WorldSettings.maxDepthZ / 8;
+        xThreads = VoxelWorldManager.WorldSettings.maxWidthX / 8 + 1;
+        yThreads = VoxelWorldManager.WorldSettings.maxHeightY / 8;
+        zThreads = VoxelWorldManager.WorldSettings.maxDepthZ / 8;
 
-        noiseShader.SetInt("containerSizeX", OuterWorldManager.WorldSettings.maxWidthX);
-        noiseShader.SetInt("containerSizeY", OuterWorldManager.WorldSettings.maxHeightY);
-        noiseShader.SetInt("containerSizeZ", OuterWorldManager.WorldSettings.maxDepthZ);
+        noiseShader.SetInt("containerSizeX", VoxelWorldManager.WorldSettings.maxWidthX);
+        noiseShader.SetInt("containerSizeY", VoxelWorldManager.WorldSettings.maxHeightY);
+        noiseShader.SetInt("containerSizeZ", VoxelWorldManager.WorldSettings.maxDepthZ);
 
         for (int i = 0; i < count; i++)
         {
@@ -69,7 +69,7 @@ public class VoxelComputeManager : MonoBehaviour
     public void GenerateVoxelData(ref VoxelContainer container, ref Camera mainCamera, bool renderOuter = false)
     {
         // Do not attempt to schedule rendering of a mesh if the container is null or the unity game is currently quitting
-        if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null && !OuterWorldManager.Instance.quitting)
+        if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null && !VoxelWorldManager.Instance.quitting)
         {
             noiseShader.SetBuffer(0, "voxelArray", container.data.noiseBuffer);
             noiseShader.SetBuffer(0, "count", container.data.countBuffer);
@@ -85,10 +85,11 @@ public class VoxelComputeManager : MonoBehaviour
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
-                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuterDic != null)
+                // Do not attempt to render anything if the WorldManager isn't ready yet!
+                if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuterDic.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerOuterDic.RenderMeshDictionary(true, transparencyValue);
+                    callback.GetData<Voxel>(0).CopyTo(VoxelWorldManager.Instance.voxelMeshContainer.data.voxelArray.array);
+                    VoxelWorldManager.Instance.voxelMeshContainer.RenderMesh(transparencyValue);
                 }
             });
 
