@@ -1,5 +1,8 @@
+using System;
 using System.IO;
+using UnityEditorInternal;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class VoxelMeshConfigurationSettings
@@ -13,6 +16,8 @@ public class VoxelMeshConfigurationSettings
     public int voxelChunkSize = 16;
     [Range(1, 6)]
     public int voxelChunkFieldOfViewMultiplier = 1;
+
+    [TagOptions()]
     public string voxelMeshContainerTagName;
 
     [HideInInspector]

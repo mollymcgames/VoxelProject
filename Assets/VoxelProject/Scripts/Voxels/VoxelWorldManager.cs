@@ -57,7 +57,7 @@ public class VoxelWorldManager : MonoBehaviour
         else
         {
             _instance = this;
-        }
+        }       
 
         try
         {
