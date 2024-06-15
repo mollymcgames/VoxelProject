@@ -144,7 +144,10 @@ public class VoxelContainer : MonoBehaviour
                     //Collect the appropriate vertices from the default vertices and add the block position
                     for (int j = 0; j < 4; j++)
                     {
-                        faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
+                        faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] +
+                            blockPos +
+                            new Vector3Int(VoxelWorldManager.Instance.offsetXBackToZero, VoxelWorldManager.Instance.offsetYBackToZero, VoxelWorldManager.Instance.offsetZBackToZero)
+                            + new Vector3Int(VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetX, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetY, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetZ);
                         faceUVs[j] = voxelUVs[j];
                     }
 

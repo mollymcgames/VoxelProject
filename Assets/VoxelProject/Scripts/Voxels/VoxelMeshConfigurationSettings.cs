@@ -20,6 +20,10 @@ public class VoxelMeshConfigurationSettings
     [TagOptions()]
     public string voxelMeshContainerTagName;
 
+    public int domainOffsetX = 0;
+    public int domainOffsetY = 0;
+    public int domainOffsetZ = 0;
+
     [HideInInspector]
     public string voxelDataFilePath
     {

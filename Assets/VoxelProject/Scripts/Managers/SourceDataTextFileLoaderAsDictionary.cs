@@ -10,12 +10,12 @@ public class SourceDataTextFileLoaderAsDictionary
 {
     private int chunkSize = 0;
     
-    private int maxX = 0;
-    private int maxY = 0;
-    private int maxZ = 0;
-    private int minX = 0;
-    private int minY = 0;
-    private int minZ = 0;
+    public int maxX = 0;
+    public int maxY = 0;
+    public int maxZ = 0;
+    public int minX = 0;
+    public int minY = 0;
+    public int minZ = 0;
 
     public SourceDataTextFileLoaderAsDictionary(int chunkSize)
     {

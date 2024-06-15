@@ -21,6 +21,7 @@ public class VoxelWorldManager : MonoBehaviour
     public Camera mainCamera;
 
     private bool filesLoaded = false;
+
     [HideInInspector]
     public bool quitting = false;
     private bool voxelsReady = false;
@@ -36,6 +37,10 @@ public class VoxelWorldManager : MonoBehaviour
     [Header("Voxel Mesh Settings")]
     [SerializeField]
     public VoxelMeshConfigurationSettings voxelMeshConfigurationSettings;
+
+    public int offsetXBackToZero = 0;
+    public int offsetYBackToZero = 0;
+    public int offsetZBackToZero = 0;
 
     public static VoxelWorldManager Instance
     {
@@ -67,6 +72,7 @@ public class VoxelWorldManager : MonoBehaviour
             WorldSettings.maxWidthX = loader.widthX;
             WorldSettings.maxHeightY = loader.heightY;
             WorldSettings.maxDepthZ = loader.depthZ;
+            calculateOffsetsBackToZero(loader);
         }
         catch (Exception e)
         {
@@ -90,6 +96,16 @@ public class VoxelWorldManager : MonoBehaviour
         InitialiseContainers(voxelMeshConfigurationSettings.voxelMeshContainerTagName);
     }
 
+    private void calculateOffsetsBackToZero(SourceDataTextFileLoaderAsDictionary loader)
+    {
+        offsetXBackToZero = -loader.minX;
+        offsetYBackToZero = -loader.minY;
+        offsetZBackToZero = -loader.minZ;
+        Debug.Log("World offset x:" + offsetXBackToZero);
+        Debug.Log("World offset y:" + offsetYBackToZero);
+        Debug.Log("World offset z:" + offsetZBackToZero);
+    }
+
     void OnApplicationQuit()
     {
         Debug.Log("Application ending after " + Time.time + " seconds");
@@ -103,7 +119,19 @@ public class VoxelWorldManager : MonoBehaviour
             voxelMeshContainer.ClearData();
             VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer, ref mainCamera);
         }
-    }    
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger detected: " + other.tag + " - " + other.name);
+        if (other.CompareTag("MainCamera"))
+        {
+            // Toggle the voxel data generation
+/*            isGeneratingOuter = !isGeneratingOuter;
+            container.ClearData();
+            OuterComputeManager.Instance.GenerateVoxelData(ref container, isGeneratingOuter);
+*/        }
+    }
 
     void InitialiseContainers(string meshContainerName = "OuterContainerDic")
     {
@@ -137,6 +165,10 @@ public class VoxelWorldManager : MonoBehaviour
         // Add a collider to the container for collision detection
         BoxCollider collider = container.AddComponent<BoxCollider>();
         collider.isTrigger = true; // Enable IsTrigger
-        collider.size = new Vector3Int(11, 9, 9); // Adjust the size as needed
+        collider.size = new Vector3Int(21, 18, 7); // Adjust the size as needed
+        collider.center = 
+              new Vector3Int(VoxelWorldManager.Instance.offsetXBackToZero, VoxelWorldManager.Instance.offsetYBackToZero, VoxelWorldManager.Instance.offsetZBackToZero)
+            + new Vector3Int(VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetX, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetY, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetZ);
+        //collider.transform.position = new Vector3Int(VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetX, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetY, VoxelWorldManager.Instance.voxelMeshConfigurationSettings.domainOffsetZ);
     }
 }
