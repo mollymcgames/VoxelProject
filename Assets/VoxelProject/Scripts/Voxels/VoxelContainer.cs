@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
-public class OuterContainer : MonoBehaviour
+public class VoxelContainer : MonoBehaviour
 {
     public Vector3 containerPosition;
 
