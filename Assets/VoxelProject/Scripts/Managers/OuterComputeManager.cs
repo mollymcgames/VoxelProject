@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class OuterComputeManager : MonoBehaviour
 {
@@ -81,23 +82,42 @@ public class OuterComputeManager : MonoBehaviour
             float transparencyValue = AdjustMaterialTransparency(ref container, ref mainCamera);
             Debug.Log("New Transparency Value: " + transparencyValue);
 
-            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+/*            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null)
                 {
                     callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuter.data.voxelArray.array);
                     OuterWorldManager.Instance.containerOuter.RenderMesh(true, transparencyValue);
                 }
+            });*/
+
+            // AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+            // {
+            //     if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
+            //     {
+            //         callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
+            //         OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
+            //     }
+            // });
+
+            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
+            {
+                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuterDic != null)
+                {
+                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuterDic.data.voxelArray.array);
+                    OuterWorldManager.Instance.containerOuterDic.RenderMeshDictionary(true, transparencyValue);
+                }
             });
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
-                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
+                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInnerDic != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
+                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInnerDic.data.voxelArray.array);
+                    OuterWorldManager.Instance.containerInnerDic.RenderMeshDictionary(false, 1f - transparencyValue);                   
                 }
-            });            
+            });
+
         }
     }
 
