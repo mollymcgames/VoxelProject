@@ -57,6 +57,18 @@ public class VoxelWorldManager : MonoBehaviour
         }
     }
 
+/*    void Awake()
+    {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("music");
+
+        if (objs.Length > 1)
+        {
+            Destroy(this.gameObject);
+        }
+
+        DontDestroyOnLoad(this.gameObject);
+    }*/
+
     void Start()
     {
         if (_instance != null)
@@ -67,6 +79,7 @@ public class VoxelWorldManager : MonoBehaviour
         else
         {
             _instance = this;
+            DontDestroyOnLoad(this);
         }       
 
         try

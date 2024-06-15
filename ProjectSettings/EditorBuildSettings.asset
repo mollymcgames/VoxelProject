@@ -17,5 +17,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/VoxelProject/Scenes/Zooming.unity
     guid: 74420e9715820154ba71ff0a9e2b0c86
+  - enabled: 1
+    path: Assets/VoxelProject/Scenes/SwitchSceneOne.unity
+    guid: d508d89cd5d5f2640a2fb41021faadb8
+  - enabled: 1
+    path: Assets/VoxelProject/Scenes/Cell.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
