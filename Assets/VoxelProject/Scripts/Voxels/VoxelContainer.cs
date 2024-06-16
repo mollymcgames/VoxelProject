@@ -138,6 +138,9 @@ public class VoxelContainer : MonoBehaviour
                 if (VoxelWorldManager.Instance.voxelFileFormat == "nii")
                 {
                     float grayScaleValue = float.Parse(nextVoxelElement.colorString) / 255f;
+                    // Abort if basically dark!
+                    if (grayScaleValue < 18)
+                        continue;
                     color = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue).color;
                 }
                 else

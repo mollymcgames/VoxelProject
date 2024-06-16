@@ -1237,6 +1237,7 @@ GameObject:
   - component: {fileID: 849045743}
   - component: {fileID: 849045742}
   - component: {fileID: 849045746}
+  - component: {fileID: 849045747}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1343,6 +1344,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b23e59ac87a409449a4ee640e3ba417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &849045747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849045741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63e3a4e26d8b8d648ae55aa376bf555c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voxelMeshContainer: {fileID: 0}
+  quitting: 0
+  worldMaterial: {fileID: 0}
+  WorldColors: []
+  worldSettings:
+    containerSize: 16
+    maxHeight: 128
+    maxWidthX: 0
+    maxDepthZ: 0
+    maxHeightY: 0
+  voxelMeshConfigurationSettings:
+    voxelDataFileName: 
+    voxelChunkSize: 16
+    voxelChunkFieldOfViewMultiplier: 1
+    voxelMeshContainerTagName: Untagged
+    domainOffsetX: 0
+    domainOffsetY: 0
+    domainOffsetZ: 0
+    sceneTargetName: 
+  offsetXBackToZero: 0
+  offsetYBackToZero: 0
+  offsetZBackToZero: 0
+  doSceneSwitch: 0
+  voxelFileFormat: nii
 --- !u!1 &888526358
 GameObject:
   m_ObjectHideFlags: 0

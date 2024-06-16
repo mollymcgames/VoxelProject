@@ -6,6 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class MenuHandler : MonoBehaviour
 {
+/*    VoxelWorldManager vwm;
+    
+    public void Start()
+    {
+        vwm = new VoxelWorldManager();
+    }*/
+
     public void LoadNextScene()
     {
         SceneManager.LoadScene("World");
