@@ -37,8 +37,6 @@ public class VoxelIndexedArray<T> where T : struct
     int IndexFromCoord(Vector3Int idx)
     {
         return idx.x + idx.y * VoxelWorldManager.WorldSettings.maxWidthX + idx.z * VoxelWorldManager.WorldSettings.maxDepthZ * VoxelWorldManager.WorldSettings.maxHeightY;
-        //return idx.x + (idx.y * size.x) + (idx.z * size.x * size.y);
-        //return Mathf.RoundToInt(idx.x) + (Mathf.RoundToInt(idx.y) * size.x) + (Mathf.RoundToInt(idx.z) * size.x * size.y);
     }
 
     public void Clear()
