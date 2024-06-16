@@ -97,7 +97,7 @@ public class VoxelContainer : MonoBehaviour
         Vector3Int[] faceVertices = new Vector3Int[4];
         Vector2[] faceUVs = new Vector2[4];
 
-        VoxelColor voxelColor;
+        VoxelColor voxelColor = new VoxelColor();
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
@@ -134,17 +134,20 @@ public class VoxelContainer : MonoBehaviour
                     continue;
                 }
 
-                // float grayScaleValue = float.Parse(vc.value)/255f;
-                // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
-                voxelColor = new VoxelColor();
-
                 Color color;
-                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.colorString, out color))
+                if (VoxelWorldManager.Instance.voxelFileFormat == "nii")
                 {
-                    Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
-                    continue;
+                    float grayScaleValue = float.Parse(nextVoxelElement.colorString) / 255f;
+                    color = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue).color;
                 }
-
+                else
+                {
+                    if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.colorString, out color))
+                    {
+                        Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
+                        continue;
+                    }
+                }
                 voxelColorAlpha = color;
                 voxelColorAlpha.a = transparencyValue; //THIS IS WHERE THE ALPHA VALUE IS SET 
                 voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);

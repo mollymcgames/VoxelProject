@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class VoxelWorldManager : MonoBehaviour
 {
@@ -20,7 +18,7 @@ public class VoxelWorldManager : MonoBehaviour
     //[Header("Voxel Camera, drag in the Main Camera")]
     //public Camera mainCamera;
 
-    private bool filesLoaded = false;
+    //private bool filesLoaded = false;
 
     [HideInInspector]
     public bool quitting = false;
@@ -45,6 +43,9 @@ public class VoxelWorldManager : MonoBehaviour
     [HideInInspector]
     public bool doSceneSwitch = false;
 
+    [HideInInspector]
+    public string voxelFileFormat = "nii";
+
     public static VoxelWorldManager Instance
     {
         get
@@ -54,18 +55,6 @@ public class VoxelWorldManager : MonoBehaviour
             return _instance;
         }
     }
-
-/*    void Awake()
-    {
-        GameObject[] objs = GameObject.FindGameObjectsWithTag("music");
-
-        if (objs.Length > 1)
-        {
-            Destroy(this.gameObject);
-        }
-
-        DontDestroyOnLoad(this.gameObject);
-    }*/
 
     void Start()
     {
@@ -82,8 +71,13 @@ public class VoxelWorldManager : MonoBehaviour
 
         try
         {
-            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(voxelMeshConfigurationSettings.voxelChunkSize);                        
+            // Load in one voxel model, currently support types are .txt and .nii files.
+            // If more types need supporting, will need additional SourceData loader implementations.
+            // Note, currently the getHeader method returns either a Nifti.NET.Nifti or string[] as appropriate.
+            ASourceDataLoader loader = DataLoaderUtils.LoadDataFile();
             voxelSourceDataDictionary = loader.LoadSourceData(voxelMeshConfigurationSettings.voxelDataFilePath);
+            voxelFileFormat = DataLoaderUtils.GetDataFileFormat();
+
             WorldSettings = worldSettings;
             WorldSettings.maxWidthX = loader.widthX;
             WorldSettings.maxHeightY = loader.heightY;
@@ -112,7 +106,7 @@ public class VoxelWorldManager : MonoBehaviour
         InitialiseContainers(voxelMeshConfigurationSettings.voxelMeshContainerTagName);
     }
 
-    private void calculateOffsetsBackToZero(SourceDataTextFileLoaderAsDictionary loader)
+    private void calculateOffsetsBackToZero(ASourceDataLoader loader)
     {
         offsetXBackToZero = -loader.minX;
         offsetYBackToZero = -loader.minY;

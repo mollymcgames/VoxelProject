@@ -29,7 +29,7 @@ public class OuterWorldManager : MonoBehaviour
 
     public Camera mainCamera;
 
-    private bool filesLoaded = false;
+    //private bool filesLoaded = false;
     public bool quitting = false;
     private bool voxelsReady = false;
 
