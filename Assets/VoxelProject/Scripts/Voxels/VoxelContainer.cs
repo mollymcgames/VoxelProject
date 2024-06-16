@@ -31,7 +31,7 @@ public class VoxelContainer : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("VOXEL-CONTAINER Trigger detected: " + other.tag + " - " + other.name);
-        if (other.CompareTag("MainCamera"))
+        if (other.CompareTag("MainCamera") && VoxelWorldManager.Instance.doSceneSwitch == false)
         {
             Debug.Log("Switching scene!");
             VoxelWorldManager.Instance.doSceneSwitch = true;

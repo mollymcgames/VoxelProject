@@ -131,7 +131,7 @@ public class VoxelWorldManager : MonoBehaviour
     private void Update()
     {
         // Don't attempt any update loop if unity is either quitting or the voxel load isn't complete, it's just not worth it!
-        if (quitting == false && voxelsReady == true) {
+        if (quitting == false && voxelsReady == true && VoxelWorldManager.Instance.doSceneSwitch == false) {
             voxelMeshContainer.ClearData();
             VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer);
         }

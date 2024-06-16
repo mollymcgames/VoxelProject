@@ -79,11 +79,10 @@ public class VoxelComputeManager : MonoBehaviour
     #endregion
 
     #region Compute Helpers
-
-    //public void GenerateVoxelData(ref VoxelContainer container, ref Camera mainCamera)
+    
     public void GenerateVoxelData(ref VoxelContainer container)
     {
-        // Do not attempt to schedule rendering of a mesh if the container is null or the unity game is currently quitting
+        // Do not attempt to schedule rendering of a mesh if the container is null or the unity game is currently quitting.
         if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null && !VoxelWorldManager.Instance.quitting)
         {
             noiseShader.SetBuffer(0, "voxelArray", container.data.noiseBuffer);
@@ -104,17 +103,22 @@ public class VoxelComputeManager : MonoBehaviour
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
-                // Do not attempt to render anything if the WorldManager isn't ready yet!
-                if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null)
+                try
                 {
-                    callback.GetData<Voxel>(0).CopyTo(VoxelWorldManager.Instance.voxelMeshContainer.data.voxelArray.array);
-                    VoxelWorldManager.Instance.voxelMeshContainer.RenderMesh(transparencyValue);
+                    // Do not attempt to render anything if the WorldManager isn't ready yet.
+                    if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null)
+                    {
+                        callback.GetData<Voxel>(0).CopyTo(VoxelWorldManager.Instance.voxelMeshContainer.data.voxelArray.array);
+                        VoxelWorldManager.Instance.voxelMeshContainer.RenderMesh(transparencyValue);
+                    }
+                }
+                catch (Exception e)
+                {
                 }
             });
 
         }
     }
-
 
     private float AdjustMaterialTransparency(ref VoxelContainer container)
     {
