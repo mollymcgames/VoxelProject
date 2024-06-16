@@ -77,7 +77,7 @@ public class VoxelWorldManager : MonoBehaviour
         else
         {
             _instance = this;
-            DontDestroyOnLoad(this);
+            //DontDestroyOnLoad(this);
         }       
 
         try

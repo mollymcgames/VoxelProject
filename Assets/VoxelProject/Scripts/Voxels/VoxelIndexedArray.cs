@@ -34,9 +34,11 @@ public class VoxelIndexedArray<T> where T : struct
         initialized = true;
     }
 
-    int IndexFromCoord(Vector3 idx)
+    int IndexFromCoord(Vector3Int idx)
     {
-        return Mathf.RoundToInt(idx.x) + (Mathf.RoundToInt(idx.y) * size.x) + (Mathf.RoundToInt(idx.z) * size.x * size.y);
+        return idx.x + idx.y * VoxelWorldManager.WorldSettings.maxWidthX + idx.z * VoxelWorldManager.WorldSettings.maxDepthZ * VoxelWorldManager.WorldSettings.maxHeightY;
+        //return idx.x + (idx.y * size.x) + (idx.z * size.x * size.y);
+        //return Mathf.RoundToInt(idx.x) + (Mathf.RoundToInt(idx.y) * size.x) + (Mathf.RoundToInt(idx.z) * size.x * size.y);
     }
 
     public void Clear()
@@ -60,11 +62,11 @@ public class VoxelIndexedArray<T> where T : struct
         }
     }  
 
-    public T this[Vector3 coord]
+    public T this[Vector3Int coord]
     {
         get
         {
-            Vector3 unityCoords = coord;
+            Vector3Int unityCoords = coord;
 
             //coord.z < 0 || coord.z > size.x)
             if (unityCoords.x < 0 || unityCoords.x > size.x ||
@@ -74,11 +76,12 @@ public class VoxelIndexedArray<T> where T : struct
                 //Debug.LogError($"Coordinates GET out of bounds! {coord}");
                 return default(T);
             }
-            return array[IndexFromCoord(coord)];
+            int coordIndex = IndexFromCoord(coord);
+            return array[coordIndex];
         }
         set
         {
-            Vector3 unityCoords = (coord);
+            Vector3Int unityCoords = (coord);
 
             if (unityCoords.x < 0 || unityCoords.x >= size.x ||
                 unityCoords.y < 0 || unityCoords.y >= size.y ||
@@ -87,7 +90,8 @@ public class VoxelIndexedArray<T> where T : struct
                 Debug.LogError($"Coordinates SET out of bounds! {coord}");
                 return;
             }
-            array[IndexFromCoord(coord)] = value;
+            int coordIndex = IndexFromCoord(coord);
+            array[coordIndex] = value;
         }
     }
 

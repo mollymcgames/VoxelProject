@@ -92,15 +92,15 @@ public class VoxelComputeManager : MonoBehaviour
             noiseShader.SetVector("chunkPosition", (Vector3)container.containerPosition);
             noiseShader.SetVector("seedOffset", Vector3.zero);
 
-            Debug.Log("World xThreads:" + xThreads);
+/*            Debug.Log("World xThreads:" + xThreads);
             Debug.Log("World yThreads:" + yThreads);
-            Debug.Log("World zThreads:" + zThreads);
+            Debug.Log("World zThreads:" + zThreads);*/
 
             noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
             noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
 
             float transparencyValue = AdjustMaterialTransparency(ref container);
-            Debug.Log("New Transparency Value: " + transparencyValue);
+            //Debug.Log("New Transparency Value: " + transparencyValue);
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
@@ -126,23 +126,23 @@ public class VoxelComputeManager : MonoBehaviour
         // alpha should be 0 if close and 1 if far
         float alpha = Mathf.InverseLerp(minDistance, maxDistance, distance);
 
-        if (container != null)
+/*        if (container != null)
         {
-            Debug.Log("Adjusting transparency with alpha: " + alpha);
+            //Debug.Log("Adjusting transparency with alpha: " + alpha);
         }
         else
         {
             Debug.LogWarning("No Renderer found on the container.");
         }
-
+*/
         return alpha;
     }
 
     private void ClearVoxelData(VoxelNoiseBuffer buffer)
     {
-        Debug.Log("World CLEAR xThreads:" + xThreads);
+/*        Debug.Log("World CLEAR xThreads:" + xThreads);
         Debug.Log("World CLEAR yThreads:" + yThreads);
-        Debug.Log("World CLEAR zThreads:" + zThreads);
+        Debug.Log("World CLEAR zThreads:" + zThreads);*/
 
         if (xThreads==0 || yThreads==0 || zThreads==0)
         { 

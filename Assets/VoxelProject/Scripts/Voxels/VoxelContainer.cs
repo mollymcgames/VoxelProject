@@ -30,7 +30,7 @@ public class VoxelContainer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("VOXEL-CONTAINER Trigger detected: " + other.tag + " - " + other.name);
+        //Debug.Log("VOXEL-CONTAINER Trigger detected: " + other.tag + " - " + other.name);
         if (other.CompareTag("MainCamera"))
         {
             Debug.Log("Switching scene!");
@@ -105,7 +105,7 @@ public class VoxelContainer : MonoBehaviour
         Dictionary<Vector3Int, Chunk> renderVectors = null;
         Dictionary<Vector3Int, Chunk> sourceData = null;
 
-        Debug.Log("We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
+        //Debug.Log("We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
 
         // Using the current camera position, calculate the relevant chunk coordinates.
         // This is going to form the centre point for the selection of chunks we're going to render....
@@ -116,7 +116,7 @@ public class VoxelContainer : MonoBehaviour
         // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
         renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, sourceData);
 
-        Debug.Log("Number of chunks selected: "+renderVectors.Count );
+        //Debug.Log("Number of chunks selected: "+renderVectors.Count );
 
         int breaker = 0;
 
@@ -212,7 +212,7 @@ public class VoxelContainer : MonoBehaviour
             return this[point].isSolid;
     }
 
-    public Voxel this[Vector3 index]
+    public Voxel this[Vector3Int index]
     {
         get
         {

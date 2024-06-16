@@ -132,6 +132,7 @@ public class SourceDataTextFileLoaderAsDictionary
             if (z<minZ) minZ = z;   
                
             voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), parts[3])); // Assign the parsed color value as the voxel value
+            index++;
         }
         Debug.Log("Lines processed:" + index);
         return voxelDataList;
