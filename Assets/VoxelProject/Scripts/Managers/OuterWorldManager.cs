@@ -94,7 +94,7 @@ public class OuterWorldManager : MonoBehaviour
         WorldSettings.maxHeightY = SourceDataTextFileLoader.heightY;
         WorldSettings.maxDepthZ = SourceDataTextFileLoader.depthZ;
 
-        //Initialize the outer containers
+        //Initialise the outer containers
         InitialiseContainers();
 
         Debug.Log("Voxels ready check starting...");
