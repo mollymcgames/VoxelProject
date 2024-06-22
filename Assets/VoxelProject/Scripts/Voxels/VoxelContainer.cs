@@ -49,6 +49,8 @@ public class VoxelContainer : MonoBehaviour
         data = VoxelComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
+
+        sourceData = VoxelWorldManager.Instance.voxelSourceDataDictionary;
     }
 
     public void ClearData()
@@ -84,8 +86,13 @@ public class VoxelContainer : MonoBehaviour
         return renderVectors;
     }
 
+    public Dictionary<Vector3Int, Chunk> renderVectors = null;
+    public Dictionary<Vector3Int, Chunk> sourceData = null;
+    public int voxelsInChunks = 0;
+
     public void GenerateMesh(float transparencyValue = 1f)
     {
+        //Debug.Log("Generating mesh...");
         // Due to scene switching, the mainCamera variable can go null!
         if (mainCamera == null)
             mainCamera = Camera.main;
@@ -102,8 +109,6 @@ public class VoxelContainer : MonoBehaviour
         Vector2 voxelSmoothness;
 
         Vector3Int chunkCoordinates = Vector3Int.zero;
-        Dictionary<Vector3Int, Chunk> renderVectors = null;
-        Dictionary<Vector3Int, Chunk> sourceData = null;
 
         //Debug.Log("We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
 
@@ -111,20 +116,25 @@ public class VoxelContainer : MonoBehaviour
         // This is going to form the centre point for the selection of chunks we're going to render....
         chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), voxelChunkSize);
 
-        sourceData = VoxelWorldManager.Instance.voxelSourceDataDictionary;
+        
         // Now using that centre point, get the surrounding chunks.
         // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
         renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, sourceData);
+        //renderVectors = GetSurroundingChunks(chunkCoordinates, 50, voxelChunkSize, sourceData);
 
         //Debug.Log("Number of chunks selected: "+renderVectors.Count );
 
         int breaker = 0;
-
+        voxelsInChunks = 0;
         // Now prep those 27 chunks for rendering....
         foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
         {
+            //Debug.Log("voxesl in chunk:"+nextChunk.Value.voxels.Count);
+            voxelsInChunks += nextChunk.Value.voxels.Count;
+
             foreach (VoxelElement nextVoxelElement in nextChunk.Value.voxels)
             {
+                //Debug.Log("looking at VE:" + nextVoxelElement.position);
                 blockPos = nextVoxelElement.position;
                 block = this[blockPos];
                 //Only check on solid blocks
@@ -139,12 +149,17 @@ public class VoxelContainer : MonoBehaviour
                 {
                     float grayScaleValue = float.Parse(nextVoxelElement.colorString) / 255f;
                     // Abort if basically dark!
-                    if (grayScaleValue < 18)
+/*                    if (grayScaleValue < 10)
+                    {
+                        Debug.Log("Bomnb!");
                         continue;
-                    color = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue).color;
+                    }
+*/                    color = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue).color;
+                    //Debug.Log("Color:"+color.ToString());
                 }
                 else
                 {
+                    //Debug.Log("not nii");
                     if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.colorString, out color))
                     {
                         Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
@@ -156,7 +171,7 @@ public class VoxelContainer : MonoBehaviour
                 voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
                 //Iterate over each face direction
                 for (int i = 0; i < 6; i++)
-                {
+                {                    
                     //Check if there's a solid block against this face
                     //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
                     // if (checkVoxelIsSolid(blockPos))                
@@ -245,6 +260,7 @@ public class VoxelContainer : MonoBehaviour
 
         public void ClearData()
         {
+            //Debug.Log("Clearing MESHDATA...");
             if (!Initialized)
             {
                 vertices = new List<Vector3>();

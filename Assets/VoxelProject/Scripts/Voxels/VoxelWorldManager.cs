@@ -16,7 +16,7 @@ public class VoxelWorldManager : MonoBehaviour
     public Dictionary<Vector3Int, Chunk> voxelSourceDataDictionary;
 
     //[Header("Voxel Camera, drag in the Main Camera")]
-    //public Camera mainCamera;
+    Camera mainCamera;
 
     //private bool filesLoaded = false;
 
@@ -83,6 +83,9 @@ public class VoxelWorldManager : MonoBehaviour
             WorldSettings.maxHeightY = loader.heightY;
             WorldSettings.maxDepthZ = loader.depthZ;
             calculateOffsetsBackToZero(loader);
+            mainCamera = Camera.main;
+            mainCamera.transform.position = CalculateMiddlePoint((float)loader.minX, (float)loader.maxX, (float)loader.minY, (float)loader.maxY, (float)loader.minZ, (float)loader.maxZ);
+            Debug.Log("Camera pointed at: " + mainCamera.transform.position);
         }
         catch (Exception e)
         {
@@ -106,6 +109,15 @@ public class VoxelWorldManager : MonoBehaviour
         InitialiseContainers(voxelMeshConfigurationSettings.voxelMeshContainerTagName);
     }
 
+    private Vector3 CalculateMiddlePoint(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
+    {
+        float xMid = (xMin + xMax) / 2f;
+        float yMid = (yMin + yMax) / 2f;
+        float zMid = (zMin + zMax) / 2f;
+
+        return new Vector3(xMid, yMid, zMid);
+    }
+
     private void calculateOffsetsBackToZero(ASourceDataLoader loader)
     {
         offsetXBackToZero = -loader.minX;
@@ -122,6 +134,7 @@ public class VoxelWorldManager : MonoBehaviour
         quitting = true;
     }
 
+    bool firstLook = true;
     private void Update()
     {
         // Don't attempt any update loop if unity is either quitting or the voxel load isn't complete, it's just not worth it!
@@ -129,6 +142,12 @@ public class VoxelWorldManager : MonoBehaviour
             voxelMeshContainer.ClearData();
             VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer);
         }
+
+        if (firstLook) {
+            Debug.Log("Looking at..." + voxelMeshContainer.containerPosition);
+            mainCamera.transform.LookAt(voxelMeshContainer.containerPosition);
+            firstLook = false;
+        }        
     }
 
     private void OnTriggerEnter(Collider other)

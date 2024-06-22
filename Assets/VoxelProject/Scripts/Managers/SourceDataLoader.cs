@@ -81,8 +81,9 @@ public class SourceDataLoader : ASourceDataLoader
                     if (z > maxZ) maxZ = z;
                     if (z < minZ) minZ = z;
 
-                    // Assign the parsed color value as the voxel value
-                    voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), niftiData.Data[index].ToString()));
+                    // Assign the parsed color value as the voxel value if it's going to be visible
+                    if (niftiData.Data[index] > 10)
+                        voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), niftiData.Data[index].ToString()));
                     index++;
                 }
             }
