@@ -116,8 +116,7 @@ public class VoxelContainer : MonoBehaviour
         
         // Now using that centre point, get the surrounding chunks.
         // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
-        renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, ref VoxelWorldManager.Instance.voxelSourceDataDictionary);
-        //renderVectors = GetSurroundingChunks(chunkCoordinates, 50, voxelChunkSize, sourceData);
+        renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, ref VoxelWorldManager.Instance.voxelSourceDataDictionary);        
 
         //Debug.Log("Number of chunks selected: "+renderVectors.Count );
 

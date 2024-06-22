@@ -2464,9 +2464,9 @@ MonoBehaviour:
     maxDepthZ: 0
     maxHeightY: 0
   voxelMeshConfigurationSettings:
-    voxelDataFileName: JHU-WhiteMatter-labels-2mm.nii
-    voxelChunkSize: 16
-    voxelChunkFieldOfViewMultiplier: 1
+    voxelDataFileName: la_007.nii
+    voxelChunkSize: 32
+    voxelChunkFieldOfViewMultiplier: 2
     voxelMeshContainerTagName: InnerContainer
     domainOffsetX: 0
     domainOffsetY: 0
