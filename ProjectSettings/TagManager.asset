@@ -8,6 +8,8 @@ TagManager:
   - OuterContainer
   - InnerContainerDic
   - OuterContainerDic
+  - BlueRoom
+  - RedRoom
   layers:
   - Default
   - TransparentFX
