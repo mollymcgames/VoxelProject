@@ -46,14 +46,14 @@ public class VoxelContainer : MonoBehaviour
     public void Initialise(Material mat, Vector3Int position)
     {
         ConfigureComponents();
-        // kjp-noNoise? data = VoxelComputeManager.Instance.GetNoiseBuffer();
+        // noNoise? data = VoxelComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
     }
 
     public void ClearData()
     {
-        // kjp-noNoise? VoxelComputeManager.Instance.ClearAndRequeueBuffer(data);
+        // noNoise? VoxelComputeManager.Instance.ClearAndRequeueBuffer(data);
     }
 
     public void RenderMesh(float transparencyValue = 1f)
@@ -133,13 +133,13 @@ public class VoxelContainer : MonoBehaviour
             {
                 //Debug.Log("looking at VE:" + nextVoxelElement.position);
                 blockPos = nextVoxelElement.position;
-                // kjp-noNoise? block = this[blockPos];
+                // noNoise? block = this[blockPos];
                 //Only check on solid blocks
-                // kjp-noNoise? if (!block.isSolid)
-                // kjp-noNoise? {
-                // kjp-noNoise? Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
-                // kjp-noNoise? continue;
-                // kjp-noNoise? }
+                // noNoise? if (!block.isSolid)
+                // noNoise? {
+                // noNoise? Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
+                // noNoise? continue;
+                // noNoise? }
 
                 Color color;
                 if (VoxelWorldManager.Instance.voxelFileFormat == "nii")

@@ -78,7 +78,7 @@ public class MeshMemoryUsage : MonoBehaviour
                 int totalMemory = vertexMemory + normalMemory + uvMemory + indexMemory;
 
                 //Debug.Log($"Mesh Memory Usage: {totalMemory / 1024f / 1024f} MB");
-                goIndexMemory.text = (vertexMemory / 1024f / 1024f).ToString() + " MB";
+                goVertexMemory.text = (vertexMemory / 1024f / 1024f).ToString() + " MB";
                 goNormalMemory.text = (normalMemory / 1024f / 1024f).ToString() + " MB";
                 goUvMemory.text = (uvMemory / 1024f / 1024f).ToString() + " MB";
                 goIndexMemory.text = (indexMemory / 1024f / 1024f).ToString() + " MB";

@@ -142,7 +142,7 @@ public class VoxelWorldManager : MonoBehaviour
             voxelMeshContainer.ClearData();           
             VoxelWorldManager.Instance.voxelMeshContainer.RenderMesh(GeneralMethods.AdjustMaterialTransparency(ref voxelMeshContainer));
 
-            // kjp-noNoise? VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer);
+            // noNoise? VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer);
         }
 
         if (firstLook) {
@@ -179,7 +179,7 @@ public class VoxelWorldManager : MonoBehaviour
         voxelMeshContainer = meshContainer.AddComponent<VoxelContainer>();
         voxelMeshContainer.Initialise(worldMaterial, Vector3Int.zero);
 
-        VoxelComputeManager.Instance.Initialise(1);
+        // noNoise? VoxelComputeManager.Instance.Initialise(1);
     }
 
     GameObject InstantiateContainerPosition(string name, Vector3Int position)
