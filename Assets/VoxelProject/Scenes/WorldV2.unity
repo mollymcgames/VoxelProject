@@ -2215,6 +2215,7 @@ MonoBehaviour:
   goTotalMemory: {fileID: 1256297367}
   goChunksSelected: {fileID: 517392345}
   goVoxelsSelected: {fileID: 1927424222}
+  goFPS: {fileID: 885338634}
   updateInterval: 0.5
 --- !u!1 &1585402879
 GameObject:
@@ -2465,7 +2466,7 @@ MonoBehaviour:
   voxelMeshConfigurationSettings:
     voxelDataFileName: JHU-WhiteMatter-labels-2mm.nii
     voxelChunkSize: 16
-    voxelChunkFieldOfViewMultiplier: 2
+    voxelChunkFieldOfViewMultiplier: 1
     voxelMeshContainerTagName: InnerContainer
     domainOffsetX: 0
     domainOffsetY: 0

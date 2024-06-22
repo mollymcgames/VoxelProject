@@ -98,7 +98,7 @@ public class VoxelComputeManager : MonoBehaviour
             noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
             noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
 
-            float transparencyValue = AdjustMaterialTransparency(ref container);
+            float transparencyValue = GeneralMethods.AdjustMaterialTransparency(ref container);
             //Debug.Log("New Transparency Value: " + transparencyValue);
 
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
@@ -119,29 +119,7 @@ public class VoxelComputeManager : MonoBehaviour
 
         }
     }
-
-    private float AdjustMaterialTransparency(ref VoxelContainer container)
-    {
-        float distance = Vector3.Distance(Camera.main.transform.position, container.transform.position);
-        float maxDistance = 30f;
-        float minDistance = 10f;
-
-        // Adjust the transparency of the material based on the camera distance
-        // alpha should be 0 if close and 1 if far
-        float alpha = Mathf.InverseLerp(minDistance, maxDistance, distance);
-
-/*        if (container != null)
-        {
-            //Debug.Log("Adjusting transparency with alpha: " + alpha);
-        }
-        else
-        {
-            Debug.LogWarning("No Renderer found on the container.");
-        }
-*/
-        return alpha;
-    }
-
+    
     private void ClearVoxelData(VoxelNoiseBuffer buffer)
     {
 /*        Debug.Log("World CLEAR xThreads:" + xThreads);

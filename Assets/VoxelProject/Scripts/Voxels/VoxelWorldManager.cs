@@ -139,8 +139,10 @@ public class VoxelWorldManager : MonoBehaviour
     {
         // Don't attempt any update loop if unity is either quitting or the voxel load isn't complete, it's just not worth it!
         if (quitting == false && voxelsReady == true && VoxelWorldManager.Instance.doSceneSwitch == false) {
-            voxelMeshContainer.ClearData();
-            VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer);
+            voxelMeshContainer.ClearData();           
+            VoxelWorldManager.Instance.voxelMeshContainer.RenderMesh(GeneralMethods.AdjustMaterialTransparency(ref voxelMeshContainer));
+
+            // kjp-noNoise? VoxelComputeManager.Instance.GenerateVoxelData(ref voxelMeshContainer);
         }
 
         if (firstLook) {

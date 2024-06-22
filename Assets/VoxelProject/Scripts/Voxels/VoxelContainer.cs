@@ -46,16 +46,14 @@ public class VoxelContainer : MonoBehaviour
     public void Initialise(Material mat, Vector3Int position)
     {
         ConfigureComponents();
-        data = VoxelComputeManager.Instance.GetNoiseBuffer();
+        // kjp-noNoise? data = VoxelComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
-
-        sourceData = VoxelWorldManager.Instance.voxelSourceDataDictionary;
     }
 
     public void ClearData()
     {
-        VoxelComputeManager.Instance.ClearAndRequeueBuffer(data);
+        // kjp-noNoise? VoxelComputeManager.Instance.ClearAndRequeueBuffer(data);
     }
 
     public void RenderMesh(float transparencyValue = 1f)
@@ -65,7 +63,7 @@ public class VoxelContainer : MonoBehaviour
         UploadMesh();
     }
     
-    private Dictionary<Vector3Int, Chunk> GetSurroundingChunks(Vector3Int position, int chunkDistanceMultiplier, int chunkSize, Dictionary<Vector3Int, Chunk> sourceData)
+    private Dictionary<Vector3Int, Chunk> GetSurroundingChunks(Vector3Int position, int chunkDistanceMultiplier, int chunkSize, ref Dictionary<Vector3Int, Chunk> sourceData)
     {
         Dictionary<Vector3Int, Chunk> renderVectors = new Dictionary<Vector3Int, Chunk>();
         List<Vector3Int> points = new List<Vector3Int>();
@@ -87,7 +85,6 @@ public class VoxelContainer : MonoBehaviour
     }
 
     public Dictionary<Vector3Int, Chunk> renderVectors = null;
-    public Dictionary<Vector3Int, Chunk> sourceData = null;
     public int voxelsInChunks = 0;
 
     public void GenerateMesh(float transparencyValue = 1f)
@@ -119,7 +116,7 @@ public class VoxelContainer : MonoBehaviour
         
         // Now using that centre point, get the surrounding chunks.
         // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
-        renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, sourceData);
+        renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, ref VoxelWorldManager.Instance.voxelSourceDataDictionary);
         //renderVectors = GetSurroundingChunks(chunkCoordinates, 50, voxelChunkSize, sourceData);
 
         //Debug.Log("Number of chunks selected: "+renderVectors.Count );
@@ -136,13 +133,13 @@ public class VoxelContainer : MonoBehaviour
             {
                 //Debug.Log("looking at VE:" + nextVoxelElement.position);
                 blockPos = nextVoxelElement.position;
-                block = this[blockPos];
+                // kjp-noNoise? block = this[blockPos];
                 //Only check on solid blocks
-                if (!block.isSolid)
-                {
-                    Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
-                    continue;
-                }
+                // kjp-noNoise? if (!block.isSolid)
+                // kjp-noNoise? {
+                // kjp-noNoise? Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
+                // kjp-noNoise? continue;
+                // kjp-noNoise? }
 
                 Color color;
                 if (VoxelWorldManager.Instance.voxelFileFormat == "nii")

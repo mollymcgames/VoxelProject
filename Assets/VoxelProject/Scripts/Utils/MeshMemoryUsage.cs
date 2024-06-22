@@ -84,8 +84,15 @@ public class MeshMemoryUsage : MonoBehaviour
                 goIndexMemory.text = (indexMemory / 1024f / 1024f).ToString() + " MB";
                 goTotalMemory.text = (totalMemory / 1024f / 1024f).ToString() + " MB";
 
-                goChunksSelected.text = VoxelWorldManager.Instance.voxelMeshContainer.renderVectors.Count.ToString();
-                goVoxelsSelected.text = VoxelWorldManager.Instance.voxelMeshContainer.voxelsInChunks.ToString();
+                try
+                {
+                    goChunksSelected.text = VoxelWorldManager.Instance.voxelMeshContainer.renderVectors.Count.ToString();
+                    goVoxelsSelected.text = VoxelWorldManager.Instance.voxelMeshContainer.voxelsInChunks.ToString();
+                } catch
+                {
+                    goChunksSelected.text = "None";
+                    goVoxelsSelected.text = "None";
+                }
             }
         }
     }
