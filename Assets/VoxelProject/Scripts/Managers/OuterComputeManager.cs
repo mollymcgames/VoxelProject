@@ -82,6 +82,38 @@ public class OuterComputeManager : MonoBehaviour
             float transparencyValue = AdjustMaterialTransparency(ref container, ref mainCamera);
             Debug.Log("New Transparency Value: " + transparencyValue);
 
+            // I know a tag and I want to find it and set the transparency value of the material
+            GameObject[] innerContainers = GameObject.FindGameObjectsWithTag("BlueRoom");
+            foreach (GameObject innerContainer in innerContainers)
+            {
+                // Get all MeshRenderer components that are children of innerContainer
+                MeshRenderer[] childRenderers = innerContainer.GetComponentsInChildren<MeshRenderer>();
+
+                // // Loop through each MeshRenderer and set its material
+                foreach (MeshRenderer renderer in childRenderers)
+                {                    
+                    Color materialColor = renderer.GetComponent<Renderer>().material.color;
+                    //set colour to black
+                    materialColor.a = transparencyValue;
+                    renderer.GetComponent<Renderer>().material.color = materialColor;      
+                }                
+            }
+
+            GameObject[] outerContainers = GameObject.FindGameObjectsWithTag("RedRoom");
+            foreach (GameObject outerContainer in outerContainers)
+            {
+                //Get all MeshRenderer components that are children of innerContainer
+                MeshRenderer[] childRenderers = outerContainer.GetComponentsInChildren<MeshRenderer>();
+
+                // Loop through each MeshRenderer and set its material
+                foreach (MeshRenderer renderer in childRenderers)
+                {
+                    Color materialColor = renderer.GetComponent<Renderer>().material.color;
+                    materialColor.a = 1.0f-transparencyValue;
+                    renderer.GetComponent<Renderer>().material.color = materialColor;      
+                }
+            }
+            
 /*            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null)
