@@ -12,7 +12,7 @@ public class VoxelContainer : MonoBehaviour
     public Vector3Int containerPosition;
 
     public VoxelNoiseBuffer data;
-    private MeshData meshData = new MeshData();
+    private MeshData meshData;// = new MeshData();
 
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
@@ -58,15 +58,19 @@ public class VoxelContainer : MonoBehaviour
 
     public void RenderMesh(float transparencyValue = 1f)
     {
+        meshData = new MeshData();
         meshData.ClearData();
         GenerateMesh(transparencyValue);
         UploadMesh();
     }
-    
+
+    public Dictionary<Vector3Int, Chunk> renderVectors = new Dictionary<Vector3Int, Chunk>();
+    List<Vector3Int> points = new List<Vector3Int>();
+
     private Dictionary<Vector3Int, Chunk> GetSurroundingChunks(Vector3Int position, int chunkDistanceMultiplier, int chunkSize, ref Dictionary<Vector3Int, Chunk> sourceData)
     {
-        Dictionary<Vector3Int, Chunk> renderVectors = new Dictionary<Vector3Int, Chunk>();
-        List<Vector3Int> points = new List<Vector3Int>();
+        renderVectors.Clear();
+        points.Clear();
 
         for (int x = -chunkDistanceMultiplier * chunkSize; x <= chunkDistanceMultiplier * chunkSize; x += chunkSize)
         {
@@ -81,10 +85,10 @@ public class VoxelContainer : MonoBehaviour
                 }
             }
         }
+
         return renderVectors;
     }
 
-    public Dictionary<Vector3Int, Chunk> renderVectors = null;
     public int voxelsInChunks = 0;
 
     // MEMORY SAVER?
@@ -133,6 +137,7 @@ public class VoxelContainer : MonoBehaviour
 
         int breaker = 0;
         voxelsInChunks = 0;
+        
         // Now prep those 27 chunks for rendering....
         foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
         {
@@ -158,7 +163,7 @@ public class VoxelContainer : MonoBehaviour
                     // Abort if basically dark!
 /*                    if (grayScaleValue < 10)
                     {
-                        Debug.Log("Bomnb!");
+                        Debug.Log("Bomb!");
                         continue;
                     }
 */                    color = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue).color;
@@ -204,7 +209,6 @@ public class VoxelContainer : MonoBehaviour
                         meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
                         meshData.colors.Add(voxelColorAlpha);
                         meshData.UVs2.Add(voxelSmoothness);
-
                         meshData.triangles.Add(counter++);
                     }
                 }
@@ -275,9 +279,8 @@ public class VoxelContainer : MonoBehaviour
                 UVs = new List<Vector2>();
                 UVs2 = new List<Vector2>();
                 colors = new List<Color>();
-
-                Initialized = true;
                 mesh = new Mesh();
+                Initialized = true;
             }
             else
             {
@@ -286,10 +289,10 @@ public class VoxelContainer : MonoBehaviour
                 UVs.Clear();
                 UVs2.Clear();
                 colors.Clear();
-
                 mesh.Clear();
             }
         }
+
         public void UploadMesh(bool sharedVertices = false)
         {
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;

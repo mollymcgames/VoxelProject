@@ -73,7 +73,7 @@ public class MeshMemoryUsage : MonoBehaviour
 
         // DISPLAY RAM USAGE
         // Convert memory usage from bytes to megabytes
-        float memoryUsageMB = UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong() / (1024f * 1024f);
+        float memoryUsageMB = UnityEngine.Profiling.Profiler.GetMonoUsedSizeLong() / (1024f * 1024f);
         goTotalRAM.text = memoryUsageMB.ToString("F0") + "MB";
 
         meshFilter = GameObject.FindAnyObjectByType<MeshFilter>();
