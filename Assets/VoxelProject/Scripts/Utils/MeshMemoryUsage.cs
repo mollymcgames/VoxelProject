@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class MeshMemoryUsage : MonoBehaviour
     public TextMeshProUGUI goVoxelsSelected;
 
     public TextMeshProUGUI goFPS;
+    public TextMeshProUGUI goTotalRAM;
 
     // Variables to store the FPS calculation
     public float updateInterval = 0.5f;
@@ -19,12 +21,18 @@ public class MeshMemoryUsage : MonoBehaviour
     private int frames = 0;
     private float fps = 0.0f;
 
+    private MeshFilter meshFilter;
+    private Mesh mesh;
+    //private Process currentProcess;
+
     void Start()
     {
         // Initialise variables
         timeSinceLastUpdate = 0.0f;
         frames = 0;
         fps = 0.0f;
+        //currentProcess = Process.GetCurrentProcess();
+        //UnityEngine.Debug.Log("CP: "+currentProcess.ToString());
     }
 
 
@@ -55,7 +63,7 @@ public class MeshMemoryUsage : MonoBehaviour
             else
             {
                 // Optionally, log FPS to console
-                Debug.Log("FPS: " + Mathf.RoundToInt(fps));
+                UnityEngine.Debug.Log("FPS: " + Mathf.RoundToInt(fps));
             }
 
             // Reset the counters
@@ -63,11 +71,15 @@ public class MeshMemoryUsage : MonoBehaviour
             timeSinceLastUpdate = 0.0f;
         }
 
-        MeshFilter meshFilter = GameObject.FindAnyObjectByType<MeshFilter>();
+        // DISPLAY RAM USAGE
+        // Convert memory usage from bytes to megabytes
+        float memoryUsageMB = UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong() / (1024f * 1024f);
+        goTotalRAM.text = memoryUsageMB.ToString("F0") + "MB";
+
+        meshFilter = GameObject.FindAnyObjectByType<MeshFilter>();
         if (meshFilter != null)
         {
-            //        Mesh mesh = GetComponent<MeshFilter>().mesh;
-            Mesh mesh = meshFilter.mesh;
+            mesh = meshFilter.mesh;
             if (mesh != null)
             {
                 int vertexMemory = mesh.vertexCount * sizeof(float) * 3; // Each vertex has 3 floats (x, y, z)

@@ -87,6 +87,13 @@ public class VoxelContainer : MonoBehaviour
     public Dictionary<Vector3Int, Chunk> renderVectors = null;
     public int voxelsInChunks = 0;
 
+    // MEMORY SAVER?
+    Vector3Int[] faceVertices = new Vector3Int[4];
+    // MEMORY SAVER?
+    Vector2[] faceUVs = new Vector2[4];
+    // MEMORY SAVER?
+    VoxelColor voxelColor;
+
     public void GenerateMesh(float transparencyValue = 1f)
     {
         //Debug.Log("Generating mesh...");
@@ -95,13 +102,17 @@ public class VoxelContainer : MonoBehaviour
             mainCamera = Camera.main;
 
         Vector3Int blockPos;
-        Voxel block;
+        //Voxel block;
 
         int counter = 0;
-        Vector3Int[] faceVertices = new Vector3Int[4];
-        Vector2[] faceUVs = new Vector2[4];
+        // MEMORY SAVER?Vector3Int[] faceVertices = new Vector3Int[4];
+        // MEMORY SAVER?Vector2[] faceUVs = new Vector2[4];
+        faceVertices = new Vector3Int[4];
+        // MEMORY SAVER?
+        faceUVs = new Vector2[4];
+        // MEMORY SAVER?
+        voxelColor = new VoxelColor();
 
-        VoxelColor voxelColor = new VoxelColor();
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 

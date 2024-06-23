@@ -112,7 +112,7 @@ public class VoxelComputeManager : MonoBehaviour
                         VoxelWorldManager.Instance.voxelMeshContainer.RenderMesh(transparencyValue);
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                 }
             });

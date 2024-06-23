@@ -2,20 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 /**
  * This struct represents a single Voxel and its properties
  */
 public class VoxelElement
 {
     public int ID;
-    public Vector3Int position { get; private set; }
+    //public Vector3Int position { get; }
+    public int positionX;
+    public int positionY;
+    public int positionZ;
     public Color color = Color.white;
     public string colorString = "";
     public bool isActive = true;
 
     public VoxelElement(Vector3Int position, Color color, bool isActive = true)
     {
-        this.position = position;
+        this.positionX = position.x;
+        this.positionY = position.y;
+        this.positionZ = position.z;
         this.color = color;
         this.isActive = isActive;
         // @TODO Need to do something with this ID...
@@ -24,12 +30,16 @@ public class VoxelElement
 
     public VoxelElement(Vector3Int position)
     {
-        this.position = position;
+        this.positionX = position.x;
+        this.positionY = position.y;
+        this.positionZ = position.z;
     }
 
     public VoxelElement(Vector3Int position, string colorString)
     {
-        this.position = position;
+        this.positionX = position.x;
+        this.positionY = position.y;
+        this.positionZ = position.z;
         this.colorString = colorString;
     }
 
@@ -41,4 +51,12 @@ public class VoxelElement
             return true;
         }
     }
+
+    public Vector3Int position {
+        get
+        {            
+            return new Vector3Int(positionX,positionY,positionZ);
+        }  
+    }
+
 }

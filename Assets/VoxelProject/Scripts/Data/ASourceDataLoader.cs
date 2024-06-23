@@ -45,6 +45,8 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             }
 
             // Add voxel to the corresponding chunk
+            // MEMORY SAVER: If we know the coordinates, which we're using as a chunk index, why do we
+            // need to save the coordinates twice (i.e. in the voxel object)?
             chunks[chunkCoordinates].AddVoxel(nextVoxelElement);
             voxelsProcessed++;
         }

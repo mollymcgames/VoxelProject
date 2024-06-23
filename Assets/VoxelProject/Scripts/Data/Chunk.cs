@@ -26,6 +26,7 @@ public class Chunk
     {
         voxels.Add(voxel);
     }
+
     public static Vector3Int GetChunkCoordinates(Vector3 voxelPosition, int chunkSize)
     {
         // Calculate chunk coordinates
