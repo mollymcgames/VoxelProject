@@ -8,8 +8,8 @@ public class ComputeManager : MonoBehaviour
 {
     public ComputeShader noiseShader;
 
-    private List<NoiseBuffer> allNoiseComputeBuffers = new List<NoiseBuffer>();
-    private Queue<NoiseBuffer> availableNoiseComputeBuffers = new Queue<NoiseBuffer>();
+    //nonoise private List<NoiseBuffer> allNoiseComputeBuffers = new List<NoiseBuffer>();
+    //nonoise private Queue<NoiseBuffer> availableNoiseComputeBuffers = new Queue<NoiseBuffer>();
 
     private int xThreads;
     private int yThreads;
@@ -21,6 +21,7 @@ public class ComputeManager : MonoBehaviour
         yThreads = WorldManager.WorldSettings.maxHeightY / 8;
         zThreads = WorldManager.WorldSettings.maxDepthZ / 8;
 
+/*      nonoise
         noiseShader.SetInt("containerSizeX", WorldManager.WorldSettings.maxWidthX);
         noiseShader.SetInt("containerSizeY", WorldManager.WorldSettings.maxHeightY);
         noiseShader.SetInt("containerSizeZ", WorldManager.WorldSettings.maxDepthZ);
@@ -28,46 +29,46 @@ public class ComputeManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             CreateNewNoiseBuffer();
-        }
+        }*/
     }
 
     #region Noise Buffers
 
     #region Pooling
-    public NoiseBuffer GetNoiseBuffer()
-    {
-        if (availableNoiseComputeBuffers.Count > 0)
-            return availableNoiseComputeBuffers.Dequeue();
-        else
+    /* nonoise   public NoiseBuffer GetNoiseBuffer()
         {
-            return CreateNewNoiseBuffer(false);
-        }
-    }
+            if (availableNoiseComputeBuffers.Count > 0)
+                return availableNoiseComputeBuffers.Dequeue();
+            else
+            {
+                return CreateNewNoiseBuffer(false);
+            }
+        }*/
 
-    public NoiseBuffer CreateNewNoiseBuffer(bool enqueue = true)
-    {
-        NoiseBuffer buffer = new NoiseBuffer();
-        buffer.InitializeBuffer();
-        allNoiseComputeBuffers.Add(buffer);
+    /* nonoise   public NoiseBuffer CreateNewNoiseBuffer(bool enqueue = true)
+        {
+            NoiseBuffer buffer = new NoiseBuffer();
+            buffer.InitializeBuffer();
+            allNoiseComputeBuffers.Add(buffer);
 
-        if (enqueue)
+            if (enqueue)
+                availableNoiseComputeBuffers.Enqueue(buffer);
+
+            return buffer;
+        }*/
+
+    /* nonoise   public void ClearAndRequeueBuffer(NoiseBuffer buffer)
+        {
+            ClearVoxelData(buffer);
             availableNoiseComputeBuffers.Enqueue(buffer);
-
-        return buffer;
-    }
-
-    public void ClearAndRequeueBuffer(NoiseBuffer buffer)
-    {
-        ClearVoxelData(buffer);
-        availableNoiseComputeBuffers.Enqueue(buffer);
-    }
+        }*/
     #endregion
 
     #region Compute Helpers
 
     public void GenerateVoxelData(ref Container cont)
     {
-        noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
+/* nonoise        noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
         noiseShader.SetBuffer(0, "count", cont.data.countBuffer);
 
         noiseShader.SetVector("chunkPosition", cont.containerPosition);
@@ -75,12 +76,12 @@ public class ComputeManager : MonoBehaviour
 
         noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
         noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
-
-        AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
-        {
-            callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
+*/
+        //AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
+        //{
+            //callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
             WorldManager.Instance.container.RenderMesh();
-        });    
+        //});    
     }
 
     private void ClearVoxelData(NoiseBuffer buffer)
@@ -92,16 +93,16 @@ public class ComputeManager : MonoBehaviour
     #endregion
     #endregion
 
-    private void OnApplicationQuit()
-    {
-        DisposeAllBuffers();
-    }
+    /* nonoise private void OnApplicationQuit()
+      {
+          DisposeAllBuffers();
+      }*/
 
-    public void DisposeAllBuffers()
-    {
-        foreach (NoiseBuffer buffer in allNoiseComputeBuffers)
-            buffer.Dispose();
-    }
+    /* nonoise   public void DisposeAllBuffers()
+        {
+            foreach (NoiseBuffer buffer in allNoiseComputeBuffers)
+                buffer.Dispose();
+        }*/
 
 
     private static ComputeManager _instance;

@@ -7,7 +7,8 @@ public class WorldManager : MonoBehaviour
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;
-    public VoxelCell[] sourceData;
+    // oldway public VoxelCell[] sourceData;
+    public Voxel[,,] sourceData;
 
     public Container container;
 

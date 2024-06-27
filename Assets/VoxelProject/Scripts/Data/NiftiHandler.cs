@@ -5,18 +5,19 @@ using UnityEngine;
 
 public class NiftiHandler : MonoBehaviour
 {      
+    public static int visibleColourThreshold = 5;
+
     public static Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
     {
         // Load the NIfTI file
         return NiftiFile.Read(niftiFilePath);
     }
 
-
-    public static VoxelCell[] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+    public static Voxel[,,] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
     {
         int numVoxels = width * height * depth;
 
-        VoxelCell[] voxelValue = new VoxelCell[numVoxels];
+        Voxel[,,] voxelValue = new Voxel[width,height,depth];
 
         // Iterate through each voxel
         int index = 0;
@@ -26,7 +27,7 @@ public class NiftiHandler : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    voxelValue[index] = new VoxelCell(z, y, x, niftiData.Data[index].ToString());
+                    voxelValue[x, y, z] = new Voxel( (int)niftiData.Data[index] > visibleColourThreshold, (int)niftiData.Data[index]); //, x, niftiData.Data[index].ToString());
                     index++;
                 }
             }
@@ -34,4 +35,27 @@ public class NiftiHandler : MonoBehaviour
         return voxelValue;
     }
 
+
+    /* oldway    public static VoxelCell[] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+        {
+            int numVoxels = width * height * depth;
+
+            VoxelCell[] voxelValue = new VoxelCell[numVoxels];
+
+            // Iterate through each voxel
+            int index = 0;
+            for (int z = 0; z < depth; z++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        voxelValue[index] = new VoxelCell(z, y, x, niftiData.Data[index].ToString());
+                        index++;
+                    }
+                }
+            }
+            return voxelValue;
+        }
+    */
 }
