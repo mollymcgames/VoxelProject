@@ -68,15 +68,6 @@ public class Container : MonoBehaviour
 
                     ProcessVoxel(x, y, z);
 
-                    float grayScaleValue = WorldManager.Instance.sourceData[x, y, z].colourRGBValue / 255f;
-                    voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
-
-                    voxelColorAlpha = voxelColor.color;
-                    voxelColorAlpha.a = 1;
-                    voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
-                    meshData.colors.Add(voxelColorAlpha);
-                    meshData.UVs2.Add(voxelSmoothness);
-
                     /*                    block = WorldManager.Instance.sourceData[x, y, z];
 
                                         //Only check on solid blocks
@@ -125,8 +116,12 @@ public class Container : MonoBehaviour
         }
 
         meshData.vertices = vertices;//.Add(faceVertices[voxelTris[i, j]]);
+        Debug.Log("vertices size:" + vertices.Count);
         meshData.UVs = uvs;//.Add(faceUVs[voxelTris[i, j]]);
         meshData.triangles = triangles;//.Add(counter++);
+        meshData.colors = colors;
+        Debug.Log("colors size:" + colors.Count);
+        meshData.UVs2 = uv2s;
 
         /* oldway       foreach (VoxelCell vc in WorldManager.Instance.sourceData)
                 {
@@ -195,6 +190,7 @@ public class Container : MonoBehaviour
         {
             return; // Skip processing if the array is not initialized or indices are out of bounds
         }
+
         Voxel voxel = WorldManager.Instance.sourceData[x, y, z];
         if (voxel.isSolid)
         {
@@ -223,14 +219,64 @@ public class Container : MonoBehaviour
         if (x < 0 || x >= WorldManager.Instance.worldSettings.chunkSize || y < 0 || y >= WorldManager.Instance.worldSettings.chunkSize || z < 0 || z >= WorldManager.Instance.worldSettings.chunkSize)
             return true; // Face is at the boundary of the chunk
         return !WorldManager.Instance.sourceData[x, y, z].isSolid;
+
+        /*        // Convert local chunk coordinates to global coordinates
+                Vector3 globalPos = transform.position + new Vector3(x, y, z);
+
+                // Check if the neighboring voxel is inactive or out of bounds in the current chunk
+                // and also if it's inactive or out of bounds in the world (neighboring chunks)
+                return IsVoxelHiddenInChunk(x, y, z) && IsVoxelHiddenInWorld(globalPos);*/
+
+    }
+
+    private bool IsVoxelHiddenInChunk(int x, int y, int z)
+    {
+        if (x < 0 || x >= WorldManager.Instance.worldSettings.chunkSize || y < 0 || y >= WorldManager.Instance.worldSettings.chunkSize || z < 0 || z >= WorldManager.Instance.worldSettings.chunkSize)
+            return true; // Face is at the boundary of the chunk
+        return !WorldManager.Instance.sourceData[x, y, z].isSolid;
+    }
+
+    private bool IsVoxelHiddenInWorld(Vector3 globalPos)
+    {
+        return false;
+/*        // Check if there is a chunk at the global position
+        Chunk neighborChunk = WorldManager.Instance.GetChunkAt(globalPos);
+        if (neighborChunk == null)
+        {
+            // No chunk at this position, so the voxel face should be hidden
+            return true;
+        }
+
+        // Convert the global position to the local position within the neighboring chunk
+        Vector3 localPos = neighborChunk.transform.InverseTransformPoint(globalPos);
+
+        // If the voxel at this local position is inactive, the face should be visible (not hidden)
+        return !neighborChunk.IsVoxelActiveAt(localPos);*/
     }
 
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> triangles = new List<int>();
     private List<Vector2> uvs = new List<Vector2>();
+    private List<Vector2> uv2s = new List<Vector2>();
+    private List<Color> colors = new List<Color>();
 
     private void AddFaceData(int x, int y, int z, int faceIndex)
     {
+        // Work out the colour
+        float grayScaleValue = WorldManager.Instance.sourceData[x, y, z].colourRGBValue / 255f;
+        VoxelColor voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+        Color voxelColorAlpha = voxelColor.color;
+        voxelColorAlpha.a = 1;
+        Vector2 voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+        colors.Add(voxelColorAlpha);
+        colors.Add(voxelColorAlpha);
+        colors.Add(voxelColorAlpha);
+        colors.Add(voxelColorAlpha);
+        uv2s.Add(voxelSmoothness);
+        uv2s.Add(voxelSmoothness);
+        uv2s.Add(voxelSmoothness);
+        uv2s.Add(voxelSmoothness);
+
         // Based on faceIndex, determine vertices and triangles
         // Add vertices and triangles for the visible face
         // Calculate and add corresponding UVs
@@ -305,7 +351,6 @@ public class Container : MonoBehaviour
             uvs.Add(new Vector2(1, 0));
             uvs.Add(new Vector2(1, 0));
             uvs.Add(new Vector2(0, 0));
-
         }
         AddTriangleIndices();
     }

@@ -51,7 +51,27 @@ public class WorldManager : MonoBehaviour
             return _instance;
         }
     }
+
+/*    public Chunk GetChunkAt(Vector3 globalPosition)
+    {
+        // Calculate the chunk's starting position based on the global position
+        Vector3Int chunkCoordinates = new Vector3Int(
+            Mathf.FloorToInt(globalPosition.x / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
+            Mathf.FloorToInt(globalPosition.y / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
+            Mathf.FloorToInt(globalPosition.z / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize
+        );
+
+        // Retrieve and return the chunk at the calculated position
+        if (chunks.TryGetValue(chunkCoordinates, out Chunk chunk))
+        {
+            return chunk;
+        }
+
+        // Return null if no chunk exists at the position
+        return null;
+    }*/
 }
+
 
 [System.Serializable]
 public class WorldSettings

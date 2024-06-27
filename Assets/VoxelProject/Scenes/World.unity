@@ -826,6 +826,7 @@ MonoBehaviour:
     maxWidthX: 0
     maxDepthZ: 0
     maxHeightY: 0
+    chunkSize: 16
   container: {fileID: 0}
 --- !u!114 &1755072227
 MonoBehaviour:
