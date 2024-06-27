@@ -61,4 +61,5 @@ public class WorldSettings
     public int maxWidthX = 0;
     public int maxDepthZ = 0;
     public int maxHeightY = 0;
+    public int chunkSize = 32;
 }

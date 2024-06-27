@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 
 [RequireComponent(typeof(MeshFilter))]
@@ -65,52 +66,67 @@ public class Container : MonoBehaviour
                     //     break;
                     breaker++;
 
-                    block = WorldManager.Instance.sourceData[x, y, z];
+                    ProcessVoxel(x, y, z);
 
-                    //Only check on solid blocks
-                    if (!block.isSolid)
-                    {
-                        Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + x + "," + y + "," + z + "]");
-                        continue;
-                    }
-
-                    float grayScaleValue = block.colourRGBValue / 255f;
+                    float grayScaleValue = WorldManager.Instance.sourceData[x, y, z].colourRGBValue / 255f;
                     voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
 
                     voxelColorAlpha = voxelColor.color;
                     voxelColorAlpha.a = 1;
                     voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
-                    //Iterate over each face direction
-                    for (int i = 0; i < 6; i++)
-                    {
-                        //Check if there's a solid block against this face
-                        //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
-                        // if (checkVoxelIsSolid(blockPos))                
-                        //     continue;
+                    meshData.colors.Add(voxelColorAlpha);
+                    meshData.UVs2.Add(voxelSmoothness);
 
-                        //Draw this face
+                    /*                    block = WorldManager.Instance.sourceData[x, y, z];
 
-                        //Collect the appropriate vertices from the default vertices and add the block position
-                        for (int j = 0; j < 4; j++)
-                        {
-                            faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + new Vector3(x,y,z);
-                            faceUVs[j] = voxelUVs[j];
-                        }
+                                        //Only check on solid blocks
+                                        if (!block.isSolid)
+                                        {
+                                            Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + x + "," + y + "," + z + "]");
+                                            continue;
+                                        }
 
-                        for (int j = 0; j < 6; j++)
-                        {
-                            meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
-                            meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
-                            meshData.colors.Add(voxelColorAlpha);
-                            meshData.UVs2.Add(voxelSmoothness);
+                                        float grayScaleValue = block.colourRGBValue / 255f;
+                                        voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
 
-                            meshData.triangles.Add(counter++);
+                                        voxelColorAlpha = voxelColor.color;
+                                        voxelColorAlpha.a = 1;
+                                        voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+                                        //Iterate over each face direction
+                                        for (int i = 0; i < 6; i++)
+                                        {
+                                            //Check if there's a solid block against this face
+                                            //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
+                                            // if (checkVoxelIsSolid(blockPos))                
+                                            //     continue;
 
-                        }
-                    }
-                }            
+                                            //Draw this face
+
+                                            //Collect the appropriate vertices from the default vertices and add the block position
+                                            for (int j = 0; j < 4; j++)
+                                            {
+                                                faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + new Vector3(x,y,z);
+                                                faceUVs[j] = voxelUVs[j];
+                                            }
+
+                                            for (int j = 0; j < 6; j++)
+                                            {
+                                                meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
+                                                meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
+                                                meshData.colors.Add(voxelColorAlpha);
+                                                meshData.UVs2.Add(voxelSmoothness);
+
+                                                meshData.triangles.Add(counter++);
+
+                                            }
+                                        }*/
+                }
             }
         }
+
+        meshData.vertices = vertices;//.Add(faceVertices[voxelTris[i, j]]);
+        meshData.UVs = uvs;//.Add(faceUVs[voxelTris[i, j]]);
+        meshData.triangles = triangles;//.Add(counter++);
 
         /* oldway       foreach (VoxelCell vc in WorldManager.Instance.sourceData)
                 {
@@ -169,6 +185,144 @@ public class Container : MonoBehaviour
                         }
                     }
                 }*/
+    }
+
+    private void ProcessVoxel(int x, int y, int z)
+    {
+        // Check if the voxels array is initialized and the indices are within bounds
+        if (WorldManager.Instance.sourceData == null || x < 0 || x >= WorldManager.Instance.sourceData.GetLength(0) ||
+            y < 0 || y >= WorldManager.Instance.sourceData.GetLength(1) || z < 0 || z >= WorldManager.Instance.sourceData.GetLength(2))
+        {
+            return; // Skip processing if the array is not initialized or indices are out of bounds
+        }
+        Voxel voxel = WorldManager.Instance.sourceData[x, y, z];
+        if (voxel.isSolid)
+        {
+            // Check each face of the voxel for visibility
+            bool[] facesVisible = new bool[6];
+
+            // Check visibility for each face
+            facesVisible[0] = IsFaceVisible(x, y + 1, z); // Top
+            facesVisible[1] = IsFaceVisible(x, y - 1, z); // Bottom
+            facesVisible[2] = IsFaceVisible(x - 1, y, z); // Left
+            facesVisible[3] = IsFaceVisible(x + 1, y, z); // Right
+            facesVisible[4] = IsFaceVisible(x, y, z + 1); // Front
+            facesVisible[5] = IsFaceVisible(x, y, z - 1); // Back
+
+            for (int i = 0; i < facesVisible.Length; i++)
+            {
+                if (facesVisible[i])
+                    AddFaceData(x, y, z, i); // Method to add mesh data for the visible face
+            }
+        }
+    }
+
+    private bool IsFaceVisible(int x, int y, int z)
+    {
+        // Check if the neighboring voxel in the given direction is inactive or out of bounds
+        if (x < 0 || x >= WorldManager.Instance.worldSettings.chunkSize || y < 0 || y >= WorldManager.Instance.worldSettings.chunkSize || z < 0 || z >= WorldManager.Instance.worldSettings.chunkSize)
+            return true; // Face is at the boundary of the chunk
+        return !WorldManager.Instance.sourceData[x, y, z].isSolid;
+    }
+
+    private List<Vector3> vertices = new List<Vector3>();
+    private List<int> triangles = new List<int>();
+    private List<Vector2> uvs = new List<Vector2>();
+
+    private void AddFaceData(int x, int y, int z, int faceIndex)
+    {
+        // Based on faceIndex, determine vertices and triangles
+        // Add vertices and triangles for the visible face
+        // Calculate and add corresponding UVs
+
+        if (faceIndex == 0) // Top Face
+        {
+            vertices.Add(new Vector3(x, y + 1, z));
+            vertices.Add(new Vector3(x, y + 1, z + 1));
+            vertices.Add(new Vector3(x + 1, y + 1, z + 1));
+            vertices.Add(new Vector3(x + 1, y + 1, z));
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(1, 0));
+            uvs.Add(new Vector2(1, 1));
+            uvs.Add(new Vector2(0, 1));
+        }
+
+        if (faceIndex == 1) // Bottom Face
+        {
+            vertices.Add(new Vector3(x, y, z));
+            vertices.Add(new Vector3(x + 1, y, z));
+            vertices.Add(new Vector3(x + 1, y, z + 1));
+            vertices.Add(new Vector3(x, y, z + 1));
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(0, 1));
+            uvs.Add(new Vector2(1, 1));
+            uvs.Add(new Vector2(1, 0));
+        }
+
+        if (faceIndex == 2) // Left Face
+        {
+            vertices.Add(new Vector3(x, y, z));
+            vertices.Add(new Vector3(x, y, z + 1));
+            vertices.Add(new Vector3(x, y + 1, z + 1));
+            vertices.Add(new Vector3(x, y + 1, z));
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(0, 1));
+            uvs.Add(new Vector2(0, 1));
+        }
+
+        if (faceIndex == 3) // Right Face
+        {
+            vertices.Add(new Vector3(x + 1, y, z + 1));
+            vertices.Add(new Vector3(x + 1, y, z));
+            vertices.Add(new Vector3(x + 1, y + 1, z));
+            vertices.Add(new Vector3(x + 1, y + 1, z + 1));
+            uvs.Add(new Vector2(1, 0));
+            uvs.Add(new Vector2(1, 1));
+            uvs.Add(new Vector2(1, 1));
+            uvs.Add(new Vector2(1, 0));
+        }
+
+        if (faceIndex == 4) // Front Face
+        {
+            vertices.Add(new Vector3(x, y, z + 1));
+            vertices.Add(new Vector3(x + 1, y, z + 1));
+            vertices.Add(new Vector3(x + 1, y + 1, z + 1));
+            vertices.Add(new Vector3(x, y + 1, z + 1));
+            uvs.Add(new Vector2(0, 1));
+            uvs.Add(new Vector2(0, 1));
+            uvs.Add(new Vector2(1, 1));
+            uvs.Add(new Vector2(1, 1));
+        }
+
+        if (faceIndex == 5) // Back Face
+        {
+            vertices.Add(new Vector3(x + 1, y, z));
+            vertices.Add(new Vector3(x, y, z));
+            vertices.Add(new Vector3(x, y + 1, z));
+            vertices.Add(new Vector3(x + 1, y + 1, z));
+            uvs.Add(new Vector2(0, 0));
+            uvs.Add(new Vector2(1, 0));
+            uvs.Add(new Vector2(1, 0));
+            uvs.Add(new Vector2(0, 0));
+
+        }
+        AddTriangleIndices();
+    }
+
+    private void AddTriangleIndices()
+    {
+        int vertCount = vertices.Count;
+
+        // First triangle
+        triangles.Add(vertCount - 4);
+        triangles.Add(vertCount - 3);
+        triangles.Add(vertCount - 2);
+
+        // Second triangle
+        triangles.Add(vertCount - 4);
+        triangles.Add(vertCount - 2);
+        triangles.Add(vertCount - 1);
     }
 
 
