@@ -116,11 +116,11 @@ public class Container : MonoBehaviour
         }
 
         meshData.vertices = vertices;//.Add(faceVertices[voxelTris[i, j]]);
-        Debug.Log("vertices size:" + vertices.Count);
+        //Debug.Log("vertices size:" + vertices.Count);
         meshData.UVs = uvs;//.Add(faceUVs[voxelTris[i, j]]);
         meshData.triangles = triangles;//.Add(counter++);
         meshData.colors = colors;
-        Debug.Log("colors size:" + colors.Count);
+        //Debug.Log("colors size:" + colors.Count);
         meshData.UVs2 = uv2s;
 
         /* oldway       foreach (VoxelCell vc in WorldManager.Instance.sourceData)
@@ -215,17 +215,17 @@ public class Container : MonoBehaviour
 
     private bool IsFaceVisible(int x, int y, int z)
     {
-        // Check if the neighboring voxel in the given direction is inactive or out of bounds
+/*        // Check if the neighboring voxel in the given direction is inactive or out of bounds
         if (x < 0 || x >= WorldManager.Instance.worldSettings.chunkSize || y < 0 || y >= WorldManager.Instance.worldSettings.chunkSize || z < 0 || z >= WorldManager.Instance.worldSettings.chunkSize)
             return true; // Face is at the boundary of the chunk
-        return !WorldManager.Instance.sourceData[x, y, z].isSolid;
+        return !WorldManager.Instance.sourceData[x, y, z].isSolid;*/
 
-        /*        // Convert local chunk coordinates to global coordinates
-                Vector3 globalPos = transform.position + new Vector3(x, y, z);
+        // Convert local chunk coordinates to global coordinates
+        Vector3 globalPos = transform.position + new Vector3(x, y, z);
 
-                // Check if the neighboring voxel is inactive or out of bounds in the current chunk
-                // and also if it's inactive or out of bounds in the world (neighboring chunks)
-                return IsVoxelHiddenInChunk(x, y, z) && IsVoxelHiddenInWorld(globalPos);*/
+        // Check if the neighboring voxel is inactive or out of bounds in the current chunk
+        // and also if it's inactive or out of bounds in the world (neighboring chunks)
+        return IsVoxelHiddenInChunk(x, y, z);// && IsVoxelHiddenInWorld(globalPos);
 
     }
 
