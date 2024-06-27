@@ -21,7 +21,7 @@ public class Container : MonoBehaviour
     public void Initialize(Material mat, Vector3 position)
     {
         ConfigureComponents();
-        //nonoise data = ComputeManager.Instance.GetNoiseBuffer();
+        data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
     }
@@ -191,7 +191,7 @@ public class Container : MonoBehaviour
         meshCollider = GetComponent<MeshCollider>();
         meshCollider.convex = false;
     }
-    public bool checkVoxelIsSolid(Vector3 point)
+    public bool checkVoxelIsSolid(Vector3Int point)
     {
         if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
             return true;
@@ -199,7 +199,7 @@ public class Container : MonoBehaviour
             return this[point].isSolid;
     }
 
-    public Voxel this[Vector3 index]
+    public Voxel this[Vector3Int index]
     {
         get
         {
