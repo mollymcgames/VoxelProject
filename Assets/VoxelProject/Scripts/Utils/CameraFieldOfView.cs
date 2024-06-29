@@ -6,17 +6,17 @@ public class CameraFieldOfView : MonoBehaviour
 {
     //This is the field of view that the Camera has
     float m_FieldOfView;
-    public Camera mainCamera;
-    public PostProcessVolume postProcessVolume;
-    private UnityEngine.Rendering.PostProcessing.DepthOfField depthOfField;
+    //public Camera mainCamera;
+/*    public PostProcessVolume postProcessVolume;
+    private UnityEngine.Rendering.PostProcessing.DepthOfField depthOfField;*/
 
     void Start()
     {
         //Start the Camera field of view at 60
         m_FieldOfView = 60.0f;
-
+/*
         // Get the Depth of Field effect from the Post Process Volume
-        postProcessVolume.profile.TryGetSettings(out depthOfField);
+        postProcessVolume.profile.TryGetSettings(out depthOfField);*/
 
 
     }
@@ -26,12 +26,12 @@ public class CameraFieldOfView : MonoBehaviour
         //Update the camera's field of view to be the variable returning from the Slider
         Camera.main.fieldOfView = m_FieldOfView;
 
-        // Adjust the blur intensity based on the camera's FOV
+/*        // Adjust the blur intensity based on the camera's FOV
         float fov = m_FieldOfView; // mainCamera.fieldOfView;
 
         // Example: Increase blur as FOV decreases
         float blurIntensity = Mathf.Lerp(10f, 0f, (fov - 30f) / (90f - 30f));
-        depthOfField.focalLength.value = blurIntensity;
+        depthOfField.focalLength.value = blurIntensity;*/
 
     }
 
