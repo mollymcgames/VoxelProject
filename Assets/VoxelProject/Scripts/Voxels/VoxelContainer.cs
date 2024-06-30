@@ -126,7 +126,7 @@ public class VoxelContainer : MonoBehaviour
             foreach (VoxelElement nextVoxelElement in nextChunk.Value.voxels)
             {
                 blockPos = nextVoxelElement.position;
-                block = this[blockPos];
+                //block = this[blockPos];
                 //Only check on solid blocks
                 //if (!block.isSolid)
                 //{
