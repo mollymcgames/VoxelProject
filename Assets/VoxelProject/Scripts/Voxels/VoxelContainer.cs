@@ -128,11 +128,11 @@ public class VoxelContainer : MonoBehaviour
                 blockPos = nextVoxelElement.position;
                 block = this[blockPos];
                 //Only check on solid blocks
-                if (!block.isSolid)
-                {
-                    Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
-                    continue;
-                }
+                //if (!block.isSolid)
+                //{
+                    //Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
+                //    continue;
+                //}
 
                 // float grayScaleValue = float.Parse(vc.value)/255f;
                 // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);

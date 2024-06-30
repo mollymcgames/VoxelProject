@@ -15,7 +15,7 @@ public struct VoxelNoiseBuffer
         countBuffer.SetData(new uint[] { 0 });
 
         voxelArray = new VoxelIndexedArray<Voxel>();
-        noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
+        noiseBuffer = new ComputeBuffer(voxelArray.Count, 8);
         noiseBuffer.SetData(voxelArray.GetData);
         Initialized = true;
     }
