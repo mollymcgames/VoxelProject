@@ -475,8 +475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa76e8def98191b429236d2285ab0bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 414495108}
-  postProcessVolume: {fileID: 842587151}
+  sensitivity: 0.1
 --- !u!4 &842587150
 Transform:
   m_ObjectHideFlags: 0
@@ -889,10 +888,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1755072225}
   - component: {fileID: 1755072226}
+  - component: {fileID: 1755072229}
   - component: {fileID: 1755072227}
   - component: {fileID: 1755072228}
   m_Layer: 3
-  m_Name: WorldManager
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -920,11 +920,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1755072223}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0e65ef4e51bde8429033f2ff79c2aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  voxelMeshConfigurationSettings:
+    voxelDataFileName: 
+    voxelSegmentLayers: []
+    voxelChunkSize: 16
+    voxelChunkFieldOfViewMultiplier: 1
+    voxelMeshContainerTagName: Untagged
+    domainOffsetX: 0
+    domainOffsetY: 0
+    domainOffsetZ: 0
+    sceneTargetName: 
+  voxelFileFormat: nii
   worldMaterial: {fileID: 2100000, guid: e8294481300e5844abcc6eaf40cda598, type: 2}
   WorldColors:
   - color: {r: 0, g: 0.4716981, b: 0.016664108, a: 0}
@@ -973,9 +984,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1755072223}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e95192a62fe0c30468a8bc857c07d4f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1755072229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755072223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ac18127f8c26a48afd8fce7d4678a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1755438928

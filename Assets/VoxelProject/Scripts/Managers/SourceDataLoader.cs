@@ -1,196 +1,159 @@
 using Nifti.NET;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
 
-public class SourceDataLoader : MonoBehaviour
+public class SourceDataLoader : ASourceDataLoader
 {
-    public void Awake()
+    public SourceDataLoader(int chunkSize) : base(chunkSize) { }
+
+    private static Nifti.NET.Nifti niftiFileLines = null;
+    
+    //public override Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
+    public override Voxel[,,] LoadSourceData(string filepath)
     {
-        DontDestroyOnLoad(this);
+        Debug.Log("Loading nii source data...:"+filepath);
+        LoadNiftiFile(filepath);
+        CreateVoxelsArray();
+        return voxelData;        
+    }    
+
+    public override Voxel[,,] LoadSegmentData(ref Voxel[,,] sourceData, int segmentLayer, string segmentFile)
+    {        
+        Debug.Log("Loading nii segment data..."+segmentFile);
+        LoadNiftiFile(Path.Combine(Application.streamingAssetsPath, segmentFile));
+        AddSegmentToVoxelsArray(segmentLayer);
+        return voxelData;
+    } 
+
+    public override object GetHeader()
+    {
+        return niftiFileLines;
     }
 
-    private static SourceDataLoader _instance;
-
-    void Start()
+    #region
+    //private Dictionary<Vector3Int, Chunk> LoadNiftiFile(string niftiFilePath)
+    private void LoadNiftiFile(string filePath)
     {
-        if (_instance != null)
-        {
-            if (_instance != this)
-                Destroy(this);
-        }
-        else
-        {
-            _instance = this;
-        }
+        // Load default file
+        niftiFileLines = ReadNiftiFile(filePath);
+        
+        // Get the dimensions
+        widthX = niftiFileLines.Dimensions[0];
+        heightY = niftiFileLines.Dimensions[1];
+        depthZ = niftiFileLines.Dimensions[2];
+
+        Debug.Log("NII width:" + widthX);
+        Debug.Log("NII height:" + heightY);
+        Debug.Log("NII depth:" + depthZ);
+
+        // Calculate the number of voxels
+        //int numVoxels = width * height * depth;
     }
 
-    public static SourceDataLoader Instance
-    {
-        get
-        {
-            if (_instance == null)
-                _instance = FindObjectOfType<SourceDataLoader>();
-            return _instance;
-        }
+    private void CreateVoxelsArray() {
+        // Read the voxel data
+        voxelData = NiftiHandler.ReadNiftiData(niftiFileLines, widthX, heightY, depthZ);
+        Debug.Log("Data now read in");
     }
+
+    private void AddSegmentToVoxelsArray(int segmentLayer) {
+        // Read the voxel data
+        voxelData = NiftiHandler.ReadNiftiSegmentData(ref voxelData, segmentLayer, niftiFileLines, widthX, heightY, depthZ);
+        Debug.Log("Segment data now read in");
+    }
+
+    public void OpenNiftiFile(string filePath)
+    {
+        niftiFileLines = ReadNiftiFile(filePath);
+    }
+
+    private Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
+    {
+        // Load the NIfTI file
+        return NiftiFile.Read(niftiFilePath);
+    }
+
+
+    private List<VoxelElement> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+    {
+        List<VoxelElement> voxelDataList = new List<VoxelElement>();
+
+        // Iterate through each voxel
+        int index = 0;
+        for (int z = 0; z < depth; z++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if (x > maxX) maxX = x;
+                    if (x < minX) minX = x;
+                    if (y > maxY) maxY = y;
+                    if (y < minY) minY = y;
+                    if (z > maxZ) maxZ = z;
+                    if (z < minZ) minZ = z;
+
+                    // Assign the parsed color value as the voxel value if it's going to be visible
+                    if (niftiData.Data[index] > 10)
+                        voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), niftiData.Data[index].ToString()));
+                    index++;
+                }
+            }
+        }
+        Debug.Log("Lines processed:" + index);
+        return voxelDataList;
+    }
+
+    #endregion
 
     //static string niftiFilePath = "Assets/Resources/la_007.nii";
-    static string niftiFilePath = "Assets/Resources/avg152T1_LR_nifti.nii";
+    //static string niftiFilePath = "Assets/Resources/avg152T1_LR_nifti.nii";
     //static string niftiFilePath = "Assets/Resources/jhu.nii";
 
     //Use Steaming Assets folder to load the file
-    static string niftiFilePath2 = Path.Combine(Application.streamingAssetsPath, "JHU-WhiteMatter-labels-2mm.nii");
+    //static string niftiFilePath2 = Path.Combine(Application.streamingAssetsPath, "JHU-WhiteMatter-labels-2mm.nii");
     // static string niftiFilePath2 = "Assets/Resources/JHU-WhiteMatter-labels-2mm.nii"; //small datafile 
 
-    static Nifti.NET.Nifti niftiFile = null;
-
-    // oldway static VoxelCell[] voxelData = null;
-    static Voxel[,,] voxelData = null;
-    public static int widthX = 0;
-    public static int heightY = 0;
-    public static int depthZ = 0;
-
-    // oldway public static VoxelCell[] LoadSourceData()
-    //{
-//        Debug.Log("Loading source data...");
-//        return LoadNiftiFile();
-    //}
-
-    public static Voxel[,,] LoadSourceData()
-    {
-        Debug.Log("Loading source data...");
-        return LoadNiftiFile();
-    }
-
-    // oldway public static VoxelCell[] LoadSourceData(string filepath)
-    //{
-    //    Debug.Log("Loading source data...");
-    //    return LoadNiftiFile(filepath);
-   // }
-
-    public static Voxel[,,] LoadSourceData(string filepath)
-    {
-        Debug.Log("Loading source data...");
-        return LoadNiftiFile(filepath);
-    }
-
-
-    public static Nifti.NET.Nifti GetHeader()
-    {
-        return niftiFile;
-    }
-    
-    public static void OpenNiftiFile(string filePath)
-    {
-        niftiFile = null;
-        niftiFile = NiftiHandler.ReadNiftiFile(filePath);
-    }
-
-/* oldway   public static VoxelCell[] LoadNiftiFile()
-    {
-        // Load default file
-        if (niftiFile == null)
+    /*    public void Awake()
         {
-            niftiFile = NiftiHandler.ReadNiftiFile(niftiFilePath2);
-        }
+            DontDestroyOnLoad(this);
+        }*/
 
-        // Get the dimensions
-        widthX = niftiFile.Dimensions[0];
-        heightY = niftiFile.Dimensions[1];
-        depthZ = niftiFile.Dimensions[2];
+    /*    private static SourceDataLoader _instance;
 
-
-        Debug.Log("NII width:" + widthX);
-        Debug.Log("NII height:" + heightY);
-        Debug.Log("NII depth:" + depthZ);
-
-        // Calculate the number of voxels
-        //int numVoxels = width * height * depth;
-
-        // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
-        Debug.Log("Data now read in");
-
-        return voxelData;
-    }
-*/
-    public static Voxel[,,] LoadNiftiFile()
-    {
-        // Load default file
-        if (niftiFile == null)
+        void Start()
         {
-            niftiFile = NiftiHandler.ReadNiftiFile(niftiFilePath2);
+            if (_instance != null)
+            {
+                if (_instance != this)
+                    Destroy(this);
+            }
+            else
+            {
+                _instance = this;
+            }
         }
-
-        // Get the dimensions
-        widthX = niftiFile.Dimensions[0];
-        heightY = niftiFile.Dimensions[1];
-        depthZ = niftiFile.Dimensions[2];
-
-
-        Debug.Log("NII width:" + widthX);
-        Debug.Log("NII height:" + heightY);
-        Debug.Log("NII depth:" + depthZ);
-
-        // Calculate the number of voxels
-        //int numVoxels = width * height * depth;
-
-        // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
-        Debug.Log("Data now read in");
-
-        return voxelData;
-    }
-
-/* oldway    public static VoxelCell[] LoadNiftiFile(string filePath)
-    {
-        SourceDataLoader.OpenNiftiFile(filePath);            
-
-        // Get the dimensions
-        widthX = niftiFile.Dimensions[0];
-        heightY = niftiFile.Dimensions[1];
-        depthZ = niftiFile.Dimensions[2];
+    */
+    /*    public static SourceDataLoader Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = FindObjectOfType<SourceDataLoader>();
+                return _instance;
+            }
+        }*/
 
 
-        Debug.Log("NII width:" + widthX);
-        Debug.Log("NII height:" + heightY);
-        Debug.Log("NII depth:" + depthZ);
-
-        // Calculate the number of voxels
-        //int numVoxels = width * height * depth;
-
-        // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
-        Debug.Log("Data now read in");
-
-        return voxelData;
-    }
-*/
-    public static Voxel[,,] LoadNiftiFile(string filePath)
-    {
-        SourceDataLoader.OpenNiftiFile(filePath);
-
-        // Get the dimensions
-        widthX = niftiFile.Dimensions[0];
-        heightY = niftiFile.Dimensions[1];
-        depthZ = niftiFile.Dimensions[2];
-
-
-        Debug.Log("NII width:" + widthX);
-        Debug.Log("NII height:" + heightY);
-        Debug.Log("NII depth:" + depthZ);
-
-        // Calculate the number of voxels
-        //int numVoxels = width * height * depth;
-
-        // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
-        Debug.Log("Data now read in");
-
-        return voxelData;
-    }
+    //public static VoxelCell[] LoadSourceData()
+    /*    public Dictionary<Vector3Int, Chunk> LoadSourceData()    
+        {
+            Debug.Log("Loading nii source data as Dictionary [a]...");
+            return LoadNiftiFile();
+        }*/
 
 }

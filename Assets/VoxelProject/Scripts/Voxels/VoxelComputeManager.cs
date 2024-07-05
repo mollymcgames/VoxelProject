@@ -108,7 +108,7 @@ public class VoxelComputeManager : MonoBehaviour
                     // Do not attempt to render anything if the WorldManager isn't ready yet.
                     if (VoxelWorldManager.Instance != null && VoxelWorldManager.Instance.voxelMeshContainer != null)
                     {
-                        callback.GetData<Voxel>(0).CopyTo(VoxelWorldManager.Instance.voxelMeshContainer.data.voxelArray.array);
+                        //weirdcallback.GetData<Voxel>(0).CopyTo(VoxelWorldManager.Instance.voxelMeshContainer.data.voxelArray.array);
                         VoxelWorldManager.Instance.voxelMeshContainer.RenderMesh(transparencyValue);
                     }
                 }

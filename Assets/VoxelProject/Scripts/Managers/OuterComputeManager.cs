@@ -104,7 +104,7 @@ public class OuterComputeManager : MonoBehaviour
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuterDic != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuterDic.data.voxelArray.array);
+                    //weirdcallback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuterDic.data.voxelArray.array);
                     OuterWorldManager.Instance.containerOuterDic.RenderMeshDictionary(true, transparencyValue);
                 }
             });
@@ -113,7 +113,7 @@ public class OuterComputeManager : MonoBehaviour
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInnerDic != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInnerDic.data.voxelArray.array);
+                    //weirdcallback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInnerDic.data.voxelArray.array);
                     OuterWorldManager.Instance.containerInnerDic.RenderMeshDictionary(false, 1f - transparencyValue);                   
                 }
             });

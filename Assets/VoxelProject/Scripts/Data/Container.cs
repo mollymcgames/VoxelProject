@@ -12,6 +12,8 @@ public class Container : MonoBehaviour
 {
     public Vector3 containerPosition;
 
+    private int layer;
+
     public NoiseBuffer data;
     private MeshData meshData = new MeshData();
 
@@ -29,11 +31,12 @@ public class Container : MonoBehaviour
 
     public void ClearData()
     {
-        //nonoise ComputeManager.Instance.ClearAndRequeueBuffer(data);
+        ComputeManager.Instance.ClearAndRequeueBuffer(data);
     }
 
-    public void RenderMesh()
+    public void RenderMesh(int layer)
     {
+        this.layer = layer;
         meshData.ClearData();
         GenerateMesh();
         UploadMesh();
@@ -41,26 +44,26 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
-        Vector3Int blockPos;
-        Voxel block;
+        //Vector3Int blockPos;
+        //Voxel block;
 
-        int counter = 0;
+        //int counter = 0;
         Vector3[] faceVertices = new Vector3[4];
         Vector2[] faceUVs = new Vector2[4];
 
-        VoxelColor voxelColor;
-        Color voxelColorAlpha;
-        Vector2 voxelSmoothness;
+        //VoxelColor voxelColor;
+        //Color voxelColorAlpha;
+        //Vector2 voxelSmoothness;
 
         int breaker = 0;
         
         //foreach (VoxelCell vc in WorldManager.Instance.sourceData)
 
-        for (int x=0; x<WorldManager.Instance.worldSettings.maxWidthX; x++) 
+        for (int x=0; x<WorldManager.Instance.worldSettings.maxWidthX-1; x++) 
         {
-            for (int y=0; y<WorldManager.Instance.worldSettings.maxHeightY; y++)
+            for (int y=0; y<WorldManager.Instance.worldSettings.maxHeightY-1; y++)
             {
-                for (int z=0; z<WorldManager.Instance.worldSettings.maxDepthZ; z++)
+                for (int z=0; z<WorldManager.Instance.worldSettings.maxDepthZ-1; z++)
                 {
                     // if (breaker >= 10000)
                     //     break;
@@ -231,9 +234,15 @@ public class Container : MonoBehaviour
 
     private bool IsVoxelHiddenInChunk(int x, int y, int z)
     {
-        if (x < 0 || x >= WorldManager.Instance.worldSettings.chunkSize || y < 0 || y >= WorldManager.Instance.worldSettings.chunkSize || z < 0 || z >= WorldManager.Instance.worldSettings.chunkSize)
-            return true; // Face is at the boundary of the chunk
-        return !WorldManager.Instance.sourceData[x, y, z].isSolid;
+        try {
+            if (x < 0 || x >= WorldManager.Instance.worldSettings.chunkSize || y < 0 || y >= WorldManager.Instance.worldSettings.chunkSize || z < 0 || z >= WorldManager.Instance.worldSettings.chunkSize)
+                return true; // Face is at the boundary of the chunk
+            return !WorldManager.Instance.sourceData[x, y, z].isSolid;
+        } catch (System.IndexOutOfRangeException e) {
+            Debug.Log("x: " + x + ", y: " + y + ", z: " + z + " is out of range");
+            Debug.Log("Exception: " + e.Message);
+            return true;
+        }
     }
 
     private bool IsVoxelHiddenInWorld(Vector3 globalPos)
@@ -263,7 +272,7 @@ public class Container : MonoBehaviour
     private void AddFaceData(int x, int y, int z, int faceIndex)
     {
         // Work out the colour
-        float grayScaleValue = WorldManager.Instance.sourceData[x, y, z].colourRGBValue / 255f;
+        float grayScaleValue = WorldManager.Instance.sourceData[x, y, z].getColourRGBLayer(layer) / 255f;
         VoxelColor voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
         Color voxelColorAlpha = voxelColor.color;
         voxelColorAlpha.a = 1;
