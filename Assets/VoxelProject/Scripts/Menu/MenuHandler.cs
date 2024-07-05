@@ -101,6 +101,6 @@ public class MenuHandler : MonoBehaviour
 
     public void BackButton()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Model");
     }
 }

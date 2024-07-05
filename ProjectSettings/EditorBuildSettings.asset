@@ -23,11 +23,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/VoxelProject/Scenes/Cell.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/VoxelProject/Scenes/SwitchSceneTwoDEAD.unity
     guid: 8a4e93975a4c2dc4099606f322e5bf68
   - enabled: 1
     path: Assets/VoxelProject/Scenes/SwitchSceneTwo.unity
     guid: 36b58650756d62d4c8901e53c9e20e45
+  - enabled: 1
+    path: Assets/VoxelProject/Scenes/Model.unity
+    guid: 9935cd6d7acb123438c800eef528a1c1
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
