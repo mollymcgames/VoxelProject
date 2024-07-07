@@ -50,13 +50,13 @@ public class MenuHandler : MonoBehaviour
         LoadAFile(true);
     }
 
-    public void LoadHeartFileHeader(TMP_Text text)
+    public string LoadHeartFileHeader()
     {
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        LoadAFileForTheHeader(text);
+        return LoadAFileForTheHeader();
     }
 
-    private void LoadAFileForTheHeader(TMP_Text text)
+    private string LoadAFileForTheHeader()
     {
         Debug.Log("Loading file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
         //Use Steaming Assets folder to load the file
@@ -69,7 +69,8 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
 
         Nifti.NET.Nifti niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
-        text.text += "\nDimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2] + "\nDescription, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip) + "\nFilename, " + niftiFilePath;
+
+        return "\nDimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2] + "\nDescription, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip) + "\nFilename, " + niftiFilePath;
     }
 
 

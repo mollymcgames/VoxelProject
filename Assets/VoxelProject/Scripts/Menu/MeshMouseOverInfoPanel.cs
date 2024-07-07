@@ -13,6 +13,8 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
     MenuHandler menuHandler;
     public TextMeshProUGUI popupText;
 
+    string brainText, liverText, heartText = null;
+
     private void Start()
     {
         menuHandler = new MenuHandler();
@@ -32,20 +34,29 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
             {
                 if (hit.collider.gameObject.CompareTag("Heart"))
                 {
-                    popupText.text = "\nThis is all about the heart!\n";
-                    menuHandler.LoadHeartFileHeader(popupText);                    
+                    if (heartText == null)
+                    {
+                        heartText += "Heart!\n";
+                        heartText = menuHandler.LoadHeartFileHeader();
+                    }
+                    popupText.text = heartText;
+                    popupText.color = Color.red;
+                    
                     // Show the panel
                     popupPanel.SetActive(true);
                 }
                 else if (hit.collider.gameObject.CompareTag("Liver"))
                 {
-                    popupText.text = "\nThis is all about the liver!\n";
+                    popupText.text = "Liver!\n";
+                    popupText.color = Color.yellow;
                     // Show the panel
                     popupPanel.SetActive(true);
                 }
                 else if (hit.collider.gameObject.CompareTag("Brain"))
                 {
-                    popupText.text = "\nThis is all about the brain!\n";
+                    popupText.text = "Brain!\n";
+                    popupText.color = Color.cyan;
+
                     // Show the panel
                     popupPanel.SetActive(true);
                 }
