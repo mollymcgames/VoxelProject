@@ -35,9 +35,9 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 if (hit.collider.gameObject.CompareTag("Heart"))
                 {
                     if (heartText == null)
-                    {
-                        heartText += "Heart!\n";
+                    {                        
                         heartText = menuHandler.LoadHeartFileHeader();
+                        heartText = "Heart!<br>" + heartText;
                     }
                     popupText.text = heartText;
                     popupText.color = Color.red;
@@ -47,14 +47,25 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 }
                 else if (hit.collider.gameObject.CompareTag("Liver"))
                 {
-                    popupText.text = "Liver!\n";
+                    if (liverText == null)
+                    {
+                        liverText = menuHandler.LoadLiverFileHeader();
+                        liverText = "Liver!<br>" + liverText;
+                    }
+                    popupText.text = liverText;
                     popupText.color = Color.yellow;
+
                     // Show the panel
                     popupPanel.SetActive(true);
                 }
                 else if (hit.collider.gameObject.CompareTag("Brain"))
                 {
-                    popupText.text = "Brain!\n";
+                    if (brainText == null)
+                    {
+                        brainText = menuHandler.LoadBrainFileHeader();
+                        brainText = "Brain!<br>" + brainText;
+                    }
+                    popupText.text = brainText;
                     popupText.color = Color.cyan;
 
                     // Show the panel
@@ -87,7 +98,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
             hideTimer += Time.deltaTime;
             if (hideTimer >= hideDelay)
             {
-                Debug.Log("Killing heart");
                 // Hide the panel after the delay
                 popupPanel.SetActive(false);
                 hideTimer = 0f;

@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Unity.VisualScripting.Member;
 
 public class MenuHandler : MonoBehaviour
 {
@@ -56,6 +59,19 @@ public class MenuHandler : MonoBehaviour
         return LoadAFileForTheHeader();
     }
 
+    public string LoadLiverFileHeader()
+    {
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";
+        return LoadAFileForTheHeader();
+    }
+
+    public string LoadBrainFileHeader()
+    {
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
+        return LoadAFileForTheHeader();
+    }
+
+
     private string LoadAFileForTheHeader()
     {
         Debug.Log("Loading file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
@@ -69,9 +85,37 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
 
         Nifti.NET.Nifti niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+        
+        string retString = "<br>Dimensions: x(" + niftiFile.Dimensions[0] + ")/ y(" + niftiFile.Dimensions[1] + ")/ z(" + niftiFile.Dimensions[2] + ") <br>Filename: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
+        //< br > Description: " + ByteToString(niftiFile.Header.descrip) +
+        Debug.Log(retString);   
 
-        return "\nDimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2] + "\nDescription, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip) + "\nFilename, " + niftiFilePath;
+        return retString;
     }
+
+    private string ByteToString(byte[] source)
+    {
+        try
+        {
+            return source != null ? System.Text.Encoding.UTF8.GetString(source) : "";
+        }
+        catch
+        {
+            return "";
+        }
+
+/*        string response = string.Empty;
+
+        foreach (byte b in bytes)
+            response += (Char)b;
+
+        return response;
+*/    }
+
+/*    private string ConvertByteToString(this byte[] source)
+    {
+        return source != null ? System.Text.Encoding.UTF8.GetString(source) : null;
+    }*/
 
 
     private void LoadAFile(bool hasSegmentLayers)
