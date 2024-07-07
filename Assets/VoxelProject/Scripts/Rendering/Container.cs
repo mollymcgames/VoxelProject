@@ -56,8 +56,6 @@ public class Container : MonoBehaviour
         //Vector2 voxelSmoothness;
 
         int breaker = 0;
-        
-        //foreach (VoxelCell vc in WorldManager.Instance.sourceData)
 
         for (int x=0; x<WorldManager.Instance.worldSettings.maxWidthX-1; x++) 
         {
@@ -195,7 +193,7 @@ public class Container : MonoBehaviour
         }
 
         Voxel voxel = WorldManager.Instance.sourceData[x, y, z];
-        if (voxel.isSolid)
+        if (voxel.isSolid && voxel.getColourRGBLayer(layer) > (int)WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
         {
             // Check each face of the voxel for visibility
             bool[] facesVisible = new bool[6];

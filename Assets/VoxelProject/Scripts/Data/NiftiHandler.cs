@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class NiftiHandler : MonoBehaviour
 {      
-    public static int visibleColourThreshold = 18;
+    public static int visibleColourThreshold = 1;
 
     public static Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
     {
@@ -28,11 +28,11 @@ public class NiftiHandler : MonoBehaviour
                 for (int x = 0; x < width; x++)
                 {
                     // Don't even bother with a voxel if it's "dark!"
-                    if ((int)niftiData.Data[index] < visibleColourThreshold)
+/*                    if ((int)niftiData.Data[index] <= visibleColourThreshold)
                     {
                         index++;
                         continue;
-                    }
+                    }*/
                     voxelValue[x, y, z] = new Voxel( (int)niftiData.Data[index] > visibleColourThreshold, (int)niftiData.Data[index]); //, x, niftiData.Data[index].ToString());
                     index++;
                 }
@@ -54,11 +54,11 @@ public class NiftiHandler : MonoBehaviour
                 for (int x = 0; x < widthX; x++)
                 {
                     //is voxel data at x,y position already set?
-                    if (voxelData[x, y, z].isSolid == true)
-                    {
+                    //if (voxelData[x, y, z].isSolid == true)
+                    //{
                         voxelData[x, y, z].addColourRGBLayer(segmentLayer, (int)niftiFileLines.Data[index]);
                         index++;
-                    }
+                    //}
                     // else 
                     // {
                     //     voxelData[x, y, z] = new Voxel((int)niftiFileLines.Data[index] > visibleColourThreshold, segmentLayer, (int)niftiFileLines.Data[index]); //, x, niftiFileLines.Data[index].ToString());

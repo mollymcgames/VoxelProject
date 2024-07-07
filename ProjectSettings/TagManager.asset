@@ -8,6 +8,9 @@ TagManager:
   - OuterContainer
   - InnerContainerDic
   - OuterContainerDic
+  - Heart
+  - Brain
+  - Liver
   layers:
   - Default
   - TransparentFX

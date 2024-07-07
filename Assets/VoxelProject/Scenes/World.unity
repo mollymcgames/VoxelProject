@@ -289,7 +289,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 414495106}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842587148}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
@@ -891,6 +891,7 @@ GameObject:
   - component: {fileID: 1755072229}
   - component: {fileID: 1755072227}
   - component: {fileID: 1755072228}
+  - component: {fileID: 1755072230}
   m_Layer: 3
   m_Name: SceneManager
   m_TagString: Untagged
@@ -935,7 +936,7 @@ MonoBehaviour:
     domainOffsetY: 0
     domainOffsetZ: 0
     sceneTargetName: 
-  voxelFileFormat: nii
+    visibilityThreshold: 1
   worldMaterial: {fileID: 2100000, guid: e8294481300e5844abcc6eaf40cda598, type: 2}
   WorldColors:
   - color: {r: 0, g: 0.4716981, b: 0.016664108, a: 0}
@@ -963,7 +964,6 @@ MonoBehaviour:
     maxDepthZ: 0
     maxHeightY: 0
     chunkSize: 16
-  container: {fileID: 0}
 --- !u!114 &1755072227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -999,6 +999,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7ac18127f8c26a48afd8fce7d4678a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  container: {fileID: 0}
+--- !u!114 &1755072230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755072223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94dff0bc7d1e52345a049b4957794795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1755438928
@@ -1215,6 +1228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19694510c1ca77c419656ed2cb8d36c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  voxelFileFormat: nii
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

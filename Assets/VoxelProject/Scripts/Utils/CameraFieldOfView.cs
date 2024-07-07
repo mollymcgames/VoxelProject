@@ -66,7 +66,9 @@ public class CameraFieldOfView : MonoBehaviour
     void OnGUI()
     {
         //This Slider changes the field of view of the Camera between the minimum and maximum values
-        m_FieldOfView = GUI.HorizontalSlider(new Rect(1000, 20, 100, 40), m_FieldOfView, min, max);
+        m_FieldOfView = GUI.HorizontalSlider(new Rect(1000, 20, 100, 10), m_FieldOfView, min, max);
+        GUI.Label(new Rect(970, 15, 50, 30), "FoV");
+
     }
 
 }

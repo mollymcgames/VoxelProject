@@ -28,6 +28,9 @@ public class VoxelMeshConfigurationSettings
 
     public string sceneTargetName;
 
+    //[HideInInspector]
+    public float visibilityThreshold = 1;
+
     [HideInInspector]
     public string voxelDataFilePath
     {
