@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -48,6 +49,29 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers = new string[] { "rkT2.nii" };
         LoadAFile(true);
     }
+
+    public void LoadHeartFileHeader(TMP_Text text)
+    {
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
+        LoadAFileForTheHeader(text);
+    }
+
+    private void LoadAFileForTheHeader(TMP_Text text)
+    {
+        Debug.Log("Loading file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
+        //Use Steaming Assets folder to load the file
+        string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
+
+        // Load in one voxel model, currently support types are .txt and .nii files.
+        // If more types need supporting, will need additional SourceData loader implementations.
+        // Note, currently the getHeader method returns either a Nifti.NET.Nifti or string[] as appropriate.
+        ASourceDataLoader loader = DataLoaderUtils.LoadDataFile();
+        WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+
+        Nifti.NET.Nifti niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+        text.text += "\nDimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2] + "\nDescription, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip) + "\nFilename, " + niftiFilePath;
+    }
+
 
     private void LoadAFile(bool hasSegmentLayers)
     {

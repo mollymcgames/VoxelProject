@@ -10,12 +10,14 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
     private float hideDelay = 1.1f; // Time to wait before hiding the panel
     private float hideTimer = 0f;
 
+    MenuHandler menuHandler;
     public TextMeshProUGUI popupText;
 
     private void Start()
     {
+        menuHandler = new MenuHandler();
         // Initially hide the panel
-        //popupPanel.SetActive(false);
+        popupPanel.SetActive(false);
     }
 
     void Update()
@@ -31,6 +33,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 if (hit.collider.gameObject.CompareTag("Heart"))
                 {
                     popupText.text = "\nThis is all about the heart!\n";
+                    menuHandler.LoadHeartFileHeader(popupText);                    
                     // Show the panel
                     popupPanel.SetActive(true);
                 }
