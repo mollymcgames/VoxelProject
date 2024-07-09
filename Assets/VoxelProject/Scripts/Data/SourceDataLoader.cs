@@ -77,35 +77,35 @@ public class SourceDataLoader : ASourceDataLoader
     }
 
 
-/*    private List<VoxelElement> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
-    {
-        List<VoxelElement> voxelDataList = new List<VoxelElement>();
-
-        // Iterate through each voxel
-        int index = 0;
-        for (int z = 0; z < depth; z++)
+    /*    private List<VoxelElement> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
         {
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    if (x > maxX) maxX = x;
-                    if (x < minX) minX = x;
-                    if (y > maxY) maxY = y;
-                    if (y < minY) minY = y;
-                    if (z > maxZ) maxZ = z;
-                    if (z < minZ) minZ = z;
+            List<VoxelElement> voxelDataList = new List<VoxelElement>();
 
-                    // Assign the parsed color value as the voxel value if it's going to be visible
-                    if (niftiData.Data[index] > 10)
-                        voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), niftiData.Data[index].ToString()));
-                    index++;
+            // Iterate through each voxel
+            int index = 0;
+            for (int z = 0; z < depth; z++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        if (x > maxX) maxX = x;
+                        if (x < minX) minX = x;
+                        if (y > maxY) maxY = y;
+                        if (y < minY) minY = y;
+                        if (z > maxZ) maxZ = z;
+                        if (z < minZ) minZ = z;
+
+                        // Assign the parsed color value as the voxel value if it's going to be visible
+                        if (niftiData.Data[index] > 10)
+                            voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), niftiData.Data[index].ToString()));
+                        index++;
+                    }
                 }
             }
-        }
-        Debug.Log("Lines processed:" + index);
-        return voxelDataList;
-    }*/
+            Debug.Log("Lines processed:" + index);
+            return voxelDataList;
+        }*/
 
     #endregion
 

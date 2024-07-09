@@ -6,7 +6,7 @@ public class LiverLoader : MonoBehaviour
 {
     void OnMouseDown() {
         MenuHandler menuHandler = new MenuHandler();
-        menuHandler.LoadSegmentData();
+        menuHandler.LoadLiverData();
         menuHandler.LoadNextScene();
     }
 }

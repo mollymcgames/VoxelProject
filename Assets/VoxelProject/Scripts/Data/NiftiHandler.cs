@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Nifti.NET;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NiftiHandler : MonoBehaviour
@@ -13,8 +14,25 @@ public class NiftiHandler : MonoBehaviour
         return NiftiFile.Read(niftiFilePath);
     }
 
+    private static string ByteToString(byte[] source)
+    {
+        try
+        {
+            return source != null ? System.Text.Encoding.UTF8.GetString(source) : "";
+        }
+        catch
+        {
+            return "";
+        }
+
+    }
+
     public static Voxel[,,] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
     {
+        Debug.Log("CAL MIN: " + niftiData.Header.cal_min);
+        Debug.Log("CAL MAX: " + niftiData.Header.cal_max);
+        Debug.Log("AUX FILE: " + ByteToString(niftiData.Header.aux_file));
+
         int numVoxels = width * height * depth;
 
         Voxel[,,] voxelValue = new Voxel[width,height,depth];
@@ -27,13 +45,16 @@ public class NiftiHandler : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    // Don't even bother with a voxel if it's "dark!"
-/*                    if ((int)niftiData.Data[index] <= visibleColourThreshold)
+                    // FORCE RED FOR NOW
+                    if (x > 10 && x < 30)
+                    {                        
+                        voxelValue[x, y, z] = new Voxel((int)niftiData.Data[index] > visibleColourThreshold, false, Convert.ToInt32("#FF0000".Replace("#", ""), 16)); //, x, niftiData.Data[index].ToString());
+                    }
+                    else
                     {
-                        index++;
-                        continue;
-                    }*/
-                    voxelValue[x, y, z] = new Voxel( (int)niftiData.Data[index] > visibleColourThreshold, (int)niftiData.Data[index]); //, x, niftiData.Data[index].ToString());
+                        //Debug.Log("Next vox colour=" + (int)niftiData.Data[index]);
+                        voxelValue[x, y, z] = new Voxel((int)niftiData.Data[index] > visibleColourThreshold, true, (int)niftiData.Data[index]); //, x, niftiData.Data[index].ToString());
+                    }                    
                     index++;
                 }
             }
@@ -69,7 +90,6 @@ public class NiftiHandler : MonoBehaviour
         }
         return voxelData;
     }
-
 
     /* oldway    public static VoxelCell[] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
         {

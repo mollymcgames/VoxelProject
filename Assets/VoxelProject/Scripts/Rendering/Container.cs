@@ -78,8 +78,8 @@ public class Container : MonoBehaviour
                                             continue;
                                         }
 
-                                        float grayScaleValue = block.colourRGBValue / 255f;
-                                        voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+                                        float colourValue = block.colourRGBValue / 255f;
+                                        voxelColor = new VoxelColor(colourValue, colourValue, colourValue);
 
                                         voxelColorAlpha = voxelColor.color;
                                         voxelColorAlpha.a = 1;
@@ -144,8 +144,8 @@ public class Container : MonoBehaviour
                         continue;
                     }
 
-                    float grayScaleValue = float.Parse(vc.value)/255f;
-                    voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
+                    float colourValue = float.Parse(vc.value)/255f;
+                    voxelColor = new VoxelColor(colourValue,colourValue,colourValue);
 
                     voxelColorAlpha = voxelColor.color;
                     voxelColorAlpha.a = 1;
@@ -209,7 +209,7 @@ public class Container : MonoBehaviour
             for (int i = 0; i < facesVisible.Length; i++)
             {
                 if (facesVisible[i])
-                    AddFaceData(x, y, z, i); // Method to add mesh data for the visible face
+                    AddFaceData(x, y, z, i, ref voxel); // Method to add mesh data for the visible face
             }
         }
     }
@@ -243,10 +243,10 @@ public class Container : MonoBehaviour
         }
     }
 
-    private bool IsVoxelHiddenInWorld(Vector3 globalPos)
+/*    private bool IsVoxelHiddenInWorld(Vector3 globalPos)
     {
         return false;
-/*        // Check if there is a chunk at the global position
+        // Check if there is a chunk at the global position
         Chunk neighborChunk = WorldManager.Instance.GetChunkAt(globalPos);
         if (neighborChunk == null)
         {
@@ -258,8 +258,8 @@ public class Container : MonoBehaviour
         Vector3 localPos = neighborChunk.transform.InverseTransformPoint(globalPos);
 
         // If the voxel at this local position is inactive, the face should be visible (not hidden)
-        return !neighborChunk.IsVoxelActiveAt(localPos);*/
-    }
+        return !neighborChunk.IsVoxelActiveAt(localPos);
+    }*/
 
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> triangles = new List<int>();
@@ -267,11 +267,44 @@ public class Container : MonoBehaviour
     private List<Vector2> uv2s = new List<Vector2>();
     private List<Color> colors = new List<Color>();
 
-    private void AddFaceData(int x, int y, int z, int faceIndex)
+    private string convertIntToHTMLColour(int colour)
     {
-        // Work out the colour
-        float grayScaleValue = WorldManager.Instance.sourceData[x, y, z].getColourRGBLayer(layer) / 255f;
-        VoxelColor voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+        int red = (colour >> 16) & 0xFF;
+        int green = (colour >> 8) & 0xFF;
+        int blue = colour & 0xFF;
+
+        // Format as a hex string
+        return $"#{red:X2}{green:X2}{blue:X2}";
+    }
+
+
+    private void AddFaceData(int x, int y, int z, int faceIndex, ref Voxel voxel)
+    {
+        int colourValue = 0;
+        VoxelColor voxelColor = null;
+
+/*        if (voxel.isHotVoxel)
+        {
+            Debug.Log("Hot one found!");
+            colourValue = WorldManager.Instance.sourceData[x, y, z].getHotVoxelColourRGB();
+            voxelColor = BuildColour(colourValue);
+        }
+        else */
+        if (voxel.isGreyScale)
+        {
+            // Work out the greyscale colour
+            colourValue = WorldManager.Instance.sourceData[x, y, z].getColourRGBLayer(layer) / 255;
+            //Debug.Log("Greyscale found ("+layer+")! [" + colourValue + "]");
+            voxelColor = new VoxelColor(colourValue, colourValue, colourValue);
+        }
+        else
+        {
+            //Debug.Log("Colourful one found!");
+            // Handle the regular colour
+            colourValue = WorldManager.Instance.sourceData[x, y, z].getColourRGBLayer(layer);
+            voxelColor = BuildColour(colourValue);
+        }
+
         Color voxelColorAlpha = voxelColor.color;
         voxelColorAlpha.a = 1;
         Vector2 voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
@@ -360,6 +393,26 @@ public class Container : MonoBehaviour
             uvs.Add(new Vector2(0, 0));
         }
         AddTriangleIndices();
+    }
+
+    private VoxelColor BuildColour(int colourValue)
+    {
+        VoxelColor voxelColor;
+        Color color;
+        if (ColorUtility.TryParseHtmlString(convertIntToHTMLColour(colourValue), out color))
+        {
+            float red = color.r;
+            float green = color.g;
+            float blue = color.b;
+            //Debug.Log($"Red: {red}, Green: {green}, Blue: {blue}");
+            voxelColor = new VoxelColor(red, green, blue);
+        }
+        else
+        {
+            voxelColor = new VoxelColor(25, 25, 25);
+        }
+
+        return voxelColor;
     }
 
     private void AddTriangleIndices()
