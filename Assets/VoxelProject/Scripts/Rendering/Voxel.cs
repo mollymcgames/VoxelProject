@@ -88,7 +88,7 @@ public unsafe struct Voxel
 
     public void addColourRGBLayer(int layerNumber, int colourRGBValue)
     {
-        this.hotVoxelColourRBGValue = colourRGBValue;
+        this.colourRGBValue[layerNumber] = colourRGBValue;
     }
 
     public int getColourRGBLayer(int layerNumber)

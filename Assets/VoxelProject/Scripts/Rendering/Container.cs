@@ -44,16 +44,11 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
-        //Vector3Int blockPos;
-        //Voxel block;
+        Debug.Log("Generating mesh for layer: " + layer);
 
         //int counter = 0;
         Vector3[] faceVertices = new Vector3[4];
         Vector2[] faceUVs = new Vector2[4];
-
-        //VoxelColor voxelColor;
-        //Color voxelColorAlpha;
-        //Vector2 voxelSmoothness;
 
         int breaker = 0;
 
@@ -209,7 +204,7 @@ public class Container : MonoBehaviour
             for (int i = 0; i < facesVisible.Length; i++)
             {
                 if (facesVisible[i])
-                    AddFaceData(x, y, z, i, ref voxel); // Method to add mesh data for the visible face
+                    AddFaceData(x, y, z, i); // Method to add mesh data for the visible face
             }
         }
     }
@@ -267,42 +262,44 @@ public class Container : MonoBehaviour
     private List<Vector2> uv2s = new List<Vector2>();
     private List<Color> colors = new List<Color>();
 
-    private string convertIntToHTMLColour(int colour)
+    private string convertIntToHTMLColour(float colour)
     {
-        int red = (colour >> 16) & 0xFF;
-        int green = (colour >> 8) & 0xFF;
-        int blue = colour & 0xFF;
+        int red = ((int)colour >> 16) & 0xFF;
+        int green = ((int)colour >> 8) & 0xFF;
+        int blue = (int)colour & 0xFF;
 
         // Format as a hex string
         return $"#{red:X2}{green:X2}{blue:X2}";
     }
 
 
-    private void AddFaceData(int x, int y, int z, int faceIndex, ref Voxel voxel)
+    private void AddFaceData(int x, int y, int z, int faceIndex)
     {
-        int colourValue = 0;
+        Voxel voxel = WorldManager.Instance.sourceData[x, y, z];
+
         VoxelColor voxelColor = null;
 
-/*        if (voxel.isHotVoxel)
+        if (voxel.isHotVoxel)
         {
-            Debug.Log("Hot one found!");
-            colourValue = WorldManager.Instance.sourceData[x, y, z].getHotVoxelColourRGB();
-            voxelColor = BuildColour(colourValue);
+            //Debug.Log("Hot one found!");
+            //colourValue = ;
+            voxelColor = BuildColour(voxel.getHotVoxelColourRGB());
+
+            CreateClickableVoxel(x, y, z);
         }
-        else */
-        if (voxel.isGreyScale)
-        {
-            // Work out the greyscale colour
-            colourValue = WorldManager.Instance.sourceData[x, y, z].getColourRGBLayer(layer) / 255;
-            //Debug.Log("Greyscale found ("+layer+")! [" + colourValue + "]");
-            voxelColor = new VoxelColor(colourValue, colourValue, colourValue);
+        else if (voxel.isGreyScale)
+        {            
+            // It's a greyscale colour!
+//            colourValue = ;
+            //Debug.Log("Greyscale found ("+layer+")! [" + voxel.getColourRGBLayer(layer) / 255f + "]");
+            voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f);
         }
         else
         {
             //Debug.Log("Colourful one found!");
             // Handle the regular colour
-            colourValue = WorldManager.Instance.sourceData[x, y, z].getColourRGBLayer(layer);
-            voxelColor = BuildColour(colourValue);
+            //colourValue = ;
+            voxelColor = BuildColour(WorldManager.Instance.sourceData[x, y, z].getColourRGBLayer(layer));
         }
 
         Color voxelColorAlpha = voxelColor.color;
@@ -392,10 +389,10 @@ public class Container : MonoBehaviour
             uvs.Add(new Vector2(1, 0));
             uvs.Add(new Vector2(0, 0));
         }
-        AddTriangleIndices();
+        AddTriangleIndices();        
     }
 
-    private VoxelColor BuildColour(int colourValue)
+    private VoxelColor BuildColour(float colourValue)
     {
         VoxelColor voxelColor;
         Color color;
@@ -413,6 +410,43 @@ public class Container : MonoBehaviour
         }
 
         return voxelColor;
+    }
+
+    // Voxel size
+    public Vector3 voxelSize = new Vector3(1, 1, 1);
+
+/*    void GenerateVoxelColliders()
+    {
+        // Get the vertices of the mesh
+        Vector3[] vertices = meshData.mesh.vertices;
+
+        // For each vertex, create a voxel GameObject
+        foreach (Vector3 vertex in vertices)
+        {
+            CreateClickableVoxel(vertex);
+        }
+    }*/
+
+    void CreateClickableVoxel(int x, int y, int z)
+    {
+        // Create a new GameObject for the voxel
+        GameObject voxel = new GameObject("Voxel");
+        voxel.transform.position = new Vector3Int(x,y,z);
+
+        // Add a BoxCollider to the voxel
+        BoxCollider boxCollider = voxel.AddComponent<BoxCollider>();
+        boxCollider.size = voxelSize;
+
+        VoxelClickHandler clickHandler = voxel.AddComponent<VoxelClickHandler>();
+        clickHandler.sceneToLoad = "SwitchSceneOne";
+
+        /*        // Optionally, you can add a MeshRenderer and MeshFilter to visualize the voxel
+                MeshRenderer meshRenderer = voxel.AddComponent<MeshRenderer>();
+                MeshFilter meshFilter = voxel.AddComponent<MeshFilter>();
+                meshFilter.mesh = CreateVoxelMesh();*/
+
+        // Set the voxel GameObject as a child of the original mesh GameObject for organization
+        voxel.transform.parent = this.transform;
     }
 
     private void AddTriangleIndices()

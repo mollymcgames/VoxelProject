@@ -121,6 +121,7 @@ public class MenuHandler : MonoBehaviour
 
     private void LoadAFile(bool hasSegmentLayers)
     {
+        WorldManager.Instance.sourceData = null;
         Debug.Log("Loading file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
         //Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
@@ -136,14 +137,14 @@ public class MenuHandler : MonoBehaviour
         Debug.Log("Dimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2]);
         Debug.Log("Filename, " + niftiFilePath);
 
-/*        if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName != null)
+        if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName != null)
         {
             Debug.Log("Loading Hot Voxel file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName);
             //Use Steaming Assets folder to load the file
             string hotVoxelFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName);
 
             WorldManager.Instance.sourceData = loader.LoadHotVoxelFile(hotVoxelFilePath);
-        }*/
+        }
 
         WorldManager.Instance.worldSettings.maxWidthX = loader.widthX;
         WorldManager.Instance.worldSettings.maxHeightY = loader.heightY;

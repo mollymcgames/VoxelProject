@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public struct VoxelNoiseBuffer
@@ -15,7 +16,9 @@ public struct VoxelNoiseBuffer
         countBuffer.SetData(new uint[] { 0 });
 
         voxelArray = new VoxelIndexedArray<Voxel>();
-        noiseBuffer = new ComputeBuffer(voxelArray.Count, 8);
+        //noiseBuffer = new ComputeBuffer(voxelArray.Count, 8);
+        noiseBuffer = new ComputeBuffer(voxelArray.Count, Marshal.SizeOf(typeof(Voxel)));
+
         noiseBuffer.SetData(voxelArray.GetData);
         Initialized = true;
     }

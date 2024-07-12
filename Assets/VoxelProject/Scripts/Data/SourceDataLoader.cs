@@ -11,6 +11,7 @@ public class SourceDataLoader : ASourceDataLoader
     public SourceDataLoader(int chunkSize) : base(chunkSize) { }
 
     private static Nifti.NET.Nifti niftiFileLines = null;
+    private static Nifti.NET.Nifti niftiSegmentFileLines = null;    
 
     //public override Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
     public override Voxel[,,] LoadSourceData(string filepath)
@@ -23,8 +24,8 @@ public class SourceDataLoader : ASourceDataLoader
 
     public override Voxel[,,] LoadSegmentData(ref Voxel[,,] sourceData, int segmentLayer, string segmentFile)
     {
-        Debug.Log("Loading nii segment data..." + segmentFile);
-        LoadNiftiFile(Path.Combine(Application.streamingAssetsPath, segmentFile));
+        Debug.Log("Loading nii segment data..." + segmentFile + " into layer: "+segmentLayer);
+        LoadNiftiSegmentFile(Path.Combine(Application.streamingAssetsPath, segmentFile));
         AddSegmentToVoxelsArray(segmentLayer);
         return voxelData;
     }
@@ -51,6 +52,17 @@ public class SourceDataLoader : ASourceDataLoader
         Debug.Log("NII depth:" + depthZ);
     }
 
+    private void LoadNiftiSegmentFile(string filePath)
+    {
+        // Load default file
+        niftiSegmentFileLines = ReadNiftiFile(filePath);
+
+        // Get the dimensions
+        widthX = niftiSegmentFileLines.Dimensions[0];
+        heightY = niftiSegmentFileLines.Dimensions[1];
+        depthZ = niftiSegmentFileLines.Dimensions[2];
+    }
+
     private void CreateVoxelsArray()
     {
         // Read the voxel data
@@ -61,7 +73,7 @@ public class SourceDataLoader : ASourceDataLoader
     private void AddSegmentToVoxelsArray(int segmentLayer)
     {
         // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiSegmentData(ref voxelData, segmentLayer, niftiFileLines, widthX, heightY, depthZ);
+        voxelData = NiftiHandler.ReadNiftiSegmentData(ref voxelData, segmentLayer, niftiSegmentFileLines, widthX, heightY, depthZ);
         Debug.Log("Segment data now read in");
     }
 
@@ -73,7 +85,7 @@ public class SourceDataLoader : ASourceDataLoader
     private Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
     {
         // Load the NIfTI file
-        return NiftiFile.Read(niftiFilePath);
+        return NiftiHandler.ReadNiftiFile(niftiFilePath);
     }
 
 
