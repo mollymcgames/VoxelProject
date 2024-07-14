@@ -64,8 +64,10 @@ public class NiftiHandler : MonoBehaviour
                 {
                     //Debug.Log("Next RAW vox colour=" + (float)niftiData.Data[index]); 
                     //Debug.Log("Next vox colour=" + (int)(niftiData.Data[index]/calMax * 254 )); 
-                    // Convert the number to a string to easily access each digit                   
-                    voxelValue[x, y, z] = new Voxel( (float)niftiData.Data[index] > visibleColourThreshold, calMax <= 255, calMax <= 255 ? (int) (niftiData.Data[index]/calMax * 254) : MakeIntColourNumber(niftiData.Data[index].ToString()) );
+                    // Convert the number to a string to easily access each digit
+                    // Different NII files represent colours in different ways. Decision here is to make everything in the range
+                    // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
+                    voxelValue[x, y, z] = new Voxel((float)niftiData.Data[index] > visibleColourThreshold, true, (int)(niftiData.Data[index] % 255));
                     index++;
                 }
             }
@@ -104,9 +106,8 @@ public class NiftiHandler : MonoBehaviour
             {
                 for (int x = 0; x < widthX; x++)
                 {
-//                    voxelData[x, y, z] = new Voxel((float)niftiSegmentFileLines.Data[index] > visibleColourThreshold, calMax <= 255, calMax <= 255 ? (int)(niftiSegmentFileLines.Data[index] / calMax * 254) : MakeIntColourNumber(niftiSegmentFileLines.Data[index].ToString()));
                     if ( (int)niftiSegmentFileLines.Data[index] > 0 )
-                        voxelData[x, y, z].addColourRGBLayer(segmentLayer, calMax <= 255 ? (int)(niftiSegmentFileLines.Data[index] / calMax * 254) : MakeIntColourNumber((niftiSegmentFileLines.Data[index]/2).ToString()));
+                        voxelData[x, y, z].addColourRGBLayer(segmentLayer, (int)(niftiSegmentFileLines.Data[index] % 255));
                     index++;
                 }
             }
