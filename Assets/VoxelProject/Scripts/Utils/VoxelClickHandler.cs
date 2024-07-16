@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class VoxelClickHandler : MonoBehaviour
 {
+    private float transitionDelayTime = 1.0f;
+    private Animator animator;
+
     // Name of the scene to load
     public string sceneToLoad;
 
@@ -23,6 +26,8 @@ public class VoxelClickHandler : MonoBehaviour
                 if (hit.collider.gameObject == gameObject)
                 {
                     // Load the specified scene
+                    animator = GameObject.Find("Transition").GetComponent<Animator>();
+                    animator.SetTrigger("TriggerTransition");
                     SceneManager.LoadScene(sceneToLoad);
                 }
             }
