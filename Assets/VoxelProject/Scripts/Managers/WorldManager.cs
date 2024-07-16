@@ -19,8 +19,12 @@ public class WorldManager : MonoBehaviour
     // oldway public VoxelCell[] sourceData;
     public Voxel[,,] sourceData;
 
+
     void Start()
     {
+/*        if (animator == null)
+            animator = GameObject.Find("Transition").GetComponent<Animator>();*/
+
         if (_instance != null)
         {
             if (_instance != this)

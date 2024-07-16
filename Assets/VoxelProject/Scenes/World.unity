@@ -878,6 +878,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416621423}
   m_CullTransparentMesh: 1
+--- !u!1001 &1685720904
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 640.4458
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 336.60214
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.789459
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4571870164522432227, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7106131655899171130, guid: dd6e80cde11bbd345888753d3583604a,
+        type: 3}
+      propertyPath: m_Name
+      value: LevelManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd6e80cde11bbd345888753d3583604a, type: 3}
 --- !u!1 &1755072223
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +955,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1755072225}
-  - component: {fileID: 1755072226}
   - component: {fileID: 1755072229}
   - component: {fileID: 1755072227}
   - component: {fileID: 1755072228}
@@ -914,56 +981,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1755072226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1755072223}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e65ef4e51bde8429033f2ff79c2aa4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  voxelMeshConfigurationSettings:
-    voxelDataFileName: 
-    voxelSegmentLayers: []
-    voxelChunkSize: 16
-    voxelChunkFieldOfViewMultiplier: 1
-    voxelMeshContainerTagName: Untagged
-    domainOffsetX: 0
-    domainOffsetY: 0
-    domainOffsetZ: 0
-    sceneTargetName: 
-    visibilityThreshold: 1
-  worldMaterial: {fileID: 2100000, guid: e8294481300e5844abcc6eaf40cda598, type: 2}
-  WorldColors:
-  - color: {r: 0, g: 0.4716981, b: 0.016664108, a: 0}
-    metallic: 0.2
-    smoothness: 0.8
-  - color: {r: 0.5471698, g: 0.29994953, b: 0, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 0.18257429, g: 0.46226418, b: 0.05015131, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 0, g: 0, b: 0, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 0.990566, g: 0.06074228, b: 0.11166651, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 1, g: 1, b: 1, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  worldSettings:
-    containerSize: 128
-    maxHeight: 128
-    maxWidthX: 0
-    maxDepthZ: 0
-    maxHeightY: 0
-    chunkSize: 16
 --- !u!114 &1755072227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1228,6 +1245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19694510c1ca77c419656ed2cb8d36c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionDelayTime: 1
   voxelFileFormat: nii
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -1239,3 +1257,4 @@ SceneRoots:
   - {fileID: 661030751}
   - {fileID: 1755438931}
   - {fileID: 842587150}
+  - {fileID: 1685720904}

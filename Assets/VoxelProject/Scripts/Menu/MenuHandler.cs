@@ -10,11 +10,16 @@ using static Unity.VisualScripting.Member;
 
 public class MenuHandler : MonoBehaviour
 {
+    public float transitionDelayTime = 1.0f;
+    private Animator animator;
+
     [HideInInspector]
     public string voxelFileFormat = "nii";
 
     public void LoadNextScene()
     {
+        animator = GameObject.Find("Transition").GetComponent<Animator>();
+        animator.SetTrigger("TriggerTransition");
         SceneManager.LoadScene("World");
     }
 
@@ -175,6 +180,9 @@ public class MenuHandler : MonoBehaviour
 
     public void BackButton()
     {
+        animator = GameObject.Find("Transition").GetComponent<Animator>();
+        animator.SetTrigger("TriggerTransition");
         SceneManager.LoadScene("Model");
     }
+
 }
