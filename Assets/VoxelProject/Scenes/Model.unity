@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: -8829001482403417715, guid: b924eaadfebc630488edf603111469ca,
         type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -8829001482403417715, guid: b924eaadfebc630488edf603111469ca,
         type: 3}
@@ -244,6 +244,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1091755960}
+    - targetCorrespondingSourceObject: {fileID: -8829001482403417715, guid: b924eaadfebc630488edf603111469ca,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1091755964}
   m_SourcePrefab: {fileID: 100100000, guid: b924eaadfebc630488edf603111469ca, type: 3}
 --- !u!1 &179440703 stripped
 GameObject:
@@ -317,7 +321,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
         type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
         type: 3}
@@ -340,6 +344,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1630303568}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1630303572}
   m_SourcePrefab: {fileID: 100100000, guid: d7d84dbb1296f9442ae7dddc93e62665, type: 3}
 --- !u!1001 &546097535
 PrefabInstance:
@@ -422,7 +430,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a6bbff910132eae41b9db254885af47a,
         type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a6bbff910132eae41b9db254885af47a,
         type: 3}
@@ -444,7 +452,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a6bbff910132eae41b9db254885af47a,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 588403107}
+      addedObject: {fileID: 588403111}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a6bbff910132eae41b9db254885af47a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 588403112}
   m_SourcePrefab: {fileID: 100100000, guid: a6bbff910132eae41b9db254885af47a, type: 3}
 --- !u!1 &547043292
 GameObject:
@@ -634,6 +646,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 32
+  customCursor: {fileID: 0}
   popupText: {fileID: 1859121159}
 --- !u!1001 &565163391
 PrefabInstance:
@@ -748,7 +761,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8670151273213183110, guid: a6bbff910132eae41b9db254885af47a, type: 3}
---- !u!114 &588403107
+--- !u!114 &588403111
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -763,8 +776,23 @@ MonoBehaviour:
   popupPanel: {fileID: 771648127}
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
-  popupText: {fileID: 0}
+    m_Bits: 64
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  popupText: {fileID: 1859121159}
+--- !u!114 &588403112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588403098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  targetTag: Heart
 --- !u!1 &770917361
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,13 +907,13 @@ GameObject:
   - component: {fileID: 771648130}
   - component: {fileID: 771648129}
   - component: {fileID: 771648131}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ModelInfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &771648128
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1014,8 +1042,23 @@ MonoBehaviour:
   popupPanel: {fileID: 771648127}
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
-  popupText: {fileID: 0}
+    m_Bits: 64
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  popupText: {fileID: 1859121159}
+--- !u!114 &1091755964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091755951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  targetTag: Brain
 --- !u!1001 &1153404278
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1160,6 +1203,7 @@ GameObject:
   - component: {fileID: 1550601690}
   - component: {fileID: 1550601689}
   - component: {fileID: 1550601688}
+  - component: {fileID: 1550601691}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1217,6 +1261,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1550601691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1550601687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  targetTag: Heart
 --- !u!1 &1630303556 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
@@ -1272,8 +1330,23 @@ MonoBehaviour:
   popupPanel: {fileID: 771648127}
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
-  popupText: {fileID: 0}
+    m_Bits: 64
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  popupText: {fileID: 1859121159}
+--- !u!114 &1630303572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630303556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  targetTag: Liver
 --- !u!1 &1712441868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,7 +1477,7 @@ GameObject:
   - component: {fileID: 1859121160}
   - component: {fileID: 1859121159}
   - component: {fileID: 1859121161}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

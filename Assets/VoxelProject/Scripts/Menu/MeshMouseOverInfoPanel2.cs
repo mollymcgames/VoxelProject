@@ -2,10 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MeshMouseOverInfoPanel : MonoBehaviour
+public class MeshMouseOverInfoPanel2 : MonoBehaviour
 {
     public GameObject popupPanel;  // Reference to the panel GameObject
-    public TextMeshProUGUI popupText;
     public LayerMask layerMask;    // Layer mask to specify which layers to interact with
     private bool isMouseOver = false;
     private float hideDelay = 1.5f; // Time to wait before hiding the panel
@@ -13,6 +12,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
     public Texture2D customCursor; // The custom cursor texture
 
     MenuHandler menuHandler;
+    public TextMeshProUGUI popupText;
 
     string brainText, liverText, heartText = null;
 
@@ -70,7 +70,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                     }
                     popupText.text = heartText;
                     popupText.color = Color.red;
-
+                    
                     // Show the panel
                     popupPanel.SetActive(true);
                     isMouseOver = true;
@@ -118,6 +118,11 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 hideTimer = 0f;
             }
         }
+/*        else
+        {
+            // Set isMouseOver to false and start the hide timer
+            isMouseOver = false;
+        }*/
 
         // If the mouse is not over the mesh, start the hide timer
         if (hasMouseExited == true)
