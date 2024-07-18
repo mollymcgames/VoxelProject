@@ -7,7 +7,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
     public GameObject popupPanel;  // Reference to the panel GameObject
     public LayerMask layerMask;    // Layer mask to specify which layers to interact with
     private bool isMouseOver = false;
-    private float hideDelay = 1.1f; // Time to wait before hiding the panel
+    private float hideDelay = 1.5f; // Time to wait before hiding the panel
     private float hideTimer = 0f;
 
     MenuHandler menuHandler;
@@ -20,6 +20,29 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
         menuHandler = new MenuHandler();
         // Initially hide the panel
         popupPanel.SetActive(false);
+    }
+
+    private bool hasMouseExited = false;
+
+    void OnMouseExit()
+    {
+        Debug.Log("GO:"+gameObject.name);
+        if (gameObject.CompareTag("Heart"))
+        {
+            // Set the boolean to true if the tag is "Heart"
+            hasMouseExited = true;
+        }
+        if (gameObject.CompareTag("Liver"))
+        {
+            // Set the boolean to true if the tag is "Heart"
+            hasMouseExited = true;
+        }
+        if (gameObject.CompareTag("Brain"))
+        {
+            // Set the boolean to true if the tag is "Heart"
+            hasMouseExited = true;
+        }
+
     }
 
     void Update()
@@ -80,11 +103,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 isMouseOver = true;
                 hideTimer = 0f;
             }
-            else
-            {
-                // Set isMouseOver to false and start the hide timer
-                isMouseOver = false;
-            }
         }
         else
         {
@@ -93,7 +111,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
         }
 
         // If the mouse is not over the mesh, start the hide timer
-        if (!isMouseOver)
+        if (hasMouseExited == true)
         {
             hideTimer += Time.deltaTime;
             if (hideTimer >= hideDelay)
@@ -101,6 +119,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 // Hide the panel after the delay
                 popupPanel.SetActive(false);
                 hideTimer = 0f;
+                hasMouseExited = false;
             }
         }
     }
