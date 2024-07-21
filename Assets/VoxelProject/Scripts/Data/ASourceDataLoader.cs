@@ -34,36 +34,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
 
     public abstract object GetHeader();
 
-    public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> sourceData)
-    {
-        Debug.Log("Data now read in, data list size: " + sourceData.Count);
-        Debug.Log("Creating chunks of size [" + chunkSize + "] cubed.");
-
-        Dictionary<Vector3Int, VoxelChunk> chunks = new Dictionary<Vector3Int, VoxelChunk>();
-
-        int voxelsProcessed = 0;
-        foreach (Voxel nextVoxelElement in sourceData)
-        {
-            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
-
-            // Create new chunk if it doesn't exist
-            if (!chunks.ContainsKey(chunkCoordinates))
-            {
-                Debug.Log("Creating new Chunk at position: " + chunkCoordinates);
-                chunks[chunkCoordinates] = new VoxelChunk(chunkCoordinates);
-            }
-
-            // Add voxel to the corresponding chunk
-            // MEMORY SAVER: If we know the coordinates, which we're using as a chunk index, why do we
-            // need to save the coordinates twice (i.e. in the voxel object)?
-            chunks[chunkCoordinates].AddVoxel(nextVoxelElement);
-            voxelsProcessed++;
-        }
-        Debug.Log("Voxels processed:" + voxelsProcessed);
-        Debug.Log("Number of chunks created: " + chunks.Count);
-        return chunks;
-    }
-
     // A HotVoxelFile is a CSV file with x y z coordinates and a colour in HTML format for each hot voxel
     // e.g.
     // 10,10,20,#FF0000
@@ -102,4 +72,36 @@ public abstract class ASourceDataLoader : ISourceDataLoader
 
         return voxelData;
     }
+
+    /*public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> sourceData)
+    {
+        Debug.Log("Data now read in, data list size: " + sourceData.Count);
+        Debug.Log("Creating chunks of size [" + chunkSize + "] cubed.");
+
+        Dictionary<Vector3Int, VoxelChunk> chunks = new Dictionary<Vector3Int, VoxelChunk>();
+
+        int voxelsProcessed = 0;
+        foreach (Voxel nextVoxelElement in sourceData)
+        {
+            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
+
+            // Create new chunk if it doesn't exist
+            if (!chunks.ContainsKey(chunkCoordinates))
+            {
+                Debug.Log("Creating new Chunk at position: " + chunkCoordinates);
+                chunks[chunkCoordinates] = new VoxelChunk(chunkCoordinates);
+            }
+
+            // Add voxel to the corresponding chunk
+            // MEMORY SAVER: If we know the coordinates, which we're using as a chunk index, why do we
+            // need to save the coordinates twice (i.e. in the voxel object)?
+            chunks[chunkCoordinates].AddVoxel(nextVoxelElement);
+            voxelsProcessed++;
+        }
+        Debug.Log("Voxels processed:" + voxelsProcessed);
+        Debug.Log("Number of chunks created: " + chunks.Count);
+        return chunks;
+    }*/
+
+
 }

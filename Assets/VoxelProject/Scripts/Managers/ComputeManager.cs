@@ -71,16 +71,16 @@ public class ComputeManager : MonoBehaviour
     public void GenerateVoxelData(ref Container cont, int layer)
     {
         Container container = cont;
-        noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
+        // KJP DO WE NEED THIS? noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
         noiseShader.SetBuffer(0, "count", cont.data.countBuffer);
 
         noiseShader.SetVector("chunkPosition", cont.containerPosition);
         noiseShader.SetVector("seedOffset", Vector3.zero);
 
-        noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
+        // KJP DO WE NEED THIS? noiseShader.Dispatch(0, xThreads, yThreads, xThreads);
         noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
 
-        AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
+        AsyncGPUReadback.Request(cont.data.countBuffer, (callback) =>
         {
             container.RenderVisibleChunks(layer);
         });    
@@ -89,7 +89,7 @@ public class ComputeManager : MonoBehaviour
     private void ClearVoxelData(NoiseBuffer buffer)
     {
         buffer.countBuffer.SetData(new int[] { 0 });
-        noiseShader.SetBuffer(1, "voxelArray", buffer.noiseBuffer);
+        // KJP DO WE NEED THIS? noiseShader.SetBuffer(1, "voxelArray", buffer.noiseBuffer);
         noiseShader.Dispatch(1, xThreads, yThreads, zThreads);
     }
     #endregion
@@ -127,7 +127,7 @@ public struct NoiseBuffer
     public bool Initialized;
     public bool Cleared;
     //public IndexedArray<Voxel> voxelArray;
-    public VoxelStruct[,,] voxelArray;
+    //public VoxelStruct[,,] voxelArray;
 
     public void InitializeBuffer()
     {
@@ -136,14 +136,14 @@ public struct NoiseBuffer
         countBuffer.SetData(new uint[] { 0 });
 
         //voxelArray = new IndexedArray<Voxel>();
-        Debug.Log("Initialising noise buffer with world settings: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
-        voxelArray = new VoxelStruct[WorldManager.Instance.worldSettings.maxWidthX, WorldManager.Instance.worldSettings.maxHeightY, WorldManager.Instance.worldSettings.maxDepthZ];
-        Debug.Log("Initialising noise buffer with size: " + voxelArray.Length);
+        // KJP DO WE NEED THIS? Debug.Log("Initialising noise buffer with world settings: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
+        // KJP DO WE NEED THIS? voxelArray = new VoxelStruct[WorldManager.Instance.worldSettings.maxWidthX, WorldManager.Instance.worldSettings.maxHeightY, WorldManager.Instance.worldSettings.maxDepthZ];
+        // KJP DO WE NEED THIS? Debug.Log("Initialising noise buffer with size: " + voxelArray.Length);
         //noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(Voxel)));  
-        noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(VoxelStruct)));  
-        Debug.Log("Initialised noise buffer with size: " + noiseBuffer.count);
+        // KJP DO WE NEED THIS? noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(VoxelStruct)));  
+        // KJP DO WE NEED THIS? Debug.Log("Initialised noise buffer with size: " + noiseBuffer.count);
         //noiseBuffer.SetData(voxelArray.GetData);
-        noiseBuffer.SetData(voxelArray);
+        // KJP DO WE NEED THIS? noiseBuffer.SetData(voxelArray);
         Initialized = true;
     }
 
@@ -154,7 +154,8 @@ public struct NoiseBuffer
 
         Initialized = false;
     }
-    public VoxelStruct this[Vector3Int index]
+    // KJP DO WE NEED THIS? 
+    /*public VoxelStruct this[Vector3Int index]
     {
         get
         {
@@ -167,5 +168,5 @@ public struct NoiseBuffer
             //voxelArray[index] = value;
             voxelArray[index.x, index.y, index.z] = value;            
         }
-    }
+    }*/
 }

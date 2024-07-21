@@ -47,7 +47,7 @@ public class Container : MonoBehaviour
 
         Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
 
-        foreach (var chunk in WorldManager.Instance.voxelGrid.Chunks.Values)
+        foreach (var chunk in WorldManager.Instance.voxelGrid.chunks.Values)
         {
             //if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.chunkBounds))
             //{
@@ -515,15 +515,18 @@ public class Container : MonoBehaviour
         meshCollider = GetComponent<MeshCollider>();
         meshCollider.convex = false;
     }
-    public bool checkVoxelIsSolid(Vector3Int point)
-    {
-        if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
-            return true;
-        else
-            return this[point].isSolid;
-    }
+    // KJP DO WE NEED THIS? 
+    /*    public bool checkVoxelIsSolid(Vector3Int point)
+        {
+            if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
+                return true;
+            else
+                return this[point].isSolid;
+        }
+    */
 
-    public VoxelStruct this[Vector3Int index]
+    // KJP DO WE NEED THIS? 
+/*    public VoxelStruct this[Vector3Int index]
     {
         get
         {
@@ -534,7 +537,7 @@ public class Container : MonoBehaviour
         {
             data[index] = value;
         }
-    }
+    }*/
 
     #region Mesh Data
 

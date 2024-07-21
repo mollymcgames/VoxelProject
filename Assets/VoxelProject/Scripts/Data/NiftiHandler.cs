@@ -75,7 +75,7 @@ public class NiftiHandler : MonoBehaviour
         return voxelValue;
     }
 
-    public static VoxelGrid ReadNiftiDataGrid(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+    public static VoxelGrid ReadNiftiDataGrid(Nifti.NET.Nifti niftiData, int width, int height, int depth, int chunkSize)
     {
         float calMin = niftiData.Header.cal_min;
         float calMax = niftiData.Header.cal_max;
@@ -85,21 +85,29 @@ public class NiftiHandler : MonoBehaviour
 
         int numVoxels = width * height * depth;
 
-        VoxelGrid voxelGrid = new VoxelGrid();
+        VoxelGrid voxelGrid = new VoxelGrid(chunkSize);
 
-        // Iterate through each voxel
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        Voxel newVoxel = null;
+
+        // Iterate through each voxel in the input NII file
         int index = 0;
-        for (int z = 0; z < depth; z++)
+        for (z = 0; z < depth-1; z++)
         {
-            for (int y = 0; y < height; y++)
+            for (y = 0; y < height-1; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (x = 0; x < width-1; x++)
                 {
+                    if (x == 61 && y == 67 && z == 38)
+                        Debug.Log("Hello! Color is: "+ (int)(niftiData.Data[index]));
+
                     //if ((int)(niftiData.Data[index] % 255) > 0)
                     //{
-                        Voxel newVoxel = new Voxel();
+                        newVoxel = new Voxel();
                         newVoxel.position = new Vector3Int(x, y, z);
-                        newVoxel.isActive = true;
+                        newVoxel.isActive = (int)niftiData.Data[index] > 0;
                         newVoxel.colourRGBValue = (int)(niftiData.Data[index] % 255);
                         voxelGrid.AddVoxel(newVoxel);
                         //Debug.Log("Next RAW vox colour=" + (float)niftiData.Data[index]); 
@@ -113,6 +121,10 @@ public class NiftiHandler : MonoBehaviour
                 }
             }
         }
+        Debug.Log("x,y,z tops were:"+x+", "+y+", "+z);  
+        Voxel tempVoxel = voxelGrid.GetVoxel(new Vector3Int(61, 67, 38));
+        Debug.Log("["+ voxelGrid.voxelsRepresented+"] VOXELS allocated to ["+voxelGrid.chunks.Count+"] CHUNKS");
+
         return voxelGrid;
     }
 

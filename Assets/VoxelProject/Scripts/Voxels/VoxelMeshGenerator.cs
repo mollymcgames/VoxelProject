@@ -18,25 +18,36 @@ public static class VoxelMeshGenerator
 
     public static Container.MeshData GenerateMesh(VoxelChunk chunk, ref Container.MeshData meshData, Transform transform)
     {
+        // If this chunk is totally empty, just drop out right away as we're wasting time!
+        if (chunk.hasAtLeastOneActiveVoxel == false)
+        {
+            Debug.Log("CHUNK ["+chunk.chunkCoordinates+"] empty, no need to render it!");
+            return meshData;
+        }
+
         internalTransform = transform;
 /*        List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
         List<Vector2> uv = new List<Vector2>();*/
-
-        int chunkSize = 16;  // Ensure this matches the chunk size defined in your VoxelGrid
-        for (int y = 0; y < chunkSize; y++)
+        
+        for (int y = 0; y < WorldManager.Instance.voxelGrid.chunkSize; y++)
         {
-            for (int x = 0; x < chunkSize; x++)
+            for (int x = 0; x < WorldManager.Instance.voxelGrid.chunkSize; x++)
             {
-                for (int z = 0; z < chunkSize; z++)
+                for (int z = 0; z < WorldManager.Instance.voxelGrid.chunkSize; z++)
                 {
                     Vector3Int localPosition = new Vector3Int(x, y, z);
                     Voxel voxel = chunk.GetVoxel(localPosition);
                     if (voxel != null && voxel.isActive)
                     {
-                        Vector3Int position = new Vector3Int(chunk.chunkCoordinates.x * chunkSize + x, chunk.chunkCoordinates.y * chunkSize + y, chunk.chunkCoordinates.z * chunkSize + z);
+                        Vector3Int position = new Vector3Int(chunk.chunkCoordinates.x * WorldManager.Instance.voxelGrid.chunkSize + x, chunk.chunkCoordinates.y * WorldManager.Instance.voxelGrid.chunkSize + y, chunk.chunkCoordinates.z * WorldManager.Instance.voxelGrid.chunkSize + z);
                         //AddVoxel(vertices, triangles, uv, position);
-                        ProcessVoxel(position.x, position.y, position.z);
+                        //ProcessVoxel(position.x, position.y, position.z);
+                        Debug.Log("Rendered voxel: " + voxel.position);
+                    }
+                    else if (voxel != null)
+                    {
+                        Debug.Log("Skipped voxel: " + voxel.position);
                     }
                 }
             }

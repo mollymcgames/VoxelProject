@@ -15,9 +15,9 @@ public class SourceDataLoader : ASourceDataLoader
     
     public override VoxelStruct[,,] LoadSourceData(string filepath)
     {
-        Debug.Log("Loading nii source data...:" + filepath);
+/*        Debug.Log("Loading nii source data...:" + filepath);
         LoadNiftiFile(filepath);
-        CreateVoxelsArray();
+        CreateVoxelsArray();*/
         return voxelData;
     }
 
@@ -80,7 +80,7 @@ public class SourceDataLoader : ASourceDataLoader
     private void CreateVoxelsArrayGrid()
     {
         // Read the voxel data
-        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFileLines, widthX, heightY, depthZ);
+        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFileLines, widthX, heightY, depthZ, chunkSize);
         Debug.Log("Data (grid) now read in");
     }
 

@@ -3,36 +3,46 @@ using UnityEngine;
 
 public class VoxelGrid
 {
-    public Dictionary<Vector3Int, VoxelChunk> Chunks { get; private set; }
-    private const int chunkSize = 16;
+    public Dictionary<Vector3Int, VoxelChunk> chunks { get; private set; }
+    
+    public int chunkSize { get; private set; }
 
-    public VoxelGrid()
+    public int voxelsRepresented { get; private set; }
+
+    public VoxelGrid(int chunkSize) 
     {
-        Chunks = new Dictionary<Vector3Int, VoxelChunk>();
+        voxelsRepresented = 0;
+        this.chunkSize = chunkSize;
+        chunks = new Dictionary<Vector3Int, VoxelChunk>();
     }
 
     public void AddVoxel(Voxel voxel)
     {
-        Vector3Int chunkPos = GetChunkPosition(voxel.position);
-        if (!Chunks.ContainsKey(chunkPos))
+        if (voxel.position.x > 59 || voxel.position.y > 65 || voxel.position.z > 36)
+            Debug.Log("key voxel!");
+
+            Vector3Int chunkPos = GetChunkPosition(voxel.position);
+        if (!chunks.ContainsKey(chunkPos))
         {
-            Chunks[chunkPos] = new VoxelChunk(chunkPos, chunkSize);
+            chunks[chunkPos] = new VoxelChunk(chunkPos, chunkSize);
         }
-        Chunks[chunkPos].voxels.Add(voxel);
+        chunks[chunkPos].voxels.Add(voxel);
+        chunks[chunkPos].hasAtLeastOneActiveVoxel = voxel.isActive;
+        voxelsRepresented++;
     }
 
     public Voxel GetVoxel(Vector3Int position)
     {
         Vector3Int chunkPos = GetChunkPosition(position);
-        if (Chunks.ContainsKey(chunkPos))
+        if (chunks.ContainsKey(chunkPos))
         {
             Vector3Int localPos = GetLocalPositionInChunk(position);
-            return Chunks[chunkPos].GetVoxel(localPos);
+            return chunks[chunkPos].GetVoxel(localPos);
         }
         return null;
     }
 
-    public static Vector3Int GetChunkPosition(Vector3Int voxelPosition)
+    public Vector3Int GetChunkPosition(Vector3Int voxelPosition)
     {
         return new Vector3Int(
             Mathf.FloorToInt((float)voxelPosition.x / chunkSize) * chunkSize,
@@ -47,7 +57,7 @@ public class VoxelGrid
         );
 */    }
 
-    public static Vector3Int GetLocalPositionInChunk(Vector3Int voxelPosition)
+    public Vector3Int GetLocalPositionInChunk(Vector3Int voxelPosition)
     {
         return new Vector3Int(
             voxelPosition.x % chunkSize,

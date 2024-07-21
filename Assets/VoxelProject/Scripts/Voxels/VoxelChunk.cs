@@ -4,13 +4,15 @@ using UnityEngine;
 /**
  * This class represents a single Chunk.
  * A Chunk is a group of Voxels that can POTENTIALLY be rendered.
- * Typically a Chunk will form a group of related (by proximity) Chunks that can POTENTIALLY be rendered.
+ * Typically a Chunk will form a group of related (by proximity) chunks that can POTENTIALLY be rendered.
  */
 public class VoxelChunk
 {
     public Vector3Int chunkCoordinates { get; set; }
 
     public List<Voxel> voxels { get; set; }
+
+    public bool hasAtLeastOneActiveVoxel = false;
 
     //Each chunk needs to have boundaries to help determine if it is within the camera's view port.
     public Bounds chunkBounds { get; set; }
