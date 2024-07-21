@@ -7,7 +7,7 @@ public struct VoxelNoiseBuffer
     public ComputeBuffer countBuffer;
     public bool Initialized;
     public bool Cleared;
-    public VoxelIndexedArray<Voxel> voxelArray;
+    public VoxelIndexedArray<VoxelStruct> voxelArray;
 
     public void InitializeBuffer()
     {
@@ -15,9 +15,9 @@ public struct VoxelNoiseBuffer
         countBuffer.SetCounterValue(0);
         countBuffer.SetData(new uint[] { 0 });
 
-        voxelArray = new VoxelIndexedArray<Voxel>();
+        voxelArray = new VoxelIndexedArray<VoxelStruct>();
         //noiseBuffer = new ComputeBuffer(voxelArray.Count, 8);
-        noiseBuffer = new ComputeBuffer(voxelArray.Count, Marshal.SizeOf(typeof(Voxel)));
+        noiseBuffer = new ComputeBuffer(voxelArray.Count, Marshal.SizeOf(typeof(VoxelStruct)));
 
         noiseBuffer.SetData(voxelArray.GetData);
         Initialized = true;
@@ -31,7 +31,7 @@ public struct VoxelNoiseBuffer
         Initialized = false;
     }
 
-    public Voxel this[Vector3Int index]
+    public VoxelStruct this[Vector3Int index]
     {
         get
         {

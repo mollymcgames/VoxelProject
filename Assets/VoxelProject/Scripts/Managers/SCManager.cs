@@ -30,5 +30,6 @@ public class SCManager : MonoBehaviour
             Debug.Log("1 key pressed, generating voxel data.");
             ComputeManager.Instance.GenerateVoxelData(ref container, 1);
         }
+        //ComputeManager.Instance.GenerateVoxelData(ref container, 0);
     }
 }

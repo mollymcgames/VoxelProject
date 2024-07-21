@@ -7,7 +7,7 @@ public class WorldManager : MonoBehaviour
 {
     // Vector3Int's are used as they use up less memory and also
     // implement the IEquatable interface making searching the Dictionary nice and fast
-    public Dictionary<Vector3Int, Chunk> voxelSourceDataDictionary;
+    public Dictionary<Vector3Int, VoxelChunk> voxelSourceDataDictionary;
 
     [Header("Voxel Mesh Settings")]
     [SerializeField]
@@ -17,8 +17,8 @@ public class WorldManager : MonoBehaviour
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;
     // oldway public VoxelCell[] sourceData;
-    public Voxel[,,] sourceData;
-
+    public VoxelStruct[,,] sourceData;
+    public VoxelGrid voxelGrid;
 
     void Start()
     {

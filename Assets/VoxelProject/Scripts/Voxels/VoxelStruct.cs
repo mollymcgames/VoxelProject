@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public unsafe struct Voxel
+public unsafe struct VoxelStruct
 {
     // This struct has to be "blittable"!
     private byte isSolidInternal; // Use byte instead of bool
@@ -49,7 +49,7 @@ public unsafe struct Voxel
     }
 
 
-    public Voxel(bool isSolid, bool isGreyScale, int colourRGBValue)
+    public VoxelStruct(bool isSolid, bool isGreyScale, int colourRGBValue)
     {
         this.isSolidInternal = (byte)(isSolid ? 1 : 0);
         this.isGreyScaleInternal = (byte)(isGreyScale ? 1 : 0);
@@ -67,7 +67,7 @@ public unsafe struct Voxel
         // }
     }
 
-    public Voxel(bool isSolid, bool isGreyScale, int layerNumber, int colourRGBValue)
+    public VoxelStruct(bool isSolid, bool isGreyScale, int layerNumber, int colourRGBValue)
     {
         isSolidInternal = (byte)(isSolid ? 1 : 0);
         this.isGreyScaleInternal = (byte)(isGreyScale ? 1 : 0);

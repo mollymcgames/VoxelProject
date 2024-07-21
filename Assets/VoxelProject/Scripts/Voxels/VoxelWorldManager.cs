@@ -15,7 +15,7 @@ public class VoxelWorldManager : MonoBehaviour
 
     // Vector3Int's are used as they use up less memory and also
     // implement the IEquatable interface making searching the Dictionary nice and fast
-    public Dictionary<Vector3Int, Chunk> voxelSourceDataDictionary;
+    public Dictionary<Vector3Int, VoxelChunk> voxelSourceDataDictionary;
 
     //[Header("Voxel Camera, drag in the Main Camera")]
     //public Camera mainCamera;

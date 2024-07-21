@@ -12,9 +12,8 @@ public class SourceDataLoader : ASourceDataLoader
 
     private static Nifti.NET.Nifti niftiFileLines = null;
     private static Nifti.NET.Nifti niftiSegmentFileLines = null;    
-
-    //public override Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
-    public override Voxel[,,] LoadSourceData(string filepath)
+    
+    public override VoxelStruct[,,] LoadSourceData(string filepath)
     {
         Debug.Log("Loading nii source data...:" + filepath);
         LoadNiftiFile(filepath);
@@ -22,7 +21,15 @@ public class SourceDataLoader : ASourceDataLoader
         return voxelData;
     }
 
-    public override Voxel[,,] LoadSegmentData(ref Voxel[,,] sourceData, int segmentLayer, string segmentFile)
+    public override VoxelGrid LoadSourceDataGrid(string filepath)
+    {
+        Debug.Log("Loading nii source data in GRID format...:" + filepath);
+        LoadNiftiFile(filepath);
+        CreateVoxelsArrayGrid();
+        return voxelGrid;
+    }
+
+    public override VoxelStruct[,,] LoadSegmentData(ref VoxelStruct[,,] sourceData, int segmentLayer, string segmentFile)
     {
         Debug.Log("Loading nii segment data..." + segmentFile + " into layer: "+segmentLayer);
         LoadNiftiSegmentFile(Path.Combine(Application.streamingAssetsPath, segmentFile));
@@ -68,6 +75,13 @@ public class SourceDataLoader : ASourceDataLoader
         // Read the voxel data
         voxelData = NiftiHandler.ReadNiftiData(niftiFileLines, widthX, heightY, depthZ);
         Debug.Log("Data now read in");
+    }
+
+    private void CreateVoxelsArrayGrid()
+    {
+        // Read the voxel data
+        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFileLines, widthX, heightY, depthZ);
+        Debug.Log("Data (grid) now read in");
     }
 
     private void AddSegmentToVoxelsArray(int segmentLayer)

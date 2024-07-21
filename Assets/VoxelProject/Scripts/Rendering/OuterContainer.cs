@@ -61,7 +61,7 @@ public class OuterContainer : MonoBehaviour
     public void GenerateMesh(bool renderOuter = true, float transparencyValue = 1f)
     {
         Vector3 blockPos;
-        Voxel block;
+        VoxelStruct block;
 
         int counter = 0;
         Vector3[] faceVertices = new Vector3[4];
@@ -150,9 +150,9 @@ public class OuterContainer : MonoBehaviour
         }
     }
     
-    private Dictionary<Vector3Int, Chunk> GetSurroundingChunks(Vector3Int position, int chunkDistanceMultiplier, int chunkSize, Dictionary<Vector3Int, Chunk> sourceData)
+    private Dictionary<Vector3Int, VoxelChunk> GetSurroundingChunks(Vector3Int position, int chunkDistanceMultiplier, int chunkSize, Dictionary<Vector3Int, VoxelChunk> sourceData)
     {
-        Dictionary<Vector3Int, Chunk> renderVectors = new Dictionary<Vector3Int, Chunk>();
+        Dictionary<Vector3Int, VoxelChunk> renderVectors = new Dictionary<Vector3Int, VoxelChunk>();
         List<Vector3Int> points = new List<Vector3Int>();
 
         for (int x = -chunkDistanceMultiplier * chunkSize; x <= chunkDistanceMultiplier * chunkSize; x += chunkSize)
@@ -164,7 +164,7 @@ public class OuterContainer : MonoBehaviour
                     //if (x == 0 && y == 0 && z == 0) 
                     //    continue; // Skip the current position
                     Vector3Int newPoint = new Vector3Int(position.x + x, position.y + y, position.z + z);
-                    sourceData.TryGetValue(newPoint, out Chunk chunk);
+                    sourceData.TryGetValue(newPoint, out VoxelChunk chunk);
                     if ( chunk != null)
                         renderVectors.Add(newPoint, chunk);
                 }
@@ -176,7 +176,7 @@ public class OuterContainer : MonoBehaviour
     public void GenerateMeshDictionary(bool renderOuter = true, float transparencyValue = 1f)
     {
         Vector3Int blockPos;
-        Voxel block;
+        VoxelStruct block;
 
         int counter = 0;
         Vector3Int[] faceVertices = new Vector3Int[4];
@@ -187,15 +187,15 @@ public class OuterContainer : MonoBehaviour
         Vector2 voxelSmoothness;
 
         Vector3Int chunkCoordinates = Vector3Int.zero;
-        Dictionary<Vector3Int, Chunk> renderVectors = null;
-        Dictionary<Vector3Int, Chunk> sourceData = null;
+        Dictionary<Vector3Int, VoxelChunk> renderVectors = null;
+        Dictionary<Vector3Int, VoxelChunk> sourceData = null;
         if (renderOuter)
         {
             Debug.Log("[OUTER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
 
             // Using the current camera position, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
-            chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkOuterSize);
+            chunkCoordinates = VoxelChunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkOuterSize);
 
             sourceData = OuterWorldManager.Instance.sourceDataOuterDictionary;
             // Now using that centre point, get the surrounding chunks.
@@ -208,7 +208,7 @@ public class OuterContainer : MonoBehaviour
 
             // Using the current camera position, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
-            chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkInnerSize);
+            chunkCoordinates = VoxelChunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkInnerSize);
 
             sourceData = OuterWorldManager.Instance.sourceDataInnerDictionary;
             // Now using that centre point, get the surrounding chunks.
@@ -221,9 +221,9 @@ public class OuterContainer : MonoBehaviour
         int breaker = 0;
 
         // Now prep those 27 chunks for rendering....
-        foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
+        foreach (KeyValuePair<Vector3Int, VoxelChunk> nextChunk in renderVectors)
         {
-            foreach (VoxelElement nextVoxelElement in nextChunk.Value.voxels)
+            foreach (Voxel nextVoxelElement in nextChunk.Value.voxels)
             {
                 blockPos = nextVoxelElement.position;
                 block = this[blockPos];
@@ -239,9 +239,9 @@ public class OuterContainer : MonoBehaviour
                 voxelColor = new VoxelColor();
 
                 Color color;
-                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.colorString, out color))
+                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.getColourRGBLayer(0), out color))
                 {
-                    Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
+                    Debug.LogError($"Invalid color value in line: {nextVoxelElement.getColourRGBLayer(0)}");
                     continue;
                 }
 
@@ -309,7 +309,7 @@ public class OuterContainer : MonoBehaviour
             return this[point].isSolid;
     }
 
-    public Voxel this[Vector3 index]
+    public VoxelStruct this[Vector3 index]
     {
         get
         {

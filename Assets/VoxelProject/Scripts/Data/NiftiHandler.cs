@@ -13,7 +13,7 @@ public class NiftiHandler : MonoBehaviour
         // Load the NIfTI file
         Nifti.NET.Nifti tempNifti = NiftiFile.Read(niftiFilePath);
 
-        float calMax = tempNifti.Header.cal_max;
+/*        float calMax = tempNifti.Header.cal_max;
         if (calMax <= 0)
         {
             int index = 0;
@@ -25,7 +25,7 @@ public class NiftiHandler : MonoBehaviour
             }
         }
         tempNifti.Header.cal_max = calMax;
-        Debug.Log("CAL MAX onload: " + tempNifti.Header.cal_max);
+        Debug.Log("CAL MAX onload: " + tempNifti.Header.cal_max);*/
         return tempNifti;
     }
 
@@ -42,7 +42,7 @@ public class NiftiHandler : MonoBehaviour
 
     }
 
-    public static Voxel[,,] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+    public static VoxelStruct[,,] ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
     {
         float calMin = niftiData.Header.cal_min;
         float calMax = niftiData.Header.cal_max;
@@ -52,7 +52,7 @@ public class NiftiHandler : MonoBehaviour
 
         int numVoxels = width * height * depth;
 
-        Voxel[,,] voxelValue = new Voxel[width,height,depth];
+        VoxelStruct[,,] voxelValue = new VoxelStruct[width,height,depth];
 
         // Iterate through each voxel
         int index = 0;
@@ -67,12 +67,53 @@ public class NiftiHandler : MonoBehaviour
                     // Convert the number to a string to easily access each digit
                     // Different NII files represent colours in different ways. Decision here is to make everything in the range
                     // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
-                    voxelValue[x, y, z] = new Voxel((float)niftiData.Data[index] > visibleColourThreshold, true, (int)(niftiData.Data[index] % 255));
+                    voxelValue[x, y, z] = new VoxelStruct((float)niftiData.Data[index] > visibleColourThreshold, true, (int)(niftiData.Data[index] % 255));
                     index++;
                 }
             }
         }
         return voxelValue;
+    }
+
+    public static VoxelGrid ReadNiftiDataGrid(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+    {
+        float calMin = niftiData.Header.cal_min;
+        float calMax = niftiData.Header.cal_max;
+        Debug.Log("CAL MIN: " + calMin);
+        Debug.Log("CAL MAX: " + calMax);
+        Debug.Log("AUX FILE: " + ByteToString(niftiData.Header.aux_file));
+
+        int numVoxels = width * height * depth;
+
+        VoxelGrid voxelGrid = new VoxelGrid();
+
+        // Iterate through each voxel
+        int index = 0;
+        for (int z = 0; z < depth; z++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    //if ((int)(niftiData.Data[index] % 255) > 0)
+                    //{
+                        Voxel newVoxel = new Voxel();
+                        newVoxel.position = new Vector3Int(x, y, z);
+                        newVoxel.isActive = true;
+                        newVoxel.colourRGBValue = (int)(niftiData.Data[index] % 255);
+                        voxelGrid.AddVoxel(newVoxel);
+                        //Debug.Log("Next RAW vox colour=" + (float)niftiData.Data[index]); 
+                        //Debug.Log("Next vox colour=" + (int)(niftiData.Data[index]/calMax * 254 )); 
+                        // Convert the number to a string to easily access each digit
+                        // Different NII files represent colours in different ways. Decision here is to make everything in the range
+                        // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
+                        //voxelValue[x, y, z] = new VoxelStruct((float)niftiData.Data[index] > visibleColourThreshold, true, (int)(niftiData.Data[index] % 255));
+                    //}
+                    index++;
+                }
+            }
+        }
+        return voxelGrid;
     }
 
     private static Int32 MakeIntColourNumber(string numberStr)
@@ -89,7 +130,7 @@ public class NiftiHandler : MonoBehaviour
         return Convert.ToInt32($"#{r:X2}{g:X2}{b:X2}".Replace("#", ""), 16);
     }
 
-    public static Voxel[,,] ReadNiftiSegmentData(ref Voxel[,,] voxelData, int segmentLayer, Nifti.NET.Nifti niftiSegmentFileLines, int widthX, int heightY, int depthZ)
+    public static VoxelStruct[,,] ReadNiftiSegmentData(ref VoxelStruct[,,] voxelData, int segmentLayer, Nifti.NET.Nifti niftiSegmentFileLines, int widthX, int heightY, int depthZ)
     {
         float calMin = niftiSegmentFileLines.Header.cal_min;
         float calMax = niftiSegmentFileLines.Header.cal_max;

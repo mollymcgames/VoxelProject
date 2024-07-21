@@ -87,7 +87,7 @@ public class OuterComputeManager : MonoBehaviour
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null)
                 {
                     callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuter.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerOuter.RenderMesh(true, transparencyValue);
+                    OuterWorldManager.Instance.containerOuter.RenderVisibleChunks(true, transparencyValue);
                 }
             });*/
 
@@ -96,7 +96,7 @@ public class OuterComputeManager : MonoBehaviour
             //     if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
             //     {
             //         callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
-            //         OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
+            //         OuterWorldManager.Instance.containerInner.RenderVisibleChunks(false, 1f - transparencyValue);
             //     }
             // });
 
@@ -184,7 +184,7 @@ public struct OuterNoiseBuffer
     public ComputeBuffer countBuffer;
     public bool Initialized;
     public bool Cleared;
-    public OuterIndexedArray<Voxel> voxelArray;
+    public OuterIndexedArray<VoxelStruct> voxelArray;
 
     public void InitializeBuffer()
     {
@@ -192,7 +192,7 @@ public struct OuterNoiseBuffer
         countBuffer.SetCounterValue(0);
         countBuffer.SetData(new uint[] { 0 });
 
-        voxelArray = new OuterIndexedArray<Voxel>();
+        voxelArray = new OuterIndexedArray<VoxelStruct>();
         noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
         noiseBuffer.SetData(voxelArray.GetData);
         Initialized = true;
@@ -205,7 +205,7 @@ public struct OuterNoiseBuffer
 
         Initialized = false;
     }
-    public Voxel this[Vector3 index]
+    public VoxelStruct this[Vector3 index]
     {
         get
         {

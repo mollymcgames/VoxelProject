@@ -21,8 +21,14 @@ public class Container : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
 
+    public VoxelGrid voxelGrid;
+    public GameObject voxelPrefab;
+    public Camera mainCamera;
+
     public void Initialize(Material mat, Vector3 position)
     {
+        Debug.Log("Initialising Container!");
+        mainCamera = Camera.main;
         ConfigureComponents();
         data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
@@ -34,15 +40,40 @@ public class Container : MonoBehaviour
         ComputeManager.Instance.ClearAndRequeueBuffer(data);
     }
 
-    public void RenderMesh(int layer)
-    {
+    public void RenderVisibleChunks(int layer)
+    {        
         this.layer = layer;
         meshData.ClearData();
-        GenerateMesh();
-        UploadMesh();
+
+        Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+
+        foreach (var chunk in WorldManager.Instance.voxelGrid.Chunks.Values)
+        {
+            //if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.chunkBounds))
+            //{
+                // Chunk is within the camera's frustum, render it
+                RenderChunk(chunk);
+            //}
+        }
+
+        //GenerateMesh();
+        //UploadMesh();
     }
 
-    public void GenerateMesh()
+    void RenderChunk(VoxelChunk chunk)
+    {
+        Transform innerTransform = this.transform;
+        meshData = VoxelMeshGenerator.GenerateMesh(chunk, ref meshData, innerTransform);
+        UploadMesh();
+        //GameObject chunkObject = new GameObject("Chunk " + chunk.chunkCoordinates);
+        //chunkObject.transform.SetParent(transform);
+        //MeshFilter mf = chunkObject.AddComponent<MeshFilter>();
+        //MeshRenderer mr = chunkObject.AddComponent<MeshRenderer>();
+        //mf.mesh = meshData.mesh;
+        //mr.material = new Material(Shader.Find("Standard"));
+    }
+
+    public void GenerateMesh(VoxelChunk chunk)
     {
         Debug.Log("Generating mesh for layer: " + layer);
 
@@ -62,7 +93,7 @@ public class Container : MonoBehaviour
                     //     break;
                     breaker++;
 
-                    ProcessVoxel(x, y, z);
+                    // KJPProcessVoxel(x, y, z);
 
                     /*                    block = WorldManager.Instance.sourceData[x, y, z];
 
@@ -187,7 +218,7 @@ public class Container : MonoBehaviour
             return; // Skip processing if the array is not initialized or indices are out of bounds
         }
 
-        Voxel voxel = WorldManager.Instance.sourceData[x, y, z];
+        VoxelStruct voxel = WorldManager.Instance.sourceData[x, y, z];
         if (voxel.isSolid && voxel.getColourRGBLayer(layer) > (int)WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
         {
             // Check each face of the voxel for visibility
@@ -275,7 +306,7 @@ public class Container : MonoBehaviour
 
     private void AddFaceData(int x, int y, int z, int faceIndex)
     {
-        Voxel voxel = WorldManager.Instance.sourceData[x, y, z];
+        VoxelStruct voxel = WorldManager.Instance.sourceData[x, y, z];
 
         VoxelColor voxelColor = null;
 
@@ -492,7 +523,7 @@ public class Container : MonoBehaviour
             return this[point].isSolid;
     }
 
-    public Voxel this[Vector3Int index]
+    public VoxelStruct this[Vector3Int index]
     {
         get
         {

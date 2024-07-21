@@ -32,6 +32,8 @@ public class ComputeManager : MonoBehaviour
         }
     }
 
+    public Camera mainCamera;
+
     #region Noise Buffers
 
     #region Pooling
@@ -79,9 +81,8 @@ public class ComputeManager : MonoBehaviour
         noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
 
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
-        {            
-            //WorldManager.Instance.container.RenderMesh(layer);
-            container.RenderMesh(layer);
+        {
+            container.RenderVisibleChunks(layer);
         });    
     }
 
@@ -126,7 +127,7 @@ public struct NoiseBuffer
     public bool Initialized;
     public bool Cleared;
     //public IndexedArray<Voxel> voxelArray;
-    public Voxel[,,] voxelArray;
+    public VoxelStruct[,,] voxelArray;
 
     public void InitializeBuffer()
     {
@@ -136,10 +137,10 @@ public struct NoiseBuffer
 
         //voxelArray = new IndexedArray<Voxel>();
         Debug.Log("Initialising noise buffer with world settings: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
-        voxelArray = new Voxel[WorldManager.Instance.worldSettings.maxWidthX, WorldManager.Instance.worldSettings.maxHeightY, WorldManager.Instance.worldSettings.maxDepthZ];
+        voxelArray = new VoxelStruct[WorldManager.Instance.worldSettings.maxWidthX, WorldManager.Instance.worldSettings.maxHeightY, WorldManager.Instance.worldSettings.maxDepthZ];
         Debug.Log("Initialising noise buffer with size: " + voxelArray.Length);
         //noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(Voxel)));  
-        noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(Voxel)));  
+        noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(VoxelStruct)));  
         Debug.Log("Initialised noise buffer with size: " + noiseBuffer.count);
         //noiseBuffer.SetData(voxelArray.GetData);
         noiseBuffer.SetData(voxelArray);
@@ -153,7 +154,7 @@ public struct NoiseBuffer
 
         Initialized = false;
     }
-    public Voxel this[Vector3Int index]
+    public VoxelStruct this[Vector3Int index]
     {
         get
         {

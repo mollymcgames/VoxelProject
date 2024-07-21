@@ -30,7 +30,7 @@ public class SourceDataTextFileLoaderAsDictionary
     public int heightY = 0;
     public int depthZ = 0;
 
-    public Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
+    public Dictionary<Vector3Int, VoxelChunk> LoadSourceData(string filepath)
     {
         Debug.Log("Loading source data as Dictionary...");
         return LoadVoxelFile(filepath);
@@ -41,13 +41,13 @@ public class SourceDataTextFileLoaderAsDictionary
         return voxelFileLines;
     }
 
-    public Dictionary<Vector3Int, Chunk> LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
+    public Dictionary<Vector3Int, VoxelChunk> LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
     {
         // Load default file
         voxelFileLines = ReadVoxelTextFile(voxelFilePath);
 
         // Read the voxel data
-        List<VoxelElement> voxelDataList = ReadVoxelData(voxelFileLines);
+        List<Voxel> voxelDataList = ReadVoxelData(voxelFileLines);
         Debug.Log("Data now read in, data list size: "+voxelDataList.Count);
 
         // Get the dimensions
@@ -63,23 +63,23 @@ public class SourceDataTextFileLoaderAsDictionary
 
       }
   
-    private Dictionary<Vector3Int, Chunk> ConstructChunks(List<VoxelElement> sourceData)
+    private Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> sourceData)
     {
         Debug.Log("Data now read in, data list size: " + sourceData.Count);
         Debug.Log("Creating chunks of size ["+chunkSize+"] cubed.");
 
-        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
+        Dictionary<Vector3Int, VoxelChunk> chunks = new Dictionary<Vector3Int, VoxelChunk>();
 
         int voxelsProcessed = 0;
-        foreach (VoxelElement nextVoxelElement in sourceData)
+        foreach (Voxel nextVoxelElement in sourceData)
         {
-            Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
+            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
 
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
             {
                 Debug.Log("Creating new Chunk at position: "+chunkCoordinates);
-                chunks[chunkCoordinates] = new Chunk(chunkCoordinates);
+                chunks[chunkCoordinates] = new VoxelChunk(chunkCoordinates);
             }
 
             // Add voxel to the corresponding chunk
@@ -98,11 +98,11 @@ public class SourceDataTextFileLoaderAsDictionary
         return File.ReadAllLines(voxelTextFilePath);
     }
 
-    private List<VoxelElement> ReadVoxelData(string[] lines)
+    private List<Voxel> ReadVoxelData(string[] lines)
     {
         //int numVoxels = width * height * depth;
 
-        List<VoxelElement> voxelDataList = new List<VoxelElement>();
+        List<Voxel> voxelDataList = new List<Voxel>();
 
         Debug.Log("Lines detected in file:" + lines.Length);
         int index = 0;
@@ -131,7 +131,7 @@ public class SourceDataTextFileLoaderAsDictionary
             if (z>maxZ) maxZ = z;
             if (z<minZ) minZ = z;   
                
-            voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), parts[3])); // Assign the parsed color value as the voxel value
+            voxelDataList.Add(new Voxel(new Vector3Int(x, y, z), parts[3])); // Assign the parsed color value as the voxel value
             index++;
         }
         Debug.Log("Lines processed:" + index);

@@ -20,8 +20,8 @@ public class OuterWorldManager : MonoBehaviour
 
     // Vector3Int's are used as they use up less memory and also
     // implement the IEquatable interface making searching the Dictionary nice and fast
-    public Dictionary<Vector3Int, Chunk> sourceDataInnerDictionary;
-    public Dictionary<Vector3Int, Chunk> sourceDataOuterDictionary;
+    public Dictionary<Vector3Int, VoxelChunk> sourceDataInnerDictionary;
+    public Dictionary<Vector3Int, VoxelChunk> sourceDataOuterDictionary;
 
     //Use streaming assets for the file path
     private string filepathInner = Path.Combine(Application.streamingAssetsPath, "blue.txt");

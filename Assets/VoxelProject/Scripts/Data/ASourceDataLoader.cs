@@ -5,7 +5,8 @@ using System.IO;
 
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
-    public Voxel[,,] voxelData = null;
+    public VoxelStruct[,,] voxelData = null;
+    public VoxelGrid voxelGrid = null;
 
     public int chunkSize = 0;
 
@@ -24,32 +25,32 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     {
         this.chunkSize = chunkSize;
     }
+    
+    public abstract VoxelStruct[,,] LoadSourceData(string filepath);
 
-    //public abstract Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath);
-    public abstract Voxel[,,] LoadSourceData(string filepath);
+    public abstract VoxelGrid LoadSourceDataGrid(string filepath);
 
-
-    public abstract Voxel[,,] LoadSegmentData(ref Voxel[,,] sourceData, int segmentLayer, string nextSegmentFile);
+    public abstract VoxelStruct[,,] LoadSegmentData(ref VoxelStruct[,,] sourceData, int segmentLayer, string nextSegmentFile);
 
     public abstract object GetHeader();
 
-    public Dictionary<Vector3Int, Chunk> ConstructChunks(List<VoxelElement> sourceData)
+    public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> sourceData)
     {
         Debug.Log("Data now read in, data list size: " + sourceData.Count);
         Debug.Log("Creating chunks of size [" + chunkSize + "] cubed.");
 
-        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
+        Dictionary<Vector3Int, VoxelChunk> chunks = new Dictionary<Vector3Int, VoxelChunk>();
 
         int voxelsProcessed = 0;
-        foreach (VoxelElement nextVoxelElement in sourceData)
+        foreach (Voxel nextVoxelElement in sourceData)
         {
-            Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
+            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
 
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
             {
                 Debug.Log("Creating new Chunk at position: " + chunkCoordinates);
-                chunks[chunkCoordinates] = new Chunk(chunkCoordinates);
+                chunks[chunkCoordinates] = new VoxelChunk(chunkCoordinates);
             }
 
             // Add voxel to the corresponding chunk
@@ -67,9 +68,9 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     // e.g.
     // 10,10,20,#FF0000
     // 10,20,20,#FF00FF
-    public Voxel[,,] LoadHotVoxelFile(string hotVoxelsFilePath)
+    public VoxelStruct[,,] LoadHotVoxelFile(string hotVoxelsFilePath)
     {
-        Voxel nextHotVoxel;
+        VoxelStruct nextHotVoxel;
 
         // Load the text file
         string[] hotVoxels = File.ReadAllLines(hotVoxelsFilePath);
