@@ -15,8 +15,8 @@ public class SceneTransition : MonoBehaviour
 
     void Update()
     {
-//        if (Vector3.Distance(playerCamera.transform.position, redCube.position) < transitionDistance ||
- //           Vector3.Distance(playerCamera.transform.position, greenCube.position) < transitionDistance)
+//        if (Vector3.Distance(playerCamera.transform.worldPosition, redCube.worldPosition) < transitionDistance ||
+ //           Vector3.Distance(playerCamera.transform.worldPosition, greenCube.worldPosition) < transitionDistance)
         if (VoxelWorldManager.Instance.doSceneSwitch)
         {
             VoxelWorldManager.Instance.doSceneSwitch = false;

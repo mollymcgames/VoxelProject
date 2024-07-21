@@ -105,15 +105,15 @@ public class VoxelContainer : MonoBehaviour
         Dictionary<Vector3Int, VoxelChunk> renderVectors = null;
         Dictionary<Vector3Int, VoxelChunk> sourceData = null;
 
-        //Debug.Log("We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
+        //Debug.Log("We need to render a chunk for this camera worldPosition: " + Vector3Int.FloorToInt(mainCamera.transform.worldPosition));
 
-        // Using the current camera position, calculate the relevant chunk coordinates.
+        // Using the current camera worldPosition, calculate the relevant chunk coordinates.
         // This is going to form the centre point for the selection of chunks we're going to render....
         chunkCoordinates = VoxelChunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), voxelChunkSize);
 
         sourceData = VoxelWorldManager.Instance.voxelSourceDataDictionary;
         // Now using that centre point, get the surrounding chunks.
-        // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
+        // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera worldPosition in the dead centre.
         renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplier, voxelChunkSize, sourceData);
 
         //Debug.Log("Number of chunks selected: "+renderVectors.Count );
@@ -125,12 +125,12 @@ public class VoxelContainer : MonoBehaviour
         {
             foreach (Voxel nextVoxelElement in nextChunk.Value.voxels)
             {
-                blockPos = nextVoxelElement.position;
+                blockPos = nextVoxelElement.worldPosition;
                 //block = this[blockPos];
                 //Only check on solid blocks
                 //if (!block.isSolid)
                 //{
-                    //Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
+                    //Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.worldPosition.x + "," + nextVoxelElement.worldPosition.y + "," + nextVoxelElement.worldPosition.z + "]");
                 //    continue;
                 //}
 
@@ -160,7 +160,7 @@ public class VoxelContainer : MonoBehaviour
 
                     //Draw this face
 
-                    //Collect the appropriate vertices from the default vertices and add the block position
+                    //Collect the appropriate vertices from the default vertices and add the block worldPosition
                     for (int j = 0; j < 4; j++)
                     {
                         faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] +

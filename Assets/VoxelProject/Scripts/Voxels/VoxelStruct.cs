@@ -57,13 +57,13 @@ public unsafe struct VoxelStruct
         this.isHotVoxelInternal = (byte)0;
         this.hotVoxelColourRBGValue = 0;
 
-        // fixed (int* colourPtr = this.colourRGBValue)
+        // fixed (int* colourPtr = this.colourGreyScaleValue)
         // {
         //     for (int i = 0; i < 10; i++)
         //     {
         //         colourPtr[i] = 0;
         //     }
-        //     colourPtr[0] = colourRGBValue;
+        //     colourPtr[0] = colourGreyScaleValue;
         // }
     }
 

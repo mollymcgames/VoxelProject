@@ -110,9 +110,9 @@ public class MeshMouseOverInfoPanel2 : MonoBehaviour
                     isMouseOver = true;
                 }
 
-                // Optionally, you can position the panel at the mouse position
+                // Optionally, you can worldPosition the panel at the mouse worldPosition
                 //Vector3 mousePos = Input.mousePosition;
-                //popupPanel.transform.position = mousePos + new Vector3(popupPanel.GetComponent<RectTransform>().rect.width / 2, popupPanel.GetComponent<RectTransform>().rect.height / 2, 0);
+                //popupPanel.transform.worldPosition = mousePos + new Vector3(popupPanel.GetComponent<RectTransform>().rect.width / 2, popupPanel.GetComponent<RectTransform>().rect.height / 2, 0);
 
                 // Set isMouseOver to true and reset the hide timer
                 hideTimer = 0f;

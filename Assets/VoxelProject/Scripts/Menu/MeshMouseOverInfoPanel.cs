@@ -12,18 +12,16 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
     private float hideTimer = 0f;
     public Texture2D customCursor; // The custom cursor texture
 
-    MenuHandler menuHandler;
-
     string brainText, liverText, heartText = null;
 
     private void Start()
     {
-        menuHandler = new MenuHandler();
         // Initially hide the panel
         popupPanel.SetActive(false);        
     }
 
     private bool hasMouseExited = false;
+    public bool loadingData = false;
 
     void OnMouseExit()
     {
@@ -50,74 +48,80 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+        if (loadingData == false)
         {
-            // Check if the hit object is the specific mesh
-            if (hit.collider != null)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
-                if (hit.collider.gameObject.CompareTag("Heart"))
+                // Check if the hit object is the specific mesh
+                if (hit.collider != null)
                 {
-                    if (isMouseOver == false)
-                        Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
-
-                    if (heartText == null)
-                    {                        
-                        heartText = menuHandler.LoadHeartFileHeader();
-                        heartText = "Heart!<br>" + heartText;
-                    }
-                    popupText.text = heartText;
-                    popupText.color = Color.red;
-
-                    // Show the panel
-                    popupPanel.SetActive(true);
-                    isMouseOver = true;
-                }
-                else if (hit.collider.gameObject.CompareTag("Liver"))
-                {
-                    if (isMouseOver == false)
-                        Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
-
-                    if (liverText == null)
+                    if (hit.collider.gameObject.CompareTag("Heart"))
                     {
-                        liverText = menuHandler.LoadLiverFileHeader();
-                        liverText = "Liver!<br>" + liverText;
+                        if (isMouseOver == false)
+                            Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
+
+                        if (heartText == null)
+                        {
+                            loadingData = true;
+                            heartText = WorldManager.Instance.menuHandler.LoadHeartFileHeader();
+                            heartText = "Heart!<br>" + heartText;
+                        }
+                        popupText.text = heartText;
+                        popupText.color = Color.red;
+
+                        // Show the panel
+                        popupPanel.SetActive(true);
+                        isMouseOver = true;                        
                     }
-                    popupText.text = liverText;
-                    popupText.color = Color.yellow;
-
-                    // Show the panel
-                    popupPanel.SetActive(true);
-                    isMouseOver = true;
-                }
-                else if (hit.collider.gameObject.CompareTag("Brain"))
-                {
-                    if (isMouseOver == false)
-                        Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
-
-                    if (brainText == null)
+                    else if (hit.collider.gameObject.CompareTag("Liver"))
                     {
-                        brainText = menuHandler.LoadBrainFileHeader();
-                        brainText = "Brain!<br>" + brainText;
+                        if (isMouseOver == false)
+                            Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
+
+                        if (liverText == null)
+                        {
+                            loadingData = true;
+                            liverText = WorldManager.Instance.menuHandler.LoadLiverFileHeader();
+                            liverText = "Liver!<br>" + liverText;
+                        }
+                        popupText.text = liverText;
+                        popupText.color = Color.yellow;
+
+                        // Show the panel
+                        popupPanel.SetActive(true);
+                        isMouseOver = true;
                     }
-                    popupText.text = brainText;
-                    popupText.color = Color.cyan;
+                    else if (hit.collider.gameObject.CompareTag("Brain"))
+                    {
+                        if (isMouseOver == false)
+                            Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
 
-                    // Show the panel
-                    popupPanel.SetActive(true);
-                    isMouseOver = true;
+                        if (brainText == null)
+                        {
+                            loadingData = true;
+                            brainText = WorldManager.Instance.menuHandler.LoadBrainFileHeader();
+                            brainText = "Brain!<br>" + brainText;
+                        }
+                        popupText.text = brainText;
+                        popupText.color = Color.cyan;
+
+                        // Show the panel
+                        popupPanel.SetActive(true);
+                        isMouseOver = true;
+                    }
+
+                    // Optionally, you can worldPosition the panel at the mouse worldPosition
+                    //Vector3 mousePos = Input.mousePosition;
+                    //popupPanel.transform.worldPosition = mousePos + new Vector3(popupPanel.GetComponent<RectTransform>().rect.width / 2, popupPanel.GetComponent<RectTransform>().rect.height / 2, 0);
+
+                    // Set isMouseOver to true and reset the hide timer
+                    hideTimer = 0f;
                 }
-
-                // Optionally, you can position the panel at the mouse position
-                //Vector3 mousePos = Input.mousePosition;
-                //popupPanel.transform.position = mousePos + new Vector3(popupPanel.GetComponent<RectTransform>().rect.width / 2, popupPanel.GetComponent<RectTransform>().rect.height / 2, 0);
-
-                // Set isMouseOver to true and reset the hide timer
-                hideTimer = 0f;
             }
-        }
+        }        
 
         // If the mouse is not over the mesh, start the hide timer
         if (hasMouseExited == true)
@@ -129,6 +133,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 popupPanel.SetActive(false);
                 hideTimer = 0f;
                 hasMouseExited = false;
+                loadingData = false;
             }
         }
     }

@@ -643,11 +643,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
   layerMask:
     serializedVersion: 2
     m_Bits: 32
   customCursor: {fileID: 0}
-  popupText: {fileID: 1859121159}
+  loadingData: 0
 --- !u!1001 &565163391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -774,11 +775,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
   layerMask:
     serializedVersion: 2
     m_Bits: 64
   customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
-  popupText: {fileID: 1859121159}
+  loadingData: 0
 --- !u!114 &588403112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1040,11 +1042,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
   layerMask:
     serializedVersion: 2
     m_Bits: 64
   customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
-  popupText: {fileID: 1859121159}
+  loadingData: 0
 --- !u!114 &1091755964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,6 +1140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1171129835}
   - component: {fileID: 1171129834}
+  - component: {fileID: 1171129836}
   m_Layer: 0
   m_Name: WorldSettings
   m_TagString: Untagged
@@ -1160,7 +1164,7 @@ MonoBehaviour:
     voxelDataFileName: 
     voxelDataHotFileName: 
     voxelSegmentLayers: []
-    voxelChunkSize: 32
+    voxelChunkSize: 16
     voxelChunkFieldOfViewMultiplier: 1
     voxelMeshContainerTagName: Untagged
     domainOffsetX: 0
@@ -1176,7 +1180,8 @@ MonoBehaviour:
     maxWidthX: 0
     maxDepthZ: 0
     maxHeightY: 0
-    chunkSize: 32
+    chunkSize: 16
+  menuHandler: {fileID: 1171129836}
 --- !u!4 &1171129835
 Transform:
   m_ObjectHideFlags: 0
@@ -1192,6 +1197,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1171129836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171129833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19694510c1ca77c419656ed2cb8d36c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionDelayTime: 1
+  voxelFileFormat: nii
 --- !u!1 &1550601687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,11 +1347,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
   layerMask:
     serializedVersion: 2
     m_Bits: 64
   customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
-  popupText: {fileID: 1859121159}
+  loadingData: 0
 --- !u!114 &1630303572
 MonoBehaviour:
   m_ObjectHideFlags: 0

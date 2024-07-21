@@ -1,15 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Unity.VisualScripting.Member;
 
 public class MenuHandler : MonoBehaviour
 {
+    private ASourceDataLoader loader = null;
+    private string fileLastLoaded = "";
+    private Nifti.NET.Nifti niftiFile = null;
+
     public float transitionDelayTime = 1.0f;
     private Animator animator;
 
@@ -81,22 +79,27 @@ public class MenuHandler : MonoBehaviour
 
     private string LoadAFileForTheHeader()
     {
-        Debug.Log("Loading file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
+        Debug.Log("Getting file header information...");
         //Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
 
         // Load in one voxel model, currently support types are .txt and .nii files.
         // If more types need supporting, will need additional SourceData loader implementations.
         // Note, currently the getHeader method returns either a Nifti.NET.Nifti or string[] as appropriate.
-        ASourceDataLoader loader = DataLoaderUtils.LoadDataFile();
-        //WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-        WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-
-        Nifti.NET.Nifti niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+        Debug.Log("Last file loaded: " + fileLastLoaded);
+        Debug.Log("Settings datafile name: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
+        if (!fileLastLoaded.Equals(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName))
+        {
+            fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
+            Debug.Log("Loading file: " + fileLastLoaded);            
+            loader = DataLoaderUtils.LoadDataFile();
+            //WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+            WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);            
+            niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+        }
         
-        string retString = "<br>Dimensions: x(" + niftiFile.Dimensions[0] + ")/ y(" + niftiFile.Dimensions[1] + ")/ z(" + niftiFile.Dimensions[2] + ") <br>Filename: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
-        //< br > Description: " + ByteToString(niftiFile.Header.descrip) +
-        Debug.Log(retString);   
+        string retString = "<br>Dimensions: x(" + niftiFile.Dimensions[0] + ")/ y(" + niftiFile.Dimensions[1] + ")/ z(" + niftiFile.Dimensions[2] + ") <br>Filename: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;        
+        Debug.Log("RETSTRING: "+retString);   
 
         return retString;
     }
@@ -127,20 +130,25 @@ public class MenuHandler : MonoBehaviour
 
     private void LoadAFile(bool hasSegmentLayers)
     {
-        WorldManager.Instance.sourceData = null;
-        WorldManager.Instance.voxelGrid = null;
-        Debug.Log("Loading file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
-        //Use Steaming Assets folder to load the file
+        Debug.Log("Loading file to display it: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
+        // Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
 
         // Load in one voxel model, currently support types are .txt and .nii files.
         // If more types need supporting, will need additional SourceData loader implementations.
         // Note, currently the getHeader method returns either a Nifti.NET.Nifti or string[] as appropriate.
-        ASourceDataLoader loader = DataLoaderUtils.LoadDataFile();        
-        //WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-        WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-
-        Nifti.NET.Nifti niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+        Debug.Log("Last file loaded: " + fileLastLoaded);
+        Debug.Log("Settings datafile name: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
+        if (!fileLastLoaded.Equals(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName))
+        {
+            fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
+            Debug.Log("Loading file: " + fileLastLoaded);
+            loader = DataLoaderUtils.LoadDataFile();
+            //WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+            WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+            niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+        }
+        
         Debug.Log("Description, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip));
         Debug.Log("Dimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2]);
         Debug.Log("Filename, " + niftiFilePath);
@@ -166,7 +174,7 @@ public class MenuHandler : MonoBehaviour
         //Debug.Log("Voxel hot color: " + WorldManager.Instance.sourceData[21, 30, 0].getHotVoxelColourRGB().ToString());
         //Debug.Log("Voxel hot bool: " + WorldManager.Instance.sourceData[21, 30, 0].isHotVoxel.ToString());
 
-        //Debug.Log("Random voxel color 0: " + WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(50, 50, 50)).getColourRGBLayer(0));
+        //Debug.Log("Random voxel color 0: " + WorldManager.Instance.voxelGrid.GetVoxelUsingWorldPosition(new Vector3Int(50, 50, 50)).getColourRGBLayer(0));
 
         // KJP TODO
 /*        if (hasSegmentLayers)

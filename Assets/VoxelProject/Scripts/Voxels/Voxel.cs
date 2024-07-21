@@ -8,28 +8,28 @@ using UnityEngine.UIElements;
 public class Voxel
 {
     public int ID;
-    public Vector3Int position { get; set; }
+    public Vector3Int worldPosition { get; set; }
     //public Color color = Color.white;
-    public int colourRGBValue = 0;
+    public int colourGreyScaleValue = 0;
     public bool isActive = true;
 
     public Voxel(Vector3Int position, Color color, bool isActive = true)
     {
-        this.position = position;
+        this.worldPosition = position;
         //this.color = color;
         this.isActive = isActive;
         // @TODO Need to do something with this ID...
         this.ID = 1;
     }
 
-    public Voxel(Vector3Int position)
+    public Voxel(Vector3Int worldPosition)
     {
-        this.position = position;
+        this.worldPosition = worldPosition;
     }
 
-    public Voxel(Vector3Int position, string colorString)
+    public Voxel(Vector3Int worldPosition, string colorString)
     {
-        this.position = position;
+        this.worldPosition = worldPosition;
         //this.colorString = colorString;
     }
 
@@ -50,15 +50,15 @@ public class Voxel
         {
             throw new System.IndexOutOfRangeException("Layer number out of range");
         }
-        return colourRGBValue;
-        //return this.colourRGBValue[layerNumber];
+        return colourGreyScaleValue;
+        //return this.colourGreyScaleValue[layerNumber];
     }
 
     public int getHotVoxelColourRGB()
     {
         // KJP TODO WE NEED TO ADD PROPER COLOURS
         return 200;
-        //return this.colourRGBValue[layerNumber];
+        //return this.colourGreyScaleValue[layerNumber];
     }
 
     public bool isHotVoxel()

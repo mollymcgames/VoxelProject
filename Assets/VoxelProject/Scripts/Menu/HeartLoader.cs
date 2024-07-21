@@ -5,8 +5,7 @@ using UnityEngine;
 public class HeartLoader : MonoBehaviour
 {
     void OnMouseDown() {
-        MenuHandler menuHandler = new MenuHandler();
-        menuHandler.LoadHeartFile();
-        menuHandler.LoadNextScene();
+        WorldManager.Instance.menuHandler.LoadHeartFile();
+        WorldManager.Instance.menuHandler.LoadNextScene();
     }
 }

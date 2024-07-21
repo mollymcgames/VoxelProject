@@ -1,17 +1,12 @@
-using Nifti.NET;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 public class SourceDataLoader : ASourceDataLoader
 {
     public SourceDataLoader(int chunkSize) : base(chunkSize) { }
 
-    private static Nifti.NET.Nifti niftiFileLines = null;
-    private static Nifti.NET.Nifti niftiSegmentFileLines = null;    
+    private static Nifti.NET.Nifti niftiFile = null;
+    private static Nifti.NET.Nifti niftiSegmentFile = null;    
     
     public override VoxelStruct[,,] LoadSourceData(string filepath)
     {
@@ -39,7 +34,7 @@ public class SourceDataLoader : ASourceDataLoader
 
     public override object GetHeader()
     {
-        return niftiFileLines;
+        return niftiFile;
     }
 
     #region
@@ -47,12 +42,12 @@ public class SourceDataLoader : ASourceDataLoader
     private void LoadNiftiFile(string filePath)
     {
         // Load default file
-        niftiFileLines = ReadNiftiFile(filePath);
+        niftiFile = ReadNiftiFile(filePath);
 
         // Get the dimensions
-        widthX = niftiFileLines.Dimensions[0];
-        heightY = niftiFileLines.Dimensions[1];
-        depthZ = niftiFileLines.Dimensions[2];
+        widthX = niftiFile.Dimensions[0];
+        heightY = niftiFile.Dimensions[1];
+        depthZ = niftiFile.Dimensions[2];
 
         Debug.Log("NII width:" + widthX);
         Debug.Log("NII height:" + heightY);
@@ -62,38 +57,38 @@ public class SourceDataLoader : ASourceDataLoader
     private void LoadNiftiSegmentFile(string filePath)
     {
         // Load default file
-        niftiSegmentFileLines = ReadNiftiFile(filePath);
+        niftiSegmentFile = ReadNiftiFile(filePath);
 
         // Get the dimensions
-        widthX = niftiSegmentFileLines.Dimensions[0];
-        heightY = niftiSegmentFileLines.Dimensions[1];
-        depthZ = niftiSegmentFileLines.Dimensions[2];
+        widthX = niftiSegmentFile.Dimensions[0];
+        heightY = niftiSegmentFile.Dimensions[1];
+        depthZ = niftiSegmentFile.Dimensions[2];
     }
 
     private void CreateVoxelsArray()
     {
         // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiData(niftiFileLines, widthX, heightY, depthZ);
+        voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
         Debug.Log("Data now read in");
     }
 
     private void CreateVoxelsArrayGrid()
     {
         // Read the voxel data
-        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFileLines, widthX, heightY, depthZ, chunkSize);
+        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFile, widthX, heightY, depthZ, chunkSize);
         Debug.Log("Data (grid) now read in");
     }
 
     private void AddSegmentToVoxelsArray(int segmentLayer)
     {
         // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiSegmentData(ref voxelData, segmentLayer, niftiSegmentFileLines, widthX, heightY, depthZ);
+        voxelData = NiftiHandler.ReadNiftiSegmentData(ref voxelData, segmentLayer, niftiSegmentFile, widthX, heightY, depthZ);
         Debug.Log("Segment data now read in");
     }
 
     public void OpenNiftiFile(string filePath)
     {
-        niftiFileLines = ReadNiftiFile(filePath);
+        niftiFile = ReadNiftiFile(filePath);
     }
 
     private Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)

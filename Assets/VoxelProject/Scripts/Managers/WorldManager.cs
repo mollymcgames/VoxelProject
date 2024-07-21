@@ -18,7 +18,11 @@ public class WorldManager : MonoBehaviour
     public WorldSettings worldSettings;
     // oldway public VoxelCell[] sourceData;
     public VoxelStruct[,,] sourceData;
-    public VoxelGrid voxelGrid;
+    
+    [HideInInspector]
+    public VoxelGrid voxelGrid = null;
+
+    public MenuHandler menuHandler;
 
     void Start()
     {
@@ -68,20 +72,20 @@ public class WorldManager : MonoBehaviour
 
 /*    public Chunk GetChunkAt(Vector3 globalPosition)
     {
-        // Calculate the chunk's starting position based on the global position
+        // Calculate the chunk's starting worldPosition based on the global worldPosition
         Vector3Int chunkCoordinates = new Vector3Int(
             Mathf.FloorToInt(globalPosition.x / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
             Mathf.FloorToInt(globalPosition.y / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
             Mathf.FloorToInt(globalPosition.z / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize
         );
 
-        // Retrieve and return the chunk at the calculated position
+        // Retrieve and return the chunk at the calculated worldPosition
         if (chunks.TryGetValue(chunkCoordinates, out Chunk chunk))
         {
             return chunk;
         }
 
-        // Return null if no chunk exists at the position
+        // Return null if no chunk exists at the worldPosition
         return null;
     }*/
 }

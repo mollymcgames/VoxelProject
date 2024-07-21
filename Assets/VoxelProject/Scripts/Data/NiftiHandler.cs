@@ -13,7 +13,7 @@ public class NiftiHandler : MonoBehaviour
         // Load the NIfTI file
         Nifti.NET.Nifti tempNifti = NiftiFile.Read(niftiFilePath);
 
-/*        float calMax = tempNifti.Header.cal_max;
+        float calMax = tempNifti.Header.cal_max;
         if (calMax <= 0)
         {
             int index = 0;
@@ -25,7 +25,7 @@ public class NiftiHandler : MonoBehaviour
             }
         }
         tempNifti.Header.cal_max = calMax;
-        Debug.Log("CAL MAX onload: " + tempNifti.Header.cal_max);*/
+        Debug.Log("CAL MAX onload: " + tempNifti.Header.cal_max);
         return tempNifti;
     }
 
@@ -94,22 +94,31 @@ public class NiftiHandler : MonoBehaviour
 
         // Iterate through each voxel in the input NII file
         int index = 0;
-        for (z = 0; z < depth-1; z++)
+        for (z = 0; z < depth; z++)
         {
-            for (y = 0; y < height-1; y++)
+            for (y = 0; y < height; y++)
             {
-                for (x = 0; x < width-1; x++)
+                for (x = 0; x < width; x++)
                 {
-                    if (x == 61 && y == 67 && z == 38)
-                        Debug.Log("Hello! Color is: "+ (int)(niftiData.Data[index]));
-
-                    //if ((int)(niftiData.Data[index] % 255) > 0)
+                    //if (x == 61 && y == 67 && z == 38)
+/*                    if (index == 380221 )
+                        Debug.Log("Hello! MOD Color at index ["+index+"] is: "+ (int)(niftiData.Data[index] % 255));
+                    if (index == 380222)
+                        Debug.Log("Hello! Color at index [" + index + "] is: " + (int)(niftiData.Data[index] % 255));
+                    if (index == 380224)
+                    {
+                        Debug.Log("x,y,z hello were:" + x + ", " + y + ", " + z);
+                        Debug.Log("Hello! Color at index [" + index + "] is: " + (int)(niftiData.Data[index]));
+                        Debug.Log("CALMAX:" + niftiData.Header.cal_max);
+                        Debug.Log("Hello! GREYSCALE Color at index [" + index + "] is: " + Mathf.FloorToInt(((int)(niftiData.Data[index]) / niftiData.Header.cal_max) * 255));
+                    }
+*/                    //if ((int)(niftiData.Data[index] % 255) > 0)
                     //{
-                        newVoxel = new Voxel();
-                        newVoxel.position = new Vector3Int(x, y, z);
-                        newVoxel.isActive = (int)niftiData.Data[index] > 0;
-                        newVoxel.colourRGBValue = (int)(niftiData.Data[index] % 255);
-                        voxelGrid.AddVoxel(newVoxel);
+                    newVoxel = new Voxel();
+                    newVoxel.worldPosition = new Vector3Int(x, y, z);
+                    newVoxel.isActive = (int)niftiData.Data[index] % 255 > 0;
+                    newVoxel.colourGreyScaleValue = Mathf.FloorToInt(( (int)(niftiData.Data[index]) /niftiData.Header.cal_max) * 255);
+                    voxelGrid.AddVoxel(newVoxel);
                         //Debug.Log("Next RAW vox colour=" + (float)niftiData.Data[index]); 
                         //Debug.Log("Next vox colour=" + (int)(niftiData.Data[index]/calMax * 254 )); 
                         // Convert the number to a string to easily access each digit
@@ -121,8 +130,8 @@ public class NiftiHandler : MonoBehaviour
                 }
             }
         }
-        Debug.Log("x,y,z tops were:"+x+", "+y+", "+z);  
-        Voxel tempVoxel = voxelGrid.GetVoxel(new Vector3Int(61, 67, 38));
+  //      Debug.Log("x,y,z tops were:"+x+", "+y+", "+z);  
+//        Voxel tempVoxel = voxelGrid.GetVoxel(new Vector3Int(64, 12, 39));
         Debug.Log("["+ voxelGrid.voxelsRepresented+"] VOXELS allocated to ["+voxelGrid.chunks.Count+"] CHUNKS");
 
         return voxelGrid;

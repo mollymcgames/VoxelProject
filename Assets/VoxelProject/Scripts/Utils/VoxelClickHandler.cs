@@ -15,7 +15,7 @@ public class VoxelClickHandler : MonoBehaviour
         // Check for mouse click
         if (Input.GetMouseButtonDown(0))
         {
-            // Create a ray from the camera to the mouse position
+            // Create a ray from the camera to the mouse worldPosition
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 

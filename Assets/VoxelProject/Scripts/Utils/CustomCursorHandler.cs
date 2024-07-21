@@ -29,7 +29,7 @@ public class CustomCursorHandler : MonoBehaviour
 
     void CheckForHover()
     {
-        // Raycast from the mouse position
+        // Raycast from the mouse worldPosition
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 

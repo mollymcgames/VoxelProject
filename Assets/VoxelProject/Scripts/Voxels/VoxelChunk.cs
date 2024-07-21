@@ -51,8 +51,16 @@ public class VoxelChunk
         return new Vector3Int(chunkX, chunkY, chunkZ);
     }
 
-    public Voxel GetVoxel(Vector3Int localPosition)
+    public Voxel GetVoxelUsingWorldPosition(Vector3Int worldPosition)
     {
-        return voxels.Find(v => v.position == localPosition);
+        return voxels.Find(v => v.worldPosition == worldPosition);
+    }
+    public Voxel GetVoxelUsingLocalPosition(Vector3Int localPosition)
+    {
+        //Debug.Log("Getting voxel for local position: " + localPosition);
+        //Debug.Log("Chunk coordinates: " + chunkCoordinates);
+        Vector3Int worldPosition = localPosition + chunkCoordinates;
+        //Debug.Log("New WORLD POSITION: "+worldPosition);
+        return voxels.Find(v => v.worldPosition == worldPosition);
     }
 }

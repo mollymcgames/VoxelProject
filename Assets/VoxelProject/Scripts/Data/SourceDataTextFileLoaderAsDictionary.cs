@@ -73,7 +73,7 @@ public class SourceDataTextFileLoaderAsDictionary
         int voxelsProcessed = 0;
         foreach (Voxel nextVoxelElement in sourceData)
         {
-            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.position, chunkSize);
+            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.worldPosition, chunkSize);
 
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))

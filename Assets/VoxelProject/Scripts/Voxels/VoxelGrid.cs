@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,16 +19,18 @@ public class VoxelGrid
 
     public void AddVoxel(Voxel voxel)
     {
-        if (voxel.position.x > 59 || voxel.position.y > 65 || voxel.position.z > 36)
-            Debug.Log("key voxel!");
+        Vector3Int chunkWorldPosition = GetChunkPosition(voxel.worldPosition);
 
-            Vector3Int chunkPos = GetChunkPosition(voxel.position);
-        if (!chunks.ContainsKey(chunkPos))
+        if (!chunks.ContainsKey(chunkWorldPosition))
         {
-            chunks[chunkPos] = new VoxelChunk(chunkPos, chunkSize);
+            chunks[chunkWorldPosition] = new VoxelChunk(chunkWorldPosition, chunkSize);
         }
-        chunks[chunkPos].voxels.Add(voxel);
-        chunks[chunkPos].hasAtLeastOneActiveVoxel = voxel.isActive;
+        chunks[chunkWorldPosition].voxels.Add(voxel);
+
+        // Flag this chunk as ACTIVE if even just one voxel is active.
+        if (chunks[chunkWorldPosition].hasAtLeastOneActiveVoxel != true && voxel.colourGreyScaleValue > 0)
+            chunks[chunkWorldPosition].hasAtLeastOneActiveVoxel = true;
+
         voxelsRepresented++;
     }
 
@@ -36,8 +39,12 @@ public class VoxelGrid
         Vector3Int chunkPos = GetChunkPosition(position);
         if (chunks.ContainsKey(chunkPos))
         {
+            // Debug.Log("Got voxel from chunk:" + chunkPos);
             Vector3Int localPos = GetLocalPositionInChunk(position);
-            return chunks[chunkPos].GetVoxel(localPos);
+            // Debug.Log("Voxel local pos in chunk:" + localPos);
+            // Debug.Log("Voxels in chunk:" + chunks[chunkPos].voxels.Count);
+            // Debug.Log("Chunk is active: " + chunks[chunkPos].hasAtLeastOneActiveVoxel);
+            return chunks[chunkPos].GetVoxelUsingWorldPosition(localPos);
         }
         return null;
     }

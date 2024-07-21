@@ -129,7 +129,7 @@ public class OuterContainer : MonoBehaviour
 
                 //Draw this face
 
-                //Collect the appropriate vertices from the default vertices and add the block position
+                //Collect the appropriate vertices from the default vertices and add the block worldPosition
                 for (int j = 0; j < 4; j++)
                 {
                     faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
@@ -162,7 +162,7 @@ public class OuterContainer : MonoBehaviour
                 for (int z = -chunkDistanceMultiplier * chunkSize; z <= chunkDistanceMultiplier * chunkSize; z += chunkSize)
                 {
                     //if (x == 0 && y == 0 && z == 0) 
-                    //    continue; // Skip the current position
+                    //    continue; // Skip the current worldPosition
                     Vector3Int newPoint = new Vector3Int(position.x + x, position.y + y, position.z + z);
                     sourceData.TryGetValue(newPoint, out VoxelChunk chunk);
                     if ( chunk != null)
@@ -193,26 +193,26 @@ public class OuterContainer : MonoBehaviour
         {
             Debug.Log("[OUTER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
 
-            // Using the current camera position, calculate the relevant chunk coordinates.
+            // Using the current camera worldPosition, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
             chunkCoordinates = VoxelChunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkOuterSize);
 
             sourceData = OuterWorldManager.Instance.sourceDataOuterDictionary;
             // Now using that centre point, get the surrounding chunks.
-            // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
+            // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera worldPosition in the dead centre.
             renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplierOuter, chunkOuterSize, sourceData);
         }
         else
         {
             Debug.Log("[INNER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
 
-            // Using the current camera position, calculate the relevant chunk coordinates.
+            // Using the current camera worldPosition, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
             chunkCoordinates = VoxelChunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkInnerSize);
 
             sourceData = OuterWorldManager.Instance.sourceDataInnerDictionary;
             // Now using that centre point, get the surrounding chunks.
-            // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera position in the dead centre.
+            // Essentially we're going to end up with effectively a Rubic's cube of chunks with our camera worldPosition in the dead centre.
             renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplierInner, chunkInnerSize, sourceData);
 
         }
@@ -225,12 +225,12 @@ public class OuterContainer : MonoBehaviour
         {
             foreach (Voxel nextVoxelElement in nextChunk.Value.voxels)
             {
-                blockPos = nextVoxelElement.position;
+                blockPos = nextVoxelElement.worldPosition;
                 block = this[blockPos];
                 //Only check on solid blocks
                 if (!block.isSolid)
                 {
-                    Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
+                    Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.worldPosition.x + "," + nextVoxelElement.worldPosition.y + "," + nextVoxelElement.worldPosition.z + "]");
                     continue;
                 }
 
@@ -260,7 +260,7 @@ public class OuterContainer : MonoBehaviour
 
                     //Draw this face
 
-                    //Collect the appropriate vertices from the default vertices and add the block position
+                    //Collect the appropriate vertices from the default vertices and add the block worldPosition
                     for (int j = 0; j < 4; j++)
                     {
                         faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;

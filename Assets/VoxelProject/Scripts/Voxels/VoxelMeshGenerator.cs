@@ -21,37 +21,44 @@ public static class VoxelMeshGenerator
         // If this chunk is totally empty, just drop out right away as we're wasting time!
         if (chunk.hasAtLeastOneActiveVoxel == false)
         {
-            Debug.Log("CHUNK ["+chunk.chunkCoordinates+"] empty, no need to render it!");
+            // Debug.Log("GenerateMesh: CHUNK [" + chunk.chunkCoordinates+"] empty, no need to render it!");
             return meshData;
         }
+        //(64, 0, 32)
 
         internalTransform = transform;
-/*        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
-        List<Vector2> uv = new List<Vector2>();*/
-        
+        /*        List<Vector3> vertices = new List<Vector3>();
+                List<int> triangles = new List<int>();
+                List<Vector2> uv = new List<Vector2>();*/
+
+        Vector3Int localPosition;
+        // Debug.Log("GenerateMesh: Chunksize: " + WorldManager.Instance.voxelGrid.chunkSize);
         for (int y = 0; y < WorldManager.Instance.voxelGrid.chunkSize; y++)
         {
             for (int x = 0; x < WorldManager.Instance.voxelGrid.chunkSize; x++)
             {
                 for (int z = 0; z < WorldManager.Instance.voxelGrid.chunkSize; z++)
-                {
-                    Vector3Int localPosition = new Vector3Int(x, y, z);
-                    Voxel voxel = chunk.GetVoxel(localPosition);
+                {                    
+                    localPosition = new Vector3Int(x, y, z);  // Perhaps we can have a base worldPosition and add to it!
+                    // Debug.Log("Voxel local position: " + localPosition);
+                    // Debug.Log("Voxel world position: " + localPosition+chunk.chunkCoordinates);
+
+                    Voxel voxel = chunk.GetVoxelUsingLocalPosition(localPosition);
                     if (voxel != null && voxel.isActive)
                     {
                         Vector3Int position = new Vector3Int(chunk.chunkCoordinates.x * WorldManager.Instance.voxelGrid.chunkSize + x, chunk.chunkCoordinates.y * WorldManager.Instance.voxelGrid.chunkSize + y, chunk.chunkCoordinates.z * WorldManager.Instance.voxelGrid.chunkSize + z);
-                        //AddVoxel(vertices, triangles, uv, position);
-                        //ProcessVoxel(position.x, position.y, position.z);
-                        Debug.Log("Rendered voxel: " + voxel.position);
+                        //AddVoxel(vertices, triangles, uv, worldPosition);
+                        ProcessVoxel(ref voxel);
+                        // Debug.Log("GenerateMesh: Rendered voxel: " + voxel.worldPosition);
                     }
                     else if (voxel != null)
                     {
-                        Debug.Log("Skipped voxel: " + voxel.position);
+                        // Debug.Log("GenerateMesh: Skipped voxel: " + voxel.worldPosition);
                     }
                 }
             }
         }
+        // Debug.Log("GenerateMesh: Completed for loop.");
 
         meshData.vertices = vertices;//.Add(faceVertices[voxelTris[i, j]]);
         //Debug.Log("vertices size:" + vertices.Count);
@@ -71,19 +78,23 @@ public static class VoxelMeshGenerator
         return meshData;
     }
 
-    private static void ProcessVoxel(int x, int y, int z)
+    private static void ProcessVoxel(ref Voxel voxel)
     {
         // KJP TODO
         // Check if the voxels array is initialized and the indices are within bounds
-/*        if (WorldManager.Instance.sourceData == null || x < 0 || x >= WorldManager.Instance.sourceData.GetLength(0) ||
-            y < 0 || y >= WorldManager.Instance.sourceData.GetLength(1) || z < 0 || z >= WorldManager.Instance.sourceData.GetLength(2))
+        /*        if (WorldManager.Instance.sourceData == null || x < 0 || x >= WorldManager.Instance.sourceData.GetLength(0) ||
+                    y < 0 || y >= WorldManager.Instance.sourceData.GetLength(1) || z < 0 || z >= WorldManager.Instance.sourceData.GetLength(2))
+                {
+                    return; // Skip processing if the array is not initialized or indices are out of bounds
+                }
+        */
+
+        if (voxel != null && voxel.isSolid && voxel.getColourRGBLayer(layer) > (int)WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
         {
-            return; // Skip processing if the array is not initialized or indices are out of bounds
-        }
-*/
-        Voxel voxel = WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z));
-        if (voxel.isSolid && voxel.getColourRGBLayer(layer) > (int)WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
-        {
+            int x = voxel.worldPosition.x;
+            int y = voxel.worldPosition.y;
+            int z = voxel.worldPosition.z;
+
             // Check each face of the voxel for visibility
             bool[] facesVisible = new bool[6];
 
@@ -94,11 +105,14 @@ public static class VoxelMeshGenerator
             facesVisible[3] = IsFaceVisible(x + 1, y, z); // Right
             facesVisible[4] = IsFaceVisible(x, y, z + 1); // Front
             facesVisible[5] = IsFaceVisible(x, y, z - 1); // Back
-
+            
             for (int i = 0; i < facesVisible.Length; i++)
             {
+                // Debug.Log("Face ["+i+"] visible: " + facesVisible[i]);
                 if (facesVisible[i])
-                    AddFaceData(x, y, z, i); // Method to add mesh data for the visible face
+                {
+                    AddFaceData(ref voxel, i); // Method to add mesh data for the visible face
+                }
             }
         }
     }
@@ -107,19 +121,21 @@ public static class VoxelMeshGenerator
     {
         // Check if the neighboring voxel is inactive or out of bounds in the current chunk
         // and also if it's inactive or out of bounds in the world (neighboring chunks)
-        return IsVoxelHiddenInChunk(x, y, z);// && IsVoxelHiddenInWorld(globalPos);
-
+        return !IsVoxelHiddenInChunk(x, y, z);// && IsVoxelHiddenInWorld(globalPos);
     }
 
     private static bool IsVoxelHiddenInChunk(int x, int y, int z)
     {
         try
         {
+            // If the neighboring voxel doesn't exist, then it CAN'T be hidden!
             if (WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z)) == null)
-                return true;
+                return false;
+
             if (x < 0 || x >= WorldManager.Instance.worldSettings.chunkSize || y < 0 || y >= WorldManager.Instance.worldSettings.chunkSize || z < 0 || z >= WorldManager.Instance.worldSettings.chunkSize)
                 return true; // Face is at the boundary of the chunk
-            return !WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z)).isSolid;
+
+            return true; // !WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z)).isSolid;
         }
         catch (System.IndexOutOfRangeException e)
         {
@@ -129,35 +145,41 @@ public static class VoxelMeshGenerator
         }
     }
 
-    private static void AddFaceData(int x, int y, int z, int faceIndex)
+    private static void AddFaceData(ref Voxel voxel, int faceIndex)
     {
-        Voxel voxel = WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z));
+        int x = voxel.worldPosition.x;
+        int y = voxel.worldPosition.y;
+        int z = voxel.worldPosition.z;
+
+        //= WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z));
 
         VoxelColor voxelColor = null;
 
-/*        if (voxel.isHotVoxel())
-        {
-            //Debug.Log("Hot one found!");
-            //colourValue = ;
-            voxelColor = BuildColour(voxel.getHotVoxelColourRGB());
+        /*        if (voxel.isHotVoxel())
+                {
+                    //Debug.Log("Hot one found!");
+                    //colourValue = ;
+                    voxelColor = BuildColour(voxel.getHotVoxelColourRGB());
 
-            CreateClickableVoxel(x, y, z);
-        }
-        else */
-//        if (voxel.isGreyScale())
-//        {
-            // It's a greyscale colour!
-            //            colourValue = ;
-            //Debug.Log("Greyscale found ("+layer+")! [" + voxel.getColourRGBLayer(layer) / 255f + "]");
-            voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f);
-            //voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer), voxel.getColourRGBLayer(layer), voxel.getColourRGBLayer(layer));
+                    CreateClickableVoxel(x, y, z);
+                }
+                else */
+        //        if (voxel.isGreyScale())
+        //        {
+        // It's a greyscale colour!
+        //            colourValue = ;
+        //Debug.Log("Greyscale found ("+layer+")! [" + voxel.getColourRGBLayer(layer) / 255f + "]");
+        // Debug.Log("RAW Voxel colour: " + voxel.getColourRGBLayer(layer));
+        //voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f);
+        voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer), voxel.getColourRGBLayer(layer), voxel.getColourRGBLayer(layer));
+        // Debug.Log("Voxel colour: " + voxelColor.color);
         /*        }
                 else
                 {
                     Debug.Log("Colourful one found!");
                     // Handle the regular colour
                     //colourValue = ;
-                    voxelColor = BuildColour(WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z)).getColourRGBLayer(layer));
+                    voxelColor = BuildColour(WorldManager.Instance.voxelGrid.GetVoxelUsingWorldPosition(new Vector3Int(x, y, z)).getColourRGBLayer(layer));
                 }
         */
         Color voxelColorAlpha = voxelColor.color;
@@ -248,6 +270,9 @@ public static class VoxelMeshGenerator
             uvs.Add(new Vector2(0, 0));
         }
         AddTriangleIndices();
+        //Debug.Log("Vertices so far: "+vertices.Count);
+        //Debug.Log("UVs so far:"+uvs.Count);
+        //Debug.Log("Colors so far:"+colors.Count);
     }
 
     private static void AddTriangleIndices()
@@ -271,9 +296,10 @@ public static class VoxelMeshGenerator
         Color color;
         if (ColorUtility.TryParseHtmlString(convertIntToHTMLColour(colourValue), out color))
         {
-            float red = color.r;
-            float green = color.g;
-            float blue = color.b;
+            Color32 color2 = new Color(color.r, color.g, color.b);
+            int red = color2.r;
+            int green = color2.g;
+            int blue = color2.b;
             //Debug.Log($"Red: {red}, Green: {green}, Blue: {blue}");
             voxelColor = new VoxelColor(red, green, blue);
         }

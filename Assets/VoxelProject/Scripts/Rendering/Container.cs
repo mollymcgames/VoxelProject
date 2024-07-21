@@ -47,24 +47,28 @@ public class Container : MonoBehaviour
 
         Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
 
+        Debug.Log("Total chunks: " + WorldManager.Instance.voxelGrid.chunks.Count);
         foreach (var chunk in WorldManager.Instance.voxelGrid.chunks.Values)
         {
-            //if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.chunkBounds))
-            //{
-                // Chunk is within the camera's frustum, render it
+            if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.chunkBounds))
+            {
+            // Chunk is within the camera's frustum, render it
+            // VoxelChunk chunk = WorldManager.Instance.voxelGrid.chunks[new Vector3Int(64, 0, 32)];
+            //Debug.Log("Wanting to render CHUNK [" + chunk.chunkCoordinates + "]...");
                 RenderChunk(chunk);
-            //}
+            }
         }
 
         //GenerateMesh();
-        //UploadMesh();
+        UploadMesh();
     }
 
     void RenderChunk(VoxelChunk chunk)
     {
         Transform innerTransform = this.transform;
         meshData = VoxelMeshGenerator.GenerateMesh(chunk, ref meshData, innerTransform);
-        UploadMesh();
+        //GenerateMesh(chunk);
+        //UploadMesh();
         //GameObject chunkObject = new GameObject("Chunk " + chunk.chunkCoordinates);
         //chunkObject.transform.SetParent(transform);
         //MeshFilter mf = chunkObject.AddComponent<MeshFilter>();
@@ -75,7 +79,7 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh(VoxelChunk chunk)
     {
-        Debug.Log("Generating mesh for layer: " + layer);
+        //Debug.Log("Generating mesh for layer: " + layer);
 
         //int counter = 0;
         Vector3[] faceVertices = new Vector3[4];
@@ -93,7 +97,7 @@ public class Container : MonoBehaviour
                     //     break;
                     breaker++;
 
-                    // KJPProcessVoxel(x, y, z);
+                    ProcessVoxel(x, y, z);
 
                     /*                    block = WorldManager.Instance.sourceData[x, y, z];
 
@@ -104,7 +108,7 @@ public class Container : MonoBehaviour
                                             continue;
                                         }
 
-                                        float colourValue = block.colourRGBValue / 255f;
+                                        float colourValue = block.colourGreyScaleValue / 255f;
                                         voxelColor = new VoxelColor(colourValue, colourValue, colourValue);
 
                                         voxelColorAlpha = voxelColor.color;
@@ -120,7 +124,7 @@ public class Container : MonoBehaviour
 
                                             //Draw this face
 
-                                            //Collect the appropriate vertices from the default vertices and add the block position
+                                            //Collect the appropriate vertices from the default vertices and add the block worldPosition
                                             for (int j = 0; j < 4; j++)
                                             {
                                                 faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + new Vector3(x,y,z);
@@ -188,7 +192,7 @@ public class Container : MonoBehaviour
 
                         //Draw this face
 
-                        //Collect the appropriate vertices from the default vertices and add the block position
+                        //Collect the appropriate vertices from the default vertices and add the block worldPosition
                         for (int j = 0; j < 4; j++)
                         {
                             faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
@@ -218,7 +222,8 @@ public class Container : MonoBehaviour
             return; // Skip processing if the array is not initialized or indices are out of bounds
         }
 
-        VoxelStruct voxel = WorldManager.Instance.sourceData[x, y, z];
+        // KJP VoxelStruct voxel = WorldManager.Instance.sourceData[x, y, z];
+        Voxel voxel = WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z));
         if (voxel.isSolid && voxel.getColourRGBLayer(layer) > (int)WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
         {
             // Check each face of the voxel for visibility
@@ -272,18 +277,18 @@ public class Container : MonoBehaviour
 /*    private bool IsVoxelHiddenInWorld(Vector3 globalPos)
     {
         return false;
-        // Check if there is a chunk at the global position
+        // Check if there is a chunk at the global worldPosition
         Chunk neighborChunk = WorldManager.Instance.GetChunkAt(globalPos);
         if (neighborChunk == null)
         {
-            // No chunk at this position, so the voxel face should be hidden
+            // No chunk at this worldPosition, so the voxel face should be hidden
             return true;
         }
 
-        // Convert the global position to the local position within the neighboring chunk
+        // Convert the global worldPosition to the local worldPosition within the neighboring chunk
         Vector3 localPos = neighborChunk.transform.InverseTransformPoint(globalPos);
 
-        // If the voxel at this local position is inactive, the face should be visible (not hidden)
+        // If the voxel at this local worldPosition is inactive, the face should be visible (not hidden)
         return !neighborChunk.IsVoxelActiveAt(localPos);
     }*/
 
@@ -293,7 +298,7 @@ public class Container : MonoBehaviour
     private List<Vector2> uv2s = new List<Vector2>();
     private List<Color> colors = new List<Color>();
 
-    private string convertIntToHTMLColour(float colour)
+    private string convertIntToHTMLColour(int colour)
     {
         int red = ((int)colour >> 16) & 0xFF;
         int green = ((int)colour >> 8) & 0xFF;
@@ -306,11 +311,12 @@ public class Container : MonoBehaviour
 
     private void AddFaceData(int x, int y, int z, int faceIndex)
     {
-        VoxelStruct voxel = WorldManager.Instance.sourceData[x, y, z];
+        //KJP VoxelStruct voxel = WorldManager.Instance.sourceData[x, y, z];
+        Voxel voxel = WorldManager.Instance.voxelGrid.GetVoxel(new Vector3Int(x, y, z));
 
         VoxelColor voxelColor = null;
 
-        if (voxel.isHotVoxel)
+        if (voxel.isHotVoxel())
         {
             //Debug.Log("Hot one found!");
             //colourValue = ;
@@ -318,12 +324,13 @@ public class Container : MonoBehaviour
 
             CreateClickableVoxel(x, y, z);
         }
-        else if (voxel.isGreyScale)
+        else if (voxel.isGreyScale())
         {            
             // It's a greyscale colour!
 //            colourValue = ;
             //Debug.Log("Greyscale found ("+layer+")! [" + voxel.getColourRGBLayer(layer) / 255f + "]");
-            voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f, voxel.getColourRGBLayer(layer) / 255f);
+            voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer), voxel.getColourRGBLayer(layer), voxel.getColourRGBLayer(layer));
+            //voxelColor = new VoxelColor(voxel.getColourRGBLayer(layer) / 255, voxel.getColourRGBLayer(layer) / 255, voxel.getColourRGBLayer(layer) / 255);
         }
         else
         {
@@ -423,15 +430,16 @@ public class Container : MonoBehaviour
         AddTriangleIndices();        
     }
 
-    private VoxelColor BuildColour(float colourValue)
+    private VoxelColor BuildColour(int colourValue)
     {
         VoxelColor voxelColor;
         Color color;
         if (ColorUtility.TryParseHtmlString(convertIntToHTMLColour(colourValue), out color))
         {
-            float red = color.r;
-            float green = color.g;
-            float blue = color.b;
+            Color32 color2 = new Color(color.r, color.g, color.b);
+            int red = color2.r;
+            int green = color2.g;
+            int blue = color2.b;
             //Debug.Log($"Red: {red}, Green: {green}, Blue: {blue}");
             voxelColor = new VoxelColor(red, green, blue);
         }
