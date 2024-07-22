@@ -1135,7 +1135,7 @@ GameObject:
   - component: {fileID: 1171129835}
   - component: {fileID: 1171129834}
   - component: {fileID: 1171129837}
-  - component: {fileID: 1171129836}
+  - component: {fileID: 1171129838}
   m_Layer: 0
   m_Name: WorldSettings
   m_TagString: Untagged
@@ -1180,20 +1180,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1171129836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171129833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19694510c1ca77c419656ed2cb8d36c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transitionDelayTime: 1
-  voxelFileFormat: nii
 --- !u!114 &1171129837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1228,7 +1214,21 @@ MonoBehaviour:
     maxHeightY: 0
     chunkSize: 16
   voxelsSelected: 0
-  menuHandler: {fileID: 0}
+  menuHandler: {fileID: 1171129838}
+--- !u!114 &1171129838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171129833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19694510c1ca77c419656ed2cb8d36c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionDelayTime: 1
+  voxelFileFormat: nii
 --- !u!1 &1350860910 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7162452699128378844, guid: d674543ea18a247459e035faa742fb24,

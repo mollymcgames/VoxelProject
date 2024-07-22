@@ -11,9 +11,9 @@ public class SourceDataLoader : ASourceDataLoader
     //public override VoxelStruct[,,] LoadSourceData(string filepath)
     public override VoxelCell[] LoadSourceData(string filepath)
     {
-/*        Debug.Log("Loading nii source data...:" + filepath);
+        Debug.Log("Loading nii source data...:" + filepath);
         LoadNiftiFile(filepath);
-        CreateVoxelsArray();*/
+        CreateVoxelsArray();
         return voxelData;
     }
 

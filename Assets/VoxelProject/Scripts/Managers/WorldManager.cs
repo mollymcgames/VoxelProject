@@ -20,7 +20,7 @@ public class WorldManager : MonoBehaviour
     public VoxelCell[] sourceData;
     public int voxelsSelected = 0;
 
-    [HideInInspector]
+    //[HideInInspector]
     // KJP CULLING public VoxelGrid voxelGrid = null;
 
     public MenuHandler menuHandler;
