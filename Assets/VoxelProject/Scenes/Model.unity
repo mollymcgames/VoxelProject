@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: -8829001482403417715, guid: b924eaadfebc630488edf603111469ca,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8829001482403417715, guid: b924eaadfebc630488edf603111469ca,
         type: 3}
@@ -315,7 +315,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
         type: 3}
@@ -424,7 +424,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a6bbff910132eae41b9db254885af47a,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a6bbff910132eae41b9db254885af47a,
         type: 3}
@@ -1317,7 +1317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
-  targetTag: 
+  targetTag: Heart
 --- !u!1 &1630303556 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
