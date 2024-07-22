@@ -14,6 +14,8 @@ public class ComputeManager : MonoBehaviour
     private int xThreads;
     private int yThreads;
     private int zThreads;
+    
+    private Container voxelContainer;
 
     public void Initialize(int count = 256)
     {
@@ -65,8 +67,9 @@ public class ComputeManager : MonoBehaviour
 
     #region Compute Helpers
 
-    public void GenerateVoxelData(ref Container cont)
+    public void GenerateVoxelData(ref Container cont, int layer)
     {
+        voxelContainer = cont;
         noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
         noiseShader.SetBuffer(0, "count", cont.data.countBuffer);
 
@@ -78,8 +81,9 @@ public class ComputeManager : MonoBehaviour
 
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
         {
-            callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
-            WorldManager.Instance.container.RenderMesh();
+            // original callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
+            callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray.array);
+            voxelContainer.RenderMesh();
         });    
     }
 
