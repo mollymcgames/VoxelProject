@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -19,13 +21,13 @@ public class ComputeManager : MonoBehaviour
 
     public void Initialize(int count = 256)
     {
-        xThreads = WorldManager.WorldSettings.maxWidthX / 8 + 1;
-        yThreads = WorldManager.WorldSettings.maxHeightY / 8;
-        zThreads = WorldManager.WorldSettings.maxDepthZ / 8;
+        xThreads = WorldManager.Instance.worldSettings.maxWidthX / 8 + 1;
+        yThreads = WorldManager.Instance.worldSettings.maxHeightY / 8;
+        zThreads = WorldManager.Instance.worldSettings.maxDepthZ / 8;
 
-        noiseShader.SetInt("containerSizeX", WorldManager.WorldSettings.maxWidthX);
-        noiseShader.SetInt("containerSizeY", WorldManager.WorldSettings.maxHeightY);
-        noiseShader.SetInt("containerSizeZ", WorldManager.WorldSettings.maxDepthZ);
+        noiseShader.SetInt("containerSizeX", WorldManager.Instance.worldSettings.maxWidthX);
+        noiseShader.SetInt("containerSizeY", WorldManager.Instance.worldSettings.maxHeightY);
+        noiseShader.SetInt("containerSizeZ", WorldManager.Instance.worldSettings.maxDepthZ);
 
         for (int i = 0; i < count; i++)
         {
@@ -82,7 +84,7 @@ public class ComputeManager : MonoBehaviour
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
         {
             // original callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
-            callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray.array);
+            callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
             voxelContainer.RenderMesh();
         });    
     }
@@ -127,7 +129,8 @@ public struct NoiseBuffer
     public ComputeBuffer countBuffer;
     public bool Initialized;
     public bool Cleared;
-    public IndexedArray<Voxel> voxelArray;
+    //public IndexedArray<Voxel> voxelArray;
+    public Voxel[] voxelArray;
 
     public void InitializeBuffer()
     {
@@ -135,9 +138,11 @@ public struct NoiseBuffer
         countBuffer.SetCounterValue(0);
         countBuffer.SetData(new uint[] { 0 });
 
-        voxelArray = new IndexedArray<Voxel>();
-        noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
-        noiseBuffer.SetData(voxelArray.GetData);
+        //voxelArray = new IndexedArray<Voxel>();
+        voxelArray = new Voxel[WorldManager.Instance.sourceData.Length];
+        //noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
+        noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(Voxel)));
+        noiseBuffer.SetData(voxelArray);
         Initialized = true;
     }
 
@@ -148,7 +153,8 @@ public struct NoiseBuffer
 
         Initialized = false;
     }
-    public Voxel this[Vector3 index]
+    //public Voxel this[Vector3 index]
+    public Voxel this[int index]
     {
         get
         {

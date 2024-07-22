@@ -51,27 +51,22 @@ public class Container : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
-        int breaker = 0;
         //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
         foreach (VoxelCell vc in WorldManager.Instance.sourceData)
         {
-            // if (breaker >= 10000)
-            //     break;
-            breaker++;
-
             blockPos = new Vector3(vc.widthX, vc.heightY, vc.depthZ);
             if (vc.widthX < 0 || vc.heightY < 0 || vc.depthZ < 0)
             {
-                Debug.Log("Weird voxel encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
                 continue;
             }
-            block = this[blockPos];
+            // original KJP
+/*            block = this[blockPos];
             //Only check on solid blocks
             if (!block.isSolid)
             {
                 Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
                 continue;
-            }
+            }*/
 
             float grayScaleValue = float.Parse(vc.value)/255f;
             voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
@@ -137,10 +132,13 @@ public class Container : MonoBehaviour
         if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
             return true;
         else
-            return this[point].isSolid;
+            // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
+            return true; // KJP Temp!!! this[point].isSolid;
     }
 
-    public Voxel this[Vector3 index]
+    // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
+    //public Voxel this[Vector3 index]
+    public Voxel this[int index]
     {
         get
         {
