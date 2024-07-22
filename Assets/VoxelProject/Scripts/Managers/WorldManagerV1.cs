@@ -23,11 +23,11 @@ public class WorldManagerV1 : MonoBehaviour
             _instance = this;
         }
 
-        sourceData = SourceDataLoader.LoadSourceData();
-        WorldSettings = worldSettings;
-        WorldSettings.maxWidthX = SourceDataLoader.widthX;
-        WorldSettings.maxHeightY = SourceDataLoader.heightY;
-        WorldSettings.maxDepthZ = SourceDataLoader.depthZ;
+        // original sourceData = SourceDataLoader.LoadSourceData();
+        // original WorldSettings = worldSettings;
+        // original WorldSettings.maxWidthX = SourceDataLoader.widthX;
+        // original WorldSettings.maxHeightY = SourceDataLoader.heightY;
+        // original WorldSettings.maxDepthZ = SourceDataLoader.depthZ;
 
         ComputeManager.Instance.Initialize(1);
         GameObject cont = new GameObject("Container");

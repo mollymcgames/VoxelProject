@@ -621,6 +621,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a91ff2d4389d66e4baf6693ab6be53c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mesh: {fileID: 1350860910}
+  maxDistance: 30
+  minDistance: 10
 --- !u!114 &547043299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -633,6 +636,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3818153647b348a1e2da72683a0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  loadingData: 0
 --- !u!1001 &565163391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -758,6 +768,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3818153647b348a1e2da72683a0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  loadingData: 0
 --- !u!114 &588403112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -770,6 +787,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customCursor: {fileID: 0}
+  targetTag: Heart
 --- !u!1 &770917361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,6 +1035,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3818153647b348a1e2da72683a0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  loadingData: 0
 --- !u!114 &1091755964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1028,6 +1054,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customCursor: {fileID: 0}
+  targetTag: Brain
 --- !u!1001 &1153404278
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1106,8 +1134,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1171129835}
   - component: {fileID: 1171129834}
-  - component: {fileID: 1171129836}
   - component: {fileID: 1171129837}
+  - component: {fileID: 1171129836}
   m_Layer: 0
   m_Name: WorldSettings
   m_TagString: Untagged
@@ -1164,6 +1192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19694510c1ca77c419656ed2cb8d36c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionDelayTime: 1
+  voxelFileFormat: nii
 --- !u!114 &1171129837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1199,6 +1229,12 @@ MonoBehaviour:
     chunkSize: 16
   voxelsSelected: 0
   menuHandler: {fileID: 0}
+--- !u!1 &1350860910 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -7162452699128378844, guid: d674543ea18a247459e035faa742fb24,
+    type: 3}
+  m_PrefabInstance: {fileID: 565163391}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1550601687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1280,6 +1316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  targetTag: 
 --- !u!1 &1630303556 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d7d84dbb1296f9442ae7dddc93e62665,
@@ -1332,6 +1370,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3818153647b348a1e2da72683a0aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popupPanel: {fileID: 771648127}
+  popupText: {fileID: 1859121159}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  loadingData: 0
 --- !u!114 &1630303572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1344,6 +1389,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customCursor: {fileID: 0}
+  targetTag: Liver
 --- !u!1 &1712441868
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,14 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
 
-public class SourceDataLoader : MonoBehaviour
+public class SourceDataLoaderV1 : MonoBehaviour
 {
     public void Awake()
     {
         DontDestroyOnLoad(this);
     }
 
-    private static SourceDataLoader _instance;
+    private static SourceDataLoaderV1 _instance;
 
     void Start()
     {
@@ -27,12 +27,12 @@ public class SourceDataLoader : MonoBehaviour
         }
     }
 
-    public static SourceDataLoader Instance
+    public static SourceDataLoaderV1 Instance
     {
         get
         {
             if (_instance == null)
-                _instance = FindObjectOfType<SourceDataLoader>();
+                _instance = FindObjectOfType<SourceDataLoaderV1>();
             return _instance;
         }
     }
@@ -107,7 +107,7 @@ public class SourceDataLoader : MonoBehaviour
 
     public static VoxelCell[] LoadNiftiFile(string filePath)
     {
-        SourceDataLoader.OpenNiftiFile(filePath);            
+        // original SourceDataLoader.OpenNiftiFile(filePath);            
 
         // Get the dimensions
         widthX = niftiFile.Dimensions[0];
