@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraFieldOfView : MonoBehaviour
 {
@@ -12,18 +14,15 @@ public class CameraFieldOfView : MonoBehaviour
     float max = 150.0f;
     float min = 20.0f;
 
-
-    //public Camera mainCamera;
-    /*    public PostProcessVolume postProcessVolume;
-        private UnityEngine.Rendering.PostProcessing.DepthOfField depthOfField;*/
+    public Slider fovSlider;
+    public TMP_Text fovValue;
+    private float lastSliderValue;
+    
 
     void Start()
     {
         //Start the Camera field of view at 60
         m_FieldOfView = 60.0f;
-/*
-        // Get the Depth of Field effect from the Post Process Volume
-        postProcessVolume.profile.TryGetSettings(out depthOfField);*/
     }
 
     void Update()
@@ -52,23 +51,16 @@ public class CameraFieldOfView : MonoBehaviour
         }
 
         //Update the camera's field of view to be the variable returning from the Slider
+        m_FieldOfView = fovSlider.value;
+        fovValue.text = fovSlider.value.ToString();
         Camera.main.fieldOfView = m_FieldOfView;
-
-/*        // Adjust the blur intensity based on the camera's FOV
-        float fov = m_FieldOfView; // mainCamera.fieldOfView;
-
-        // Example: Increase blur as FOV decreases
-        float blurIntensity = Mathf.Lerp(10f, 0f, (fov - 30f) / (90f - 30f));
-        depthOfField.focalLength.value = blurIntensity;*/
-
     }
 
-    void OnGUI()
-    {
-        //This Slider changes the field of view of the Camera between the minimum and maximum values
-        m_FieldOfView = GUI.HorizontalSlider(new Rect(1000, 20, 100, 10), m_FieldOfView, min, max);
-        GUI.Label(new Rect(970, 15, 50, 30), "FoV");
-
-    }
+    /*    void OnGUI()
+        {
+            //This Slider changes the field of view of the Camera between the minimum and maximum values
+            m_FieldOfView = GUI.HorizontalSlider(new Rect(1000, 20, 100, 10), m_FieldOfView, min, max);
+            GUI.Label(new Rect(970, 15, 50, 30), "FoV");
+        }*/
 
 }

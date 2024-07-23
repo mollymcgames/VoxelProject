@@ -51,24 +51,29 @@ public class Container : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
-        //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
-        foreach (VoxelCell vc in WorldManager.Instance.sourceData)
+        //for (VoxelCell nextVoxel = 1; x < WorldManager.Instance.widthX + 1; x++)
+        foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
         {
-            blockPos = new Vector3(vc.widthX, vc.heightY, vc.depthZ);
-            if (vc.widthX < 0 || vc.heightY < 0 || vc.depthZ < 0)
+            blockPos = new Vector3(nextVoxel.widthX, nextVoxel.heightY, nextVoxel.depthZ);
+            if (nextVoxel.widthX < 0 || nextVoxel.heightY < 0 || nextVoxel.depthZ < 0)
             {
                 continue;
             }
-            // original KJP
-/*            block = this[blockPos];
-            //Only check on solid blocks
-            if (!block.isSolid)
-            {
-                Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
-                continue;
-            }*/
 
-            float grayScaleValue = float.Parse(vc.value)/255f;
+            // Skip this voxel if it's below the visibility threshold
+            if (float.Parse(nextVoxel.value) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+                continue;
+
+            // original KJP
+            /*            block = this[blockPos];
+                        //Only check on solid blocks
+                        if (!block.isSolid)
+                        {
+                            Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + nextVoxel.widthX + "," + nextVoxel.depthZ + "," + nextVoxel.depthZ + "]");
+                            continue;
+                        }*/
+
+            float grayScaleValue = float.Parse(nextVoxel.value)/255f;
             voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
 
             voxelColorAlpha = voxelColor.color;
@@ -81,7 +86,7 @@ public class Container : MonoBehaviour
                 //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
                 // if (checkVoxelIsSolid(blockPos))                
                 //     continue;
-                if ( float.Parse(vc.value) < 18)
+                if ( float.Parse(nextVoxel.value) < 18)
                     continue;
 
                 //Draw this face
