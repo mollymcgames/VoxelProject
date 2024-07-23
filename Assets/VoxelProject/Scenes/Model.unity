@@ -622,8 +622,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mesh: {fileID: 1350860910}
-  maxDistance: 30
-  minDistance: 10
+  maxDistance: 3
+  minDistance: 0.72
 --- !u!114 &547043299
 MonoBehaviour:
   m_ObjectHideFlags: 0
