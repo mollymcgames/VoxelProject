@@ -7,7 +7,7 @@ public class WorldManager : MonoBehaviour
 {
     // Vector3Int's are used as they use up less memory and also
     // implement the IEquatable interface making searching the Dictionary nice and fast
-    // KJP CULLING public Dictionary<Vector3Int, VoxelChunk> voxelSourceDataDictionary;
+    // CULLING public Dictionary<Vector3Int, VoxelChunk> voxelSourceDataDictionary;
 
     [Header("Voxel Mesh Settings")]
     [SerializeField]
@@ -17,11 +17,11 @@ public class WorldManager : MonoBehaviour
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;    
     //public VoxelStruct[,,] sourceData;
-    public VoxelCell[] sourceData;
+    public VoxelCell[,,] sourceData;
     public int voxelsSelected = 0;
 
     //[HideInInspector]
-    // KJP CULLING public VoxelGrid voxelGrid = null;
+    // CULLING public VoxelGrid voxelGrid = null;
 
     public MenuHandler menuHandler;
 

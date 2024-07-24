@@ -79,7 +79,7 @@ public class OuterContainer : MonoBehaviour
             sourceData = OuterWorldManager.Instance.sourceDataInner;
         }
         int breaker = 0;
-        //for (VoxelCell vc = 1; x < WorldManager.Instance.widthX + 1; x++)
+        //for (VoxelCell vc = 1; x < WorldManager.Instance.x + 1; x++)
         foreach (VoxelCell vc in sourceData)
         {
             // if (breaker >= 10000)
@@ -88,29 +88,29 @@ public class OuterContainer : MonoBehaviour
 
             if (vc == null)
                 continue;
-            blockPos = new Vector3(vc.widthX, vc.heightY, vc.depthZ);
-            // if (vc.widthX < 0 || vc.heightY < 0 || vc.depthZ < 0)
+            blockPos = new Vector3(vc.x, vc.y, vc.z);
+            // if (vc.x < 0 || vc.y < 0 || vc.z < 0)
             // {
-            //     Debug.Log("Weird voxel encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
+            //     Debug.Log("Weird voxel encountered (Loop-"+breaker+")! [" + vc.x + "," + vc.z + "," + vc.z + "]");
             //     continue;
             // }
             block = this[blockPos];
             //Only check on solid blocks
             if (!block.isSolid)
             {
-                Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.widthX + "," + vc.depthZ + "," + vc.depthZ + "]");
+                Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.x + "," + vc.z + "," + vc.z + "]");
                 continue;
             }
 
-            // float grayScaleValue = float.Parse(vc.value)/255f;
+            // float grayScaleValue = float.Parse(vc.color)/255f;
             // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
             voxelColor = new VoxelColor();
 
 
             Color color;
-            if (!ColorUtility.TryParseHtmlString("#" + vc.value, out color))
+            if (!ColorUtility.TryParseHtmlString("#" + vc.color, out color))
             {
-                Debug.LogError($"Invalid color value in line: {vc.value}");
+                Debug.LogError($"Invalid color value in line: {vc.color}");
                 continue;
             }            
 
@@ -124,7 +124,7 @@ public class OuterContainer : MonoBehaviour
                 //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
                 // if (checkVoxelIsSolid(blockPos))                
                 //     continue;
-                // if ( float.Parse(vc.value) < 18)
+                // if ( float.Parse(vc.color) < 18)
                 //     continue;
 
                 //Draw this face
@@ -234,7 +234,7 @@ public class OuterContainer : MonoBehaviour
                     continue;
                 }
 
-                // float grayScaleValue = float.Parse(vc.value)/255f;
+                // float grayScaleValue = float.Parse(vc.color)/255f;
                 // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
                 voxelColor = new VoxelColor();
 
@@ -255,7 +255,7 @@ public class OuterContainer : MonoBehaviour
                     //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
                     // if (checkVoxelIsSolid(blockPos))                
                     //     continue;
-                    // if ( float.Parse(vc.value) < 18)
+                    // if ( float.Parse(vc.color) < 18)
                     //     continue;
 
                     //Draw this face

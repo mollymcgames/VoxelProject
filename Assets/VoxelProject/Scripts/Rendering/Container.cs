@@ -40,7 +40,7 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
-        Vector3 blockPos;
+        Vector3 voxelBlockPosition;
         Voxel block;
 
         int counter = 0;
@@ -51,29 +51,29 @@ public class Container : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
-        //for (VoxelCell nextVoxel = 1; x < WorldManager.Instance.widthX + 1; x++)
+        //for (VoxelCell nextVoxel = 1; x < WorldManager.Instance.x + 1; x++)
         foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
         {
-            blockPos = new Vector3(nextVoxel.widthX, nextVoxel.heightY, nextVoxel.depthZ);
-            if (nextVoxel.widthX < 0 || nextVoxel.heightY < 0 || nextVoxel.depthZ < 0)
+            voxelBlockPosition = new Vector3(nextVoxel.x, nextVoxel.y, nextVoxel.z);
+            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
             {
                 continue;
             }
 
             // Skip this voxel if it's below the visibility threshold
-            if (float.Parse(nextVoxel.value) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
                 continue;
 
-            // original KJP
-            /*            block = this[blockPos];
+            // original
+            /*            block = this[voxelBlockPosition];
                         //Only check on solid blocks
                         if (!block.isSolid)
                         {
-                            Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + nextVoxel.widthX + "," + nextVoxel.depthZ + "," + nextVoxel.depthZ + "]");
+                            Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + nextVoxel.x + "," + nextVoxel.z + "," + nextVoxel.z + "]");
                             continue;
                         }*/
 
-            float grayScaleValue = float.Parse(nextVoxel.value)/255f;
+            float grayScaleValue = float.Parse(nextVoxel.color)/255f;
             voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
 
             voxelColorAlpha = voxelColor.color;
@@ -83,18 +83,18 @@ public class Container : MonoBehaviour
             for (int i = 0; i < 6; i++)
             {
                 //Check if there's a solid block against this face
-                //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
-                // if (checkVoxelIsSolid(blockPos))                
+                //if (checkVoxelIsSolid(voxelBlockPosition + voxelFaceChecks[i]))
+                // if (checkVoxelIsSolid(voxelBlockPosition))                
                 //     continue;
-                if ( float.Parse(nextVoxel.value) < 18)
-                    continue;
+                //if ( float.Parse(nextVoxel.color) < 18)
+                //    continue;
 
                 //Draw this face
 
                 //Collect the appropriate vertices from the default vertices and add the block position
                 for (int j = 0; j < 4; j++)
                 {
-                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + blockPos;
+                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelBlockPosition;
                     faceUVs[j] = voxelUVs[j];
                 }
 
@@ -138,7 +138,7 @@ public class Container : MonoBehaviour
             return true;
         else
             // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
-            return true; // KJP Temp!!! this[point].isSolid;
+            return true; // Temp!!! this[point].isSolid;
     }
 
     // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.

@@ -40,7 +40,7 @@ public class CameraFieldOfView : MonoBehaviour
             isDragging = false;
         }
 
-        // Update the slider value based on mouse movement if dragging
+        // Update the slider color based on mouse movement if dragging
         if (isDragging)
         {
             float mouseY = Input.mousePosition.y;

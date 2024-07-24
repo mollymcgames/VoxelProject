@@ -1,21 +1,34 @@
 /**
-* A VoxelCell represents information about a particular type of cell. Could be colour, if it makes a beeping noise, anything really!
+* A VoxelCell represents information about a particular type of cell.
 */
 public class VoxelCell
 {
-    public string value { get; }
+    public readonly string color;
 
-    public int depthZ { get; }
+    public readonly int z;
 
-    public int heightY { get; }
+    public readonly int y;
 
-    public int widthX { get; }
+    public readonly int x;
 
-    public VoxelCell(int depthZ, int heightY, int widthX, string inputValue)
+    public readonly bool isSegmentVoxel;
+
+    public VoxelCell(int z, int y, int x, string color)
     {
-        this.depthZ = depthZ;
-        this.heightY = heightY;
-        this.widthX = widthX;
-        this.value = inputValue;
+        this.z = z;
+        this.y = y;
+        this.x = x;
+        this.color = color;
+        isSegmentVoxel = false;
     }
+
+    public VoxelCell(int z, int y, int x, string color, bool isSegmentVoxel)
+    {
+        this.z = z;
+        this.y = y;
+        this.x = x;
+        this.color = color;
+        this.isSegmentVoxel = isSegmentVoxel;
+    }
+
 }

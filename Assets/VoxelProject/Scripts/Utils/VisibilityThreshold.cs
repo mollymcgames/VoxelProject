@@ -51,7 +51,7 @@ public class VisibilityThreshold : MonoBehaviour
 
         if (sliderChanged && lastSliderValue != visibilityThresholdSlider.value)
         {
-            // Update the mesh only if the slider value has changed
+            // Update the mesh only if the slider color has changed
             lastSliderValue = visibilityThresholdSlider.value;
             sliderChanged = false;
             ComputeManager.Instance.GenerateVoxelData(ref SCManager.Instance.container, 0);
@@ -64,7 +64,7 @@ public class VisibilityThreshold : MonoBehaviour
         visibilityThresholdValue.text = visibilityThresholdSlider.value.ToString();
 
         //Update the camera's field of view to be the variable returning from the Slider
-        WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = lastSliderValue; // (int)m_visibilityThreshold;
+        WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = (int)lastSliderValue; // (int)m_visibilityThreshold;
     }
 
 /*    void OnGUI()

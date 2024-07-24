@@ -10,7 +10,7 @@ public class VoxelMeshConfigurationSettings
     [Header("Voxel Data Filename")]
     //Use streaming assets for the file path. e.g. "blue.txt" "voxtest.txt"
     public string voxelDataFileName = "";
-    public string voxelDataHotFileName = "";
+    public string voxelDataSegmentFileName = "";
 
     [Header("Voxel Segment Layers")]
     public string[] voxelSegmentLayers;
@@ -31,7 +31,7 @@ public class VoxelMeshConfigurationSettings
     public string sceneTargetName;
 
     //[HideInInspector]
-    public float visibilityThreshold = 1;
+    public int visibilityThreshold = 1;
 
     [HideInInspector]
     public string voxelDataFilePath

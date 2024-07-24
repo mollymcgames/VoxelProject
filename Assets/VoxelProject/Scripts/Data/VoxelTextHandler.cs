@@ -35,7 +35,7 @@ public class VoxelTextHandler : MonoBehaviour
                 continue;
             }
 
-            voxelDataList[index++] = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color value as the voxel value
+            voxelDataList[index++] = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
         }
         return voxelDataList;
     }

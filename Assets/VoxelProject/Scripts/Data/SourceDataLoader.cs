@@ -9,7 +9,7 @@ public class SourceDataLoader : ASourceDataLoader
     private static Nifti.NET.Nifti niftiSegmentFile = null;    
     
     //public override VoxelStruct[,,] LoadSourceData(string filepath)
-    public override VoxelCell[] LoadSourceData(string filepath)
+    public override VoxelCell[,,] LoadSourceData(string filepath)
     {
         Debug.Log("Loading nii source data...:" + filepath);
         LoadNiftiFile(filepath);
@@ -24,16 +24,7 @@ public class SourceDataLoader : ASourceDataLoader
         CreateVoxelsArrayGrid();
         return voxelGrid;
     }*/
-
-    //public override VoxelStruct[,,] LoadSegmentData(ref VoxelStruct[,,] sourceData, int segmentLayer, string segmentFile)
-    public override VoxelCell[] LoadSegmentData(ref VoxelCell[] sourceData, int segmentLayer, string segmentFile)
-    {
-        Debug.Log("Loading nii segment data..." + segmentFile + " into layer: "+segmentLayer);
-        LoadNiftiSegmentFile(Path.Combine(Application.streamingAssetsPath, segmentFile));
-        AddSegmentToVoxelsArray(segmentLayer);
-        return voxelData;
-    }
-
+   
     public override object GetHeader()
     {
         return niftiFile;
@@ -77,16 +68,9 @@ public class SourceDataLoader : ASourceDataLoader
 /*    private void CreateVoxelsArrayGrid()
     {
         // Read the voxel data
-        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFile, widthX, heightY, depthZ, chunkSize);
+        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFile, x, y, z, chunkSize);
         Debug.Log("Data (grid) now read in");
     }*/
-
-    private void AddSegmentToVoxelsArray(int segmentLayer)
-    {
-        // Read the voxel data
-        // KJP TODO voxelData = NiftiHandler.ReadNiftiSegmentData(ref voxelData, segmentLayer, niftiSegmentFile, widthX, heightY, depthZ);
-        Debug.Log("Segment data now read in");
-    }
 
     public void OpenNiftiFile(string filePath)
     {
@@ -98,38 +82,6 @@ public class SourceDataLoader : ASourceDataLoader
         // Load the NIfTI file
         return NiftiHandler.ReadNiftiFile(niftiFilePath);
     }
-
-
-    /*    private List<VoxelElement> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
-        {
-            List<VoxelElement> voxelDataList = new List<VoxelElement>();
-
-            // Iterate through each voxel
-            int index = 0;
-            for (int z = 0; z < depth; z++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    for (int x = 0; x < width; x++)
-                    {
-                        if (x > maxX) maxX = x;
-                        if (x < minX) minX = x;
-                        if (y > maxY) maxY = y;
-                        if (y < minY) minY = y;
-                        if (z > maxZ) maxZ = z;
-                        if (z < minZ) minZ = z;
-
-                        // Assign the parsed color value as the voxel value if it's going to be visible
-                        if (niftiData.Data[index] > 10)
-                            voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), niftiData.Data[index].ToString()));
-                        index++;
-                    }
-                }
-            }
-            Debug.Log("Lines processed:" + index);
-            return voxelDataList;
-        }*/
-
     #endregion
 
 }

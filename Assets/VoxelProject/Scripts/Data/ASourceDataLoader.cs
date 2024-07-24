@@ -6,7 +6,7 @@ using System.IO;
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
     //public VoxelStruct[,,] voxelData = null;
-    public VoxelCell[] voxelData = null;
+    public VoxelCell[,,] voxelData = null;
     //public VoxelGrid voxelGrid = null;
 
     public int chunkSize = 0;
@@ -28,12 +28,46 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     }
 
     //public abstract VoxelStruct[,,] LoadSourceData(string filepath);
-    public abstract VoxelCell[] LoadSourceData(string filepath);
+    public abstract VoxelCell[,,] LoadSourceData(string filepath);
 
     //public abstract VoxelGrid LoadSourceDataGrid(string filepath);
 
-    //public abstract VoxelStruct[,,] LoadSegmentData(ref VoxelStruct[,,] sourceData, int segmentLayer, string nextSegmentFile);
-    public abstract VoxelCell[] LoadSegmentData(ref VoxelCell[] sourceData, int segmentLayer, string nextSegmentFile);
+    //public abstract VoxelStruct[,,] LoadVoxelSegmentDefinitionFile(ref VoxelStruct[,,] sourceData, int segmentLayer, string nextSegmentFile);
+    public VoxelCell[,,] LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
+    {
+        VoxelCell nextSegmentVoxel;
+
+        // Load the text file
+        string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
+
+        int index = 0;
+        foreach (var segmentVoxelLine in segmentVoxels)
+        {
+            if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#")) continue; // Skip empty lines and comments
+
+            var parts = segmentVoxelLine.Split(',');
+            if (parts.Length != 4)
+            {
+                Debug.LogError($"Invalid line format: {segmentVoxelLine}");
+                continue;
+            }
+            if (!int.TryParse(parts[0], out int x) ||
+                !int.TryParse(parts[1], out int y) ||
+                !int.TryParse(parts[2], out int z))
+            {
+                Debug.LogError($"Invalid integer values in line: {segmentVoxelLine}");
+                continue;
+            }
+
+            nextSegmentVoxel = voxelData[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
+            voxelData[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
+            // TODO nextSegmentVoxel.isHotVoxel = true;
+            // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
+            // TODO voxelData[x, y, z] = nextSegmentVoxel;
+        }
+
+        return voxelData;
+    }
 
     public abstract object GetHeader();
 
@@ -41,38 +75,37 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     // e.g.
     // 10,10,20,#FF0000
     // 10,20,20,#FF00FF
-    //public VoxelStruct[,,] LoadHotVoxelFile(string hotVoxelsFilePath)
-    public VoxelCell[] LoadHotVoxelFile(string hotVoxelsFilePath)
+    public VoxelCell[,,] LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
     {
-        //VoxelStruct nextHotVoxel;
-        VoxelCell nextHotVoxel;
+        VoxelCell nextSegmentVoxel;
 
         // Load the text file
-        string[] hotVoxels = File.ReadAllLines(hotVoxelsFilePath);
+        string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
 
         int index = 0;
-        foreach (var hotVoxelLine in hotVoxels)
+        foreach (var segmentVoxelLine in segmentVoxels)
         {
-            if (string.IsNullOrWhiteSpace(hotVoxelLine) || hotVoxelLine.StartsWith("#")) continue; // Skip empty lines and comments
+            if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#")) continue; // Skip empty lines and comments
 
-            var parts = hotVoxelLine.Split(',');
+            var parts = segmentVoxelLine.Split(',');
             if (parts.Length != 4)
             {
-                Debug.LogError($"Invalid line format: {hotVoxelLine}");
+                Debug.LogError($"Invalid line format: {segmentVoxelLine}");
                 continue;
             }
             if (!int.TryParse(parts[0], out int x) ||
                 !int.TryParse(parts[1], out int y) ||
                 !int.TryParse(parts[2], out int z))
             {
-                Debug.LogError($"Invalid integer values in line: {hotVoxelLine}");
+                Debug.LogError($"Invalid integer values in line: {segmentVoxelLine}");
                 continue;
             }
 
-            // KJP TODO nextHotVoxel = voxelData[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color value as the voxel value
-            // KJP TODO nextHotVoxel.isHotVoxel = true;
-            // KJP TODO nextHotVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
-            // KJP TODO voxelData[x, y, z] = nextHotVoxel;
+            nextSegmentVoxel = voxelData[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
+            voxelData[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
+            // TODO nextSegmentVoxel.isHotVoxel = true;
+            // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
+            // TODO voxelData[x, y, z] = nextSegmentVoxel;
         }
 
         return voxelData;

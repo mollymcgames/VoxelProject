@@ -25,41 +25,42 @@ public class MenuHandler : MonoBehaviour
     {
         // WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName = null;
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         LoadAFile(false);
     }
-
-    public void LoadBrainFile()
+    public string LoadHeartFileHeader()
     {
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName = null;
-        LoadAFile(false);
-        // string hotVoxelFilePath = "Assets/Resources/avg152T1_LR_nifti.nii"; 
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
+        return LoadAFileForTheHeader();
     }
 
     public void LoadLiverData()
     {
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";
-        //KJP WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers = new string[] { "rkT2.nii" };
-        //KJP WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName = "rkT1-hot-voxels.csv";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";        
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
+        // WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers = new string[] { "rkT2.nii" };
         LoadAFile(true);
-    }
-
-    public string LoadHeartFileHeader()
-    {
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        return LoadAFileForTheHeader();
     }
 
     public string LoadLiverFileHeader()
     {
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
         return LoadAFileForTheHeader();
+    }
+
+    public void LoadBrainFile()
+    {
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
+        LoadAFile(false);
     }
 
     public string LoadBrainFileHeader()
     {
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         return LoadAFileForTheHeader();
     }
 
@@ -139,15 +140,14 @@ public class MenuHandler : MonoBehaviour
         Debug.Log("Dimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2]);
         Debug.Log("Filename, " + niftiFilePath);
 
-        // KJP TODO
-/*        if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName != null)
+        if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName != null)
         {
-            Debug.Log("Loading Hot Voxel file: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName);
+            Debug.Log("Loading Voxel Segment Definition File: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName);
             //Use Steaming Assets folder to load the file
-            string hotVoxelFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataHotFileName);
+            string voxelSegmentDefinitionFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName);
 
-            WorldManager.Instance.sourceData = loader.LoadHotVoxelFile(hotVoxelFilePath);
-        }*/
+            WorldManager.Instance.sourceData = loader.LoadVoxelSegmentDefinitionFileExtra(voxelSegmentDefinitionFilePath);
+        }
 
         WorldManager.Instance.worldSettings.maxWidthX = loader.widthX;
         WorldManager.Instance.worldSettings.maxHeightY = loader.heightY;
@@ -162,13 +162,13 @@ public class MenuHandler : MonoBehaviour
 
         //Debug.Log("Random voxel color 0: " + WorldManager.Instance.voxelGrid.GetVoxelUsingWorldPosition(new Vector3Int(50, 50, 50)).getColourRGBLayer(0));
 
-        // KJP TODO
+        // TODO
 /*        if (hasSegmentLayers)
         {
             int segmentLayer = 1;
             foreach (string nextSegmentFile in WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers)
             {
-                WorldManager.Instance.sourceData = loader.LoadSegmentData(ref WorldManager.Instance.sourceData, segmentLayer++, nextSegmentFile);
+                WorldManager.Instance.sourceData = loader.LoadVoxelSegmentDefinitionFile(ref WorldManager.Instance.sourceData, segmentLayer++, nextSegmentFile);
             }        
             voxelFileFormat = DataLoaderUtils.GetDataFileFormat();
             Debug.Log("Random voxel color 1: " + WorldManager.Instance.sourceData[20, 20, 20].getColourRGBLayer(1));

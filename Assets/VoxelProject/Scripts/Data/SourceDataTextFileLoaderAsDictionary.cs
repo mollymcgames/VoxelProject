@@ -139,7 +139,7 @@ public class SourceDataTextFileLoaderAsDictionary
             if (z>maxZ) maxZ = z;
             if (z<minZ) minZ = z;   
                
-            voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), parts[3])); // Assign the parsed color value as the voxel value
+            voxelDataList.Add(new VoxelElement(new Vector3Int(x, y, z), parts[3])); // Assign the parsed color color as the voxel color
         }
         Debug.Log("Lines processed:" + index);
         return voxelDataList;
