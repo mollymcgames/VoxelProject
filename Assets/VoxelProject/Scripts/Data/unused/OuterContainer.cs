@@ -191,7 +191,7 @@ public class OuterContainer : MonoBehaviour
         Dictionary<Vector3Int, Chunk> sourceData = null;
         if (renderOuter)
         {
-            Debug.Log("[OUTER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
+            //Debug.Log("[OUTER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
 
             // Using the current camera position, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
@@ -204,7 +204,7 @@ public class OuterContainer : MonoBehaviour
         }
         else
         {
-            Debug.Log("[INNER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
+            //Debug.Log("[INNER] We need to render a chunk for this camera position: " + Vector3Int.FloorToInt(mainCamera.transform.position));
 
             // Using the current camera position, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
@@ -216,7 +216,7 @@ public class OuterContainer : MonoBehaviour
             renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplierInner, chunkInnerSize, sourceData);
 
         }
-        Debug.Log(renderOuter?"[OUTER]":"[INNER]"+" Number of chunks selected: "+renderVectors.Count );
+        //Debug.Log(renderOuter?"[OUTER]":"[INNER]"+" Number of chunks selected: "+renderVectors.Count );
 
         int breaker = 0;
 
@@ -230,7 +230,7 @@ public class OuterContainer : MonoBehaviour
                 //Only check on solid blocks
                 if (!block.isSolid)
                 {
-                    Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
+                    //Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.position.x + "," + nextVoxelElement.position.y + "," + nextVoxelElement.position.z + "]");
                     continue;
                 }
 
@@ -241,7 +241,7 @@ public class OuterContainer : MonoBehaviour
                 Color color;
                 if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.colorString, out color))
                 {
-                    Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
+                    //Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
                     continue;
                 }
 

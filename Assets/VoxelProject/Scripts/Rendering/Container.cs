@@ -40,21 +40,20 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
-        Vector3 voxelBlockPosition;
+        Vector3Int voxelBlockPosition;
         Voxel block;
 
         int counter = 0;
-        Vector3[] faceVertices = new Vector3[4];
+        Vector3Int[] faceVertices = new Vector3Int[4];
         Vector2[] faceUVs = new Vector2[4];
 
         VoxelColor voxelColor;
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
-        //for (VoxelCell nextVoxel = 1; x < WorldManager.Instance.x + 1; x++)
         foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
         {
-            voxelBlockPosition = new Vector3(nextVoxel.x, nextVoxel.y, nextVoxel.z);
+            voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
             if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
             {
                 continue;
@@ -75,10 +74,16 @@ public class Container : MonoBehaviour
 
             float grayScaleValue = float.Parse(nextVoxel.color)/255f;
             voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
-
             voxelColorAlpha = voxelColor.color;
             voxelColorAlpha.a = 1;
             voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+
+
+            if (nextVoxel.isSegmentVoxel)
+            {             
+                CreateClickableVoxel(new Vector3Int(nextVoxel.x,nextVoxel.y,nextVoxel.z));
+            }
+
             //Iterate over each face direction
             for (int i = 0; i < 6; i++)
             {
@@ -112,6 +117,22 @@ public class Container : MonoBehaviour
         }
     }
 
+    void CreateClickableVoxel(Vector3Int clickableVoxelPosition)
+    {
+        // Create a new GameObject for the clickable voxel
+        GameObject voxel = new GameObject("Voxel");
+        voxel.transform.position = clickableVoxelPosition;
+
+        // Add a BoxCollider to the voxel
+        BoxCollider boxCollider = voxel.AddComponent<BoxCollider>();
+        boxCollider.size = WorldManager.Instance.voxelMeshConfigurationSettings.standardVoxelSize;
+
+        VoxelClickHandler clickHandler = voxel.AddComponent<VoxelClickHandler>();
+        clickHandler.sceneToLoad = "Zooming";
+
+        // Set the voxel GameObject as a child of the original mesh GameObject for organization
+        voxel.transform.parent = this.transform;
+    }
 
     public void UploadMesh()
     {
@@ -215,27 +236,27 @@ public class Container : MonoBehaviour
     #endregion
 
     #region Static Variables
-    static readonly Vector3[] voxelVertices = new Vector3[8]
+    static readonly Vector3Int[] voxelVertices = new Vector3Int[8]
     {
-            new Vector3(0,0,0),//0
-            new Vector3(1,0,0),//1
-            new Vector3(0,1,0),//2
-            new Vector3(1,1,0),//3
+            new Vector3Int(0,0,0),//0
+            new Vector3Int(1,0,0),//1
+            new Vector3Int(0,1,0),//2
+            new Vector3Int(1,1,0),//3
 
-            new Vector3(0,0,1),//4
-            new Vector3(1,0,1),//5
-            new Vector3(0,1,1),//6
-            new Vector3(1,1,1),//7
+            new Vector3Int(0,0,1),//4
+            new Vector3Int(1,0,1),//5
+            new Vector3Int(0,1,1),//6
+            new Vector3Int(1,1,1),//7
     };
 
-    static readonly Vector3[] voxelFaceChecks = new Vector3[6]
+    static readonly Vector3Int[] voxelFaceChecks = new Vector3Int[6]
     {
-            new Vector3(0,0,-1),//back
-            new Vector3(0,0,1),//front
-            new Vector3(-1,0,0),//left
-            new Vector3(1,0,0),//right
-            new Vector3(0,-1,0),//bottom
-            new Vector3(0,1,0)//top
+            new Vector3Int(0,0,-1),//back
+            new Vector3Int(0,0,1),//front
+            new Vector3Int(-1,0,0),//left
+            new Vector3Int(1,0,0),//right
+            new Vector3Int(0,-1,0),//bottom
+            new Vector3Int(0,1,0)//top
     };
 
     static readonly int[,] voxelVertexIndex = new int[6, 4]

@@ -80,7 +80,7 @@ public class OuterComputeManager : MonoBehaviour
             noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
 
             float transparencyValue = AdjustMaterialTransparency(ref container, ref mainCamera);
-            Debug.Log("New Transparency Value: " + transparencyValue);
+            //Debug.Log("New Transparency Value: " + transparencyValue);
 
 /*            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
@@ -132,7 +132,7 @@ public class OuterComputeManager : MonoBehaviour
         // alpha should be 0 if close and 1 if far
         float alpha = Mathf.InverseLerp(minDistance, maxDistance, distance);
 
-        if (container != null)
+/*        if (container != null)
         {
             Debug.Log("Adjusting transparency with alpha: " + alpha);
         }
@@ -140,7 +140,7 @@ public class OuterComputeManager : MonoBehaviour
         {
             Debug.LogWarning("No Renderer found on the container.");
         }
-
+*/
         return alpha;
     }
 

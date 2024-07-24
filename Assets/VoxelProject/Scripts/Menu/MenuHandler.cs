@@ -182,9 +182,15 @@ public class MenuHandler : MonoBehaviour
 
     public void BackButton()
     {
-        animator = GameObject.Find("Transition").GetComponent<Animator>();
-        animator.SetTrigger("TriggerTransition");
+        // TODO animator = GameObject.Find("Transition").GetComponent<Animator>();
+        // TODO animator.SetTrigger("TriggerTransition");
         SceneManager.LoadScene("Model");
     }
 
+    public void BackToWorldButton()
+    {
+        // TODO animator = GameObject.Find("Transition").GetComponent<Animator>();
+        // TODO animator.SetTrigger("TriggerTransition");
+        SceneManager.LoadScene("World");
+    }
 }
