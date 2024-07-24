@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using UnityEditorInternal;
 using UnityEngine;
-using System.Linq;
 
 [System.Serializable]
 public class VoxelMeshConfigurationSettings

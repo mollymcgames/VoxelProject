@@ -9,13 +9,16 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/VoxelProject/Scenes/MainMenu.unity
-    guid: 15e0d6cdeab6bbc49a5ddef6feafccfc
+    path: Assets/VoxelProject/Scenes/Model.unity
+    guid: 9935cd6d7acb123438c800eef528a1c1
   - enabled: 1
     path: Assets/VoxelProject/Scenes/World.unity
     guid: 585e920a0ed93f64e8b93df655b05926
   - enabled: 1
     path: Assets/VoxelProject/Scenes/Zooming.unity
     guid: 74420e9715820154ba71ff0a9e2b0c86
+  - enabled: 1
+    path: Assets/VoxelProject/Scenes/MainMenu.unity
+    guid: 15e0d6cdeab6bbc49a5ddef6feafccfc
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
