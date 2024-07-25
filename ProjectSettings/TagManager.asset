@@ -8,11 +8,14 @@ TagManager:
   - OuterContainer
   - InnerContainerDic
   - OuterContainerDic
+  - Brain
+  - Heart
+  - Liver
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - MouseOver
   - Water
   - UI
   - 
