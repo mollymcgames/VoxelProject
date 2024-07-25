@@ -51,7 +51,8 @@ public class NiftiHandler : MonoBehaviour
                     // Convert the number to a string to easily access each digit
                     // Different NII files represent colours in different ways. Decision here is to make everything in the range
                     // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
-                    voxelValue[x,y,z] = new VoxelCell(z, y, x, ((int)(niftiData.Data[index++] % 255)).ToString());                    
+                    string color = ( (int)((float)(niftiData.Data[index++]/calMax)*255) % 255).ToString();
+                    voxelValue[x,y,z] = new VoxelCell(z, y, x, color);
                 }
             }
         }
