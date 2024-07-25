@@ -161,7 +161,6 @@ public class Container : MonoBehaviour
     }
 
     // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
-    //public Voxel this[Vector3 index]
     public Voxel this[int index]
     {
         get

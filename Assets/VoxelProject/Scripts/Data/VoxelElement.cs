@@ -37,7 +37,6 @@ public class VoxelElement
     {
         get
         {
-            //return ID != 0;
             return true;
         }
     }

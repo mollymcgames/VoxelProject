@@ -29,14 +29,6 @@ public class MeshTransparency : MonoBehaviour
             Color color = material.color;
             color.a = alpha;
             material.color = color;
-
-             // Log the details
-            // Debug.Log($"Distance to mesh: {distance}");
-            // Debug.Log($"Calculated alpha: {alpha}");
-            // Debug.Log($"Material color: {material.color}");            
-
-            // If using a shader with a transparency property, you might need to set that too
-            // material.SetFloat("_Transparency", alpha);
         }
     }
 }

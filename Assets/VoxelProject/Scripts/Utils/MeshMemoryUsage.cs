@@ -35,14 +35,6 @@ public class MeshMemoryUsage : MonoBehaviour
         //UnityEngine.Debug.Log("CP: "+currentProcess.ToString());
     }
 
-
-/*    // Optionally, add an OnGUI method to display FPS on screen without UI text
-    void OnGUI()
-    {
-        // Display FPS as overlay text on screen
-        GUI.Label(new Rect(10, 10, 100, 20), "FPS: " + Mathf.RoundToInt(fps));
-    }*/
-
     void Update()
     {
         // Increment frame count
@@ -98,7 +90,6 @@ public class MeshMemoryUsage : MonoBehaviour
 
                 try
                 {
-                    //goChunksSelected.text = WorldManager.Instance.voxelGrid.chunks.Count.ToString();
                     goChunksSelected.text = "NA"; // WorldManager.Instance.voxelGrid.chunks.Count.ToString();
                     //goVoxelsSelected.text = WorldManager.Instance.voxelGrid.voxelsRepresented.ToString();
                     goVoxelsSelected.text = WorldManager.Instance.voxelsSelected.ToString();

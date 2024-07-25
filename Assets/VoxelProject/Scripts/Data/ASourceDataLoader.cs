@@ -5,7 +5,6 @@ using System.IO;
 
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
-    //public VoxelStruct[,,] voxelData = null;
     public VoxelCell[,,] voxelData = null;
     //public VoxelGrid voxelGrid = null;
 
@@ -27,12 +26,10 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         this.chunkSize = chunkSize;
     }
 
-    //public abstract VoxelStruct[,,] LoadSourceData(string filepath);
     public abstract VoxelCell[,,] LoadSourceData(string filepath);
 
     //public abstract VoxelGrid LoadSourceDataGrid(string filepath);
 
-    //public abstract VoxelStruct[,,] LoadVoxelSegmentDefinitionFile(ref VoxelStruct[,,] sourceData, int segmentLayer, string nextSegmentFile);
     public VoxelCell[,,] LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
     {
         VoxelCell nextSegmentVoxel;
@@ -140,6 +137,5 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         Debug.Log("Number of chunks created: " + chunks.Count);
         return chunks;
     }*/
-
 
 }

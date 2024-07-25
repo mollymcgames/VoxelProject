@@ -5,11 +5,8 @@ public class VoxelClickHandler : MonoBehaviour
 {
     private float transitionDelayTime = 1.0f;
     private Animator animator;
-
-    // Name of the scene to load
     public string sceneToLoad;
 
-    // Update is called once per frame
     void Update()
     {
         // Check for mouse click

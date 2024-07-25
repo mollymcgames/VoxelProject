@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class WorldManager : MonoBehaviour
 {
-    // Vector3Int's are used as they use up less memory and also
-    // implement the IEquatable interface making searching the Dictionary nice and fast
-    // CULLING public Dictionary<Vector3Int, VoxelChunk> voxelSourceDataDictionary;
+    // Vector3Int's are used as they use up less memory than floats and also
 
     [Header("Voxel Mesh Settings")]
     [SerializeField]
@@ -16,7 +14,6 @@ public class WorldManager : MonoBehaviour
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;    
-    //public VoxelStruct[,,] sourceData;
     public VoxelCell[,,] sourceData;
     public int voxelsSelected = 0;
 
@@ -42,21 +39,7 @@ public class WorldManager : MonoBehaviour
         }
 
         WorldSettings = worldSettings;        
-        //ComputeManager.Instance.GenerateVoxelData(ref container, 0);
     }
-
-    // void Update(){
-    //     // key is 0 for now, will be changed to a more appropriate key later
-    //     if (Input.GetKeyDown(KeyCode.Alpha0))
-    //     {
-    //         Debug.Log("0 key pressed, generating voxel data.");
-    //         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
-    //     } else if (Input.GetKeyDown(KeyCode.Alpha1))
-    //     {
-    //         Debug.Log("1 key pressed, generating voxel data.");
-    //         ComputeManager.Instance.GenerateVoxelData(ref container, 1);
-    //     }
-    // }
 
     public static WorldSettings WorldSettings;
     private static WorldManager _instance;

@@ -78,9 +78,6 @@ public class SourceDataTextFileLoader : MonoBehaviour
         Debug.Log("NII height:" + heightY);
         Debug.Log("NII depth:" + depthZ);
 
-        // Calculate the number of voxels
-        //int numVoxels = width * height * depth;
-
         // Read the voxel data
         voxelData = VoxelTextHandler.ReadVoxelData(voxelFileLines, widthX, heightY, depthZ);
         Debug.Log("Data now read in");

@@ -22,7 +22,6 @@ public class SCManager : MonoBehaviour
         ComputeManager.Instance.Initialize(1);
         GameObject cont = new GameObject("Container");
         cont.transform.parent = transform;
-        //Debug.Log("SCManager Start - transform:"+cont.transform.parent);
         container = cont.AddComponent<Container>();
         container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);
 
