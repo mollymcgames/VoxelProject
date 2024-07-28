@@ -79,6 +79,7 @@ public class Container : MonoBehaviour
     {
         AdaptMesh();
         UploadMesh();
+        // TODO SET SOME RETURN FLAG AT THIS POINT SO THAT A FUTURE UPDATE LOOP DOESN@T ATTEMPT TO UPDATE UNTIL THE RERENDER HAS ACTUALLY FINISHED.
     }
 
     public void GenerateMesh()
@@ -201,7 +202,8 @@ public class Container : MonoBehaviour
 
             float grayScaleValue = float.Parse(nextVoxel.color) / 255f;
 
-            float camDistance = Vector3.Distance(mainCamera.transform.position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
+/*          THIS IS FOR LATER WHEN TRYING TO ADJUST TRANSPARENCY BASEd ON CAMERA LOCATION  
+ *          float camDistance = Vector3.Distance(mainCamera.transform.position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
             if (camDistance < 100f)
             {
                 grayScaleValue = AdjustGrayscale(grayScaleValue, camDistance);
@@ -209,10 +211,10 @@ public class Container : MonoBehaviour
                 voxelColorAlpha.a = camDistance / 50;
             }
             else
-            {
+            {*/
                 voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
                 voxelColorAlpha.a = 1;
-            }
+            //}
 
             voxelColorAlpha = voxelColor.color;
             voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
@@ -250,9 +252,12 @@ public class Container : MonoBehaviour
 
     void CreateClickableVoxel(Vector3Int clickableVoxelPosition)
     {
+        string voxelTag = "SegmentOne";
+
         // Create a new GameObject for the clickable voxel
         GameObject voxel = new GameObject("Voxel");
         voxel.transform.position = clickableVoxelPosition;
+        voxel.tag = voxelTag;
 
         // Add a BoxCollider to the voxel
         BoxCollider boxCollider = voxel.AddComponent<BoxCollider>();
@@ -260,6 +265,10 @@ public class Container : MonoBehaviour
 
         VoxelClickHandler clickHandler = voxel.AddComponent<VoxelClickHandler>();
         clickHandler.sceneToLoad = "Zooming";
+
+        // Set the cursor handler so that we get a nice cursor when mouseover/out.
+        CustomCursorHandler cch = voxel.AddComponent<CustomCursorHandler>();
+        cch.targetTag = voxelTag;
 
         // Set the voxel GameObject as a child of the original mesh GameObject for organization
         voxel.transform.parent = this.transform;

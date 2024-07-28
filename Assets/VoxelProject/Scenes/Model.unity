@@ -641,7 +641,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
   loadingData: 0
 --- !u!1001 &565163391
 PrefabInstance:
@@ -773,7 +772,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
   loadingData: 0
 --- !u!114 &588403112
 MonoBehaviour:
@@ -787,7 +785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customCursor: {fileID: 0}
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
   targetTag: Heart
 --- !u!1 &770917361
 GameObject:
@@ -1040,7 +1038,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
   loadingData: 0
 --- !u!114 &1091755964
 MonoBehaviour:
@@ -1054,7 +1051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customCursor: {fileID: 0}
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
   targetTag: Brain
 --- !u!1001 &1153404278
 PrefabInstance:
@@ -1199,10 +1196,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   voxelMeshConfigurationSettings:
     voxelDataFileName: 
-    voxelDataHotFileName: 
+    voxelDataSegmentFileName: 
     voxelSegmentLayers: []
     voxelChunkSize: 16
     voxelChunkFieldOfViewMultiplier: 1
+    standardVoxelSize: {x: 1, y: 1, z: 1}
+    voxelMeshCenter: {x: 0, y: 0, z: 0}
     voxelMeshContainerTagName: Untagged
     domainOffsetX: 0
     domainOffsetY: 0
@@ -1341,6 +1340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4b29c613ec0d349a9b030f719bc8e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cch: {fileID: 1630303572}
 --- !u!64 &1630303564
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1380,7 +1380,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
-  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
   loadingData: 0
 --- !u!114 &1630303572
 MonoBehaviour:
@@ -1394,7 +1393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customCursor: {fileID: 0}
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
   targetTag: Liver
 --- !u!1 &1712441868
 GameObject:

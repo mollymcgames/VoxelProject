@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 79178782}
   - component: {fileID: 79178785}
   - component: {fileID: 79178784}
+  - component: {fileID: 79178786}
   m_Layer: 0
   m_Name: SCManager
   m_TagString: Untagged
@@ -194,6 +195,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noiseShader: {fileID: 7200000, guid: 2f02a6167301c774d83b7600a477ddac, type: 3}
+--- !u!114 &79178786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79178781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a884f4a497c88b4096c18ea78dec7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customCursor: {fileID: 2800000, guid: 5f72bdea4ae53a64c89035b80a8748ab, type: 3}
+  targetTag: SegmentOne
 --- !u!1 &187432833
 GameObject:
   m_ObjectHideFlags: 0

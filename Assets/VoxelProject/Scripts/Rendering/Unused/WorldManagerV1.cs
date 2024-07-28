@@ -29,6 +29,8 @@ public class WorldManagerV1 : MonoBehaviour
         // original WorldSettings.maxHeightY = SourceDataLoader.y;
         // original WorldSettings.maxDepthZ = SourceDataLoader.z;
 
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
         ComputeManager.Instance.Initialize(1);
         GameObject cont = new GameObject("Container");
         cont.transform.parent = transform;

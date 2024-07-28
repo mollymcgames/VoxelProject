@@ -11,6 +11,7 @@ TagManager:
   - Brain
   - Heart
   - Liver
+  - SegmentOne
   layers:
   - Default
   - TransparentFX

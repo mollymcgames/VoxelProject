@@ -6,10 +6,8 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
     public GameObject popupPanel;  // Reference to the panel GameObject
     public TextMeshProUGUI popupText;
     public LayerMask layerMask;    // Layer mask to specify which layers to interact with
-    private bool isMouseOver = false;
     private float hideDelay = 1.5f; // Time to wait before hiding the panel
     private float hideTimer = 0f;
-    public Texture2D customCursor; // The custom cursor texture
 
     string brainText, liverText, heartText = null;
 
@@ -28,19 +26,16 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
         {
             // Set the boolean to true if the tag is "Heart"
             hasMouseExited = true;
-            isMouseOver = false;
         }
         if (gameObject.CompareTag("Liver"))
         {
-            // Set the boolean to true if the tag is "Heart"
+            // Set the boolean to true if the tag is "Liver"
             hasMouseExited = true;
-            isMouseOver = false;
         }
         if (gameObject.CompareTag("Brain"))
         {
-            // Set the boolean to true if the tag is "Heart"
+            // Set the boolean to true if the tag is "Brain"
             hasMouseExited = true;
-            isMouseOver = false;
         }
 
     }
@@ -59,9 +54,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 {
                     if (hit.collider.gameObject.CompareTag("Heart"))
                     {
-                        if (isMouseOver == false)
-                            Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
-
                         if (heartText == null)
                         {
                             loadingData = true;
@@ -72,14 +64,10 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                         popupText.color = Color.red;
 
                         // Show the panel
-                        popupPanel.SetActive(true);
-                        isMouseOver = true;                        
+                        popupPanel.SetActive(true);                      
                     }
                     else if (hit.collider.gameObject.CompareTag("Liver"))
                     {
-                        if (isMouseOver == false)
-                            Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
-
                         if (liverText == null)
                         {
                             loadingData = true;
@@ -91,13 +79,9 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
                         // Show the panel
                         popupPanel.SetActive(true);
-                        isMouseOver = true;
                     }
                     else if (hit.collider.gameObject.CompareTag("Brain"))
                     {
-                        if (isMouseOver == false)
-                            Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
-
                         if (brainText == null)
                         {
                             loadingData = true;
@@ -109,7 +93,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
                         // Show the panel
                         popupPanel.SetActive(true);
-                        isMouseOver = true;
                     }
 
                     // Optionally, you can worldPosition the panel at the mouse worldPosition
