@@ -12,6 +12,7 @@ public class SourceDataLoader : ASourceDataLoader
     {
         Debug.Log("Loading nii source data...:" + filepath);
         LoadNiftiFile(filepath);
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter = CalculateCenter(niftiFile.Dimensions[0], niftiFile.Dimensions[1], niftiFile.Dimensions[2]);
         CreateVoxelsArray();
         return voxelData;
     }

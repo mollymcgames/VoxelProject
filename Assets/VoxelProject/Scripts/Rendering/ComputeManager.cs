@@ -86,6 +86,15 @@ public class ComputeManager : MonoBehaviour
         });    
     }
 
+    public void RefreshVoxels(ref Container cont, int layer)
+    {
+        AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
+        {
+            callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
+            voxelContainer.ReRenderMesh();
+        });
+    }
+
     private void ClearVoxelData(NoiseBuffer buffer)
     {
         buffer.countBuffer.SetData(new int[] { 0 });

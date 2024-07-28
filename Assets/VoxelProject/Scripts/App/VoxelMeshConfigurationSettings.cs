@@ -20,6 +20,7 @@ public class VoxelMeshConfigurationSettings
     public int voxelChunkFieldOfViewMultiplier = 1;
 
     public Vector3Int standardVoxelSize = new Vector3Int(1, 1, 1);
+    public Vector3Int voxelMeshCenter;
 
     [TagOptions()]
     public string voxelMeshContainerTagName;

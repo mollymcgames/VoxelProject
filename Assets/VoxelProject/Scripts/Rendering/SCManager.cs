@@ -1,7 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class SCManager : MonoBehaviour
 {
+    private float updateInterval = 0.1f;
+
     [HideInInspector]
     public Container container;
     
@@ -26,6 +29,8 @@ public class SCManager : MonoBehaviour
         container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);
 
         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
+
+        StartCoroutine(TimedUpdateCoroutine());
     }
 
     void Update(){
@@ -39,6 +44,17 @@ public class SCManager : MonoBehaviour
             Debug.Log("1 key pressed, generating voxel data.");
             ComputeManager.Instance.GenerateVoxelData(ref container, 1);
         }
-        //ComputeManager.Instance.GenerateVoxelData(ref container, 0);
+    }
+
+    IEnumerator TimedUpdateCoroutine()
+    {
+        while (true)
+        {
+            // Call the custom update method
+            ComputeManager.Instance.RefreshVoxels(ref container, 0);
+
+            // Wait for the specified interval
+            yield return new WaitForSeconds(updateInterval);
+        }
     }
 }

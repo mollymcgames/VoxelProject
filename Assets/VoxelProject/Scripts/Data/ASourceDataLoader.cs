@@ -108,6 +108,15 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         return voxelData;
     }
 
+    public Vector3Int CalculateCenter(int x, int y, int z)
+    {
+        int centerX = (int)Math.Round(x / 2.0);
+        int centerY = (int)Math.Round(y / 2.0);
+        int centerZ = (int)Math.Round(z / 2.0);
+
+        return new Vector3Int(centerX, centerY, centerZ);
+    }
+
     /*public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> sourceData)
     {
         Debug.Log("Data now read in, data list size: " + sourceData.Count);

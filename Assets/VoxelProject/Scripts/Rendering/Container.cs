@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ using UnityEngine;
 [RequireComponent(typeof(MeshCollider))]
 public class Container : MonoBehaviour
 {
+    public Camera mainCamera;
+
     public Vector3 containerPosition;
 
     public NoiseBuffer data;
@@ -16,13 +19,49 @@ public class Container : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
 
+    private Coroutine distanceCheckCoroutine;
+
+    // Update loop interval to check the camera distance
+    private float checkInterval = 0.1f;
+    float distanceToCamera = 0f;
+
     public void Initialize(Material mat, Vector3 position)
     {
+        mainCamera = Camera.main;
         ConfigureComponents();
         data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
+
+        //distanceCheckCoroutine = StartCoroutine(CheckCameraDistanceCoroutine());
     }
+
+/*    IEnumerator CheckCameraDistanceCoroutine()
+    {
+        while (true)
+        {
+            distanceToCamera = Vector3.Distance(mainCamera.transform.position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
+            //AnimateVoxelsBasedOnDistance(distanceToCamera);
+            yield return new WaitForSeconds(checkInterval);
+        }
+    }*/
+
+/*    void AnimateVoxelsBasedOnDistance(float distanceToCamera)
+    {
+        foreach (VoxelCell voxel in WorldManager.Instance.sourceData)
+        {
+            if (voxel.isOuterVoxel)
+            {
+                Vector3 direction = (voxel.transform.position - voxelMeshCenter.position).normalized;
+                float distanceFactor = Mathf.Clamp01((animationDistance - distanceToCamera) / animationDistance);
+                voxel.AnimateAway(direction, distanceFactor * animationDistance, animationTime);
+            }
+            else
+            {
+                voxel.ResetPosition();
+            }
+        }
+    }*/
 
     public void ClearData()
     {
@@ -36,9 +75,15 @@ public class Container : MonoBehaviour
         UploadMesh();
     }
 
+    public void ReRenderMesh()
+    {
+        AdaptMesh();
+        UploadMesh();
+    }
+
     public void GenerateMesh()
     {
-        Vector3Int voxelBlockPosition;
+        //Vector3Int voxelBlockPosition;
         Voxel block;
 
         int counter = 0;
@@ -51,7 +96,7 @@ public class Container : MonoBehaviour
 
         foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
         {
-            voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
+            //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
             if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
             {
                 continue;
@@ -70,12 +115,13 @@ public class Container : MonoBehaviour
                             continue;
                         }*/
 
-            float grayScaleValue = float.Parse(nextVoxel.color)/255f;
-            voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
-            voxelColorAlpha = voxelColor.color;
-            voxelColorAlpha.a = 1;
-            voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
 
+
+            float grayScaleValue = float.Parse(nextVoxel.color)/255f;
+            voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+            voxelColorAlpha.a = 1;
+            voxelColorAlpha = voxelColor.color;
+            voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
 
             if (nextVoxel.isSegmentVoxel)
             {             
@@ -97,7 +143,8 @@ public class Container : MonoBehaviour
                 //Collect the appropriate vertices from the default vertices and add the block position
                 for (int j = 0; j < 4; j++)
                 {
-                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelBlockPosition;
+                    //faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelBlockPosition;
+                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + nextVoxel.position;
                     faceUVs[j] = voxelUVs[j];
                 }
 
@@ -113,6 +160,92 @@ public class Container : MonoBehaviour
                 }
             }
         }
+    }
+
+    float maxDistance = 200f;
+
+    public void AdaptMesh()
+    {
+        Voxel block;
+
+        int counter = 0;
+
+        VoxelColor voxelColor;
+        Color voxelColorAlpha;
+        Vector2 voxelSmoothness;
+
+        meshData.colors = new List<Color>();
+
+        foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
+        {
+            //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
+            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
+            {
+                continue;
+            }
+
+            // Skip this voxel if it's below the visibility threshold
+            if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+                continue;
+
+            // original
+            /*            block = this[voxelBlockPosition];
+                        //Only check on solid blocks
+                        if (!block.isSolid)
+                        {
+                            Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + nextVoxel.x + "," + nextVoxel.z + "," + nextVoxel.z + "]");
+                            continue;
+                        }*/
+
+
+
+            float grayScaleValue = float.Parse(nextVoxel.color) / 255f;
+
+            float camDistance = Vector3.Distance(mainCamera.transform.position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
+            if (camDistance < 100f)
+            {
+                grayScaleValue = AdjustGrayscale(grayScaleValue, camDistance);
+                voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+                voxelColorAlpha.a = camDistance / 50;
+            }
+            else
+            {
+                voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+                voxelColorAlpha.a = 1;
+            }
+
+            voxelColorAlpha = voxelColor.color;
+            voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+
+            //Iterate over each face direction
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    // FOr this to be meaningful, we really need to track where each voxel is in the mesh so that we can
+                    // change individual colours!!!
+                    // THis will save looping through each voxel all the time!!
+                    meshData.colors.Add(voxelColorAlpha);
+                }
+            }
+        }
+    }
+
+    float AdjustGrayscale(float originalGrayscale, float distance)
+    {
+        // Clamp the distance to the range [0, maxDistance]
+        distance = Mathf.Clamp(distance, 0, maxDistance);
+
+        // Normalize the distance to the range [0, 1]
+        float normalizedDistance = distance / maxDistance;
+
+        // Target grayscale value at minimum distance (e.g., closer to white)
+        float targetGrayscaleValue = 254f;
+
+        // Blend the original grayscale value with the target grayscale value based on the normalized distance
+        float adjustedGrayscale = Mathf.Lerp(originalGrayscale, targetGrayscaleValue, 1 - normalizedDistance);
+
+        return adjustedGrayscale;
     }
 
     void CreateClickableVoxel(Vector3Int clickableVoxelPosition)
