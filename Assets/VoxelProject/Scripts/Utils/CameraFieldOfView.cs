@@ -27,33 +27,42 @@ public class CameraFieldOfView : MonoBehaviour
 
     void Update()
     {
-        // Check if the mouse wheel button is pressed
-        if (Input.GetMouseButtonDown(2))
+        //Debug.Log("SC zooming? " + SCManager.Instance.isZooming);
+        if (SCManager.Instance.isZooming == false)
         {
-            isDragging = true;
-            lastMouseY = Input.mousePosition.y;
-        }
+            // Check if the mouse wheel button is pressed
+            if (Input.GetMouseButtonDown(2))
+            {
+                isDragging = true;
+                lastMouseY = Input.mousePosition.y;
+            }
 
-        // Check if the mouse wheel button is released
-        if (Input.GetMouseButtonUp(2))
-        {
-            isDragging = false;
-        }
+            // Check if the mouse wheel button is released
+            if (Input.GetMouseButtonUp(2))
+            {
+                isDragging = false;
+            }
 
-        // Update the slider color based on mouse movement if dragging
-        if (isDragging)
-        {
-            float mouseY = Input.mousePosition.y;
-            float deltaY = lastMouseY - mouseY;
-            m_FieldOfView += deltaY * sensitivity;
-            m_FieldOfView = Mathf.Clamp(m_FieldOfView, min, max);
-            lastMouseY = mouseY;
-        }
+            // Update the slider color based on mouse movement if dragging
+            if (isDragging)
+            {
+                float mouseY = Input.mousePosition.y;
+                float deltaY = lastMouseY - mouseY;
+                m_FieldOfView += deltaY * sensitivity;
+                m_FieldOfView = Mathf.Clamp(m_FieldOfView, min, max);
+                lastMouseY = mouseY;
+            }
 
-        //Update the camera's field of view to be the variable returning from the Slider
-        m_FieldOfView = fovSlider.value;
-        fovValue.text = fovSlider.value.ToString();
-        Camera.main.fieldOfView = m_FieldOfView;
+            if (Camera.main.fieldOfView != m_FieldOfView)
+            {
+                Camera.main.fieldOfView = m_FieldOfView;
+            }
+
+            //Update the camera's field of view to be the variable returning from the Slider
+            m_FieldOfView = fovSlider.value;
+            fovValue.text = ((int)fovSlider.value).ToString();
+            Camera.main.fieldOfView = m_FieldOfView;
+        }
     }
 
 }

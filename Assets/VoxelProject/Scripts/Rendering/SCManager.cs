@@ -4,6 +4,7 @@ using UnityEngine;
 public class SCManager : MonoBehaviour
 {
     private float updateInterval = 0.1f;
+    public bool isZooming = false;
 
     [HideInInspector]
     public Container container;
