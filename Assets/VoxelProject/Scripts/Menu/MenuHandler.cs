@@ -153,9 +153,9 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.worldSettings.maxHeightY = loader.heightY;
         WorldManager.Instance.worldSettings.maxDepthZ = loader.depthZ;
 
-        Debug.Log("Loaded world dimensions: " + WorldManager.WorldSettings.maxWidthX + ", " + WorldManager.WorldSettings.maxHeightY + ", " + WorldManager.WorldSettings.maxDepthZ);
-        Debug.Log("Loaded world dimensions2: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
+        Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
 
+        // WorldManager.Instance.voxelsSelected = WorldManager.Instance.worldSettings.maxWidthX * WorldManager.Instance.worldSettings.maxHeightY * WorldManager.Instance.worldSettings.maxDepthZ;
         //Debug.Log("Random voxel color 0: " + WorldManager.Instance.sourceData[20, 20, 20].getColourRGBLayer(0));
         //Debug.Log("Voxel hot color: " + WorldManager.Instance.sourceData[21, 30, 0].getHotVoxelColourRGB().ToString());
         //Debug.Log("Voxel hot bool: " + WorldManager.Instance.sourceData[21, 30, 0].isHotVoxel.ToString());

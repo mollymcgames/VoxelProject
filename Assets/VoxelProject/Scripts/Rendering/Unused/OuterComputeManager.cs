@@ -39,6 +39,7 @@ public class OuterComputeManager : MonoBehaviour
     {
         if (availableNoiseComputeBuffers.Count > 0)
             return availableNoiseComputeBuffers.Dequeue();
+            
         else
         {
             return CreateNewNoiseBuffer(false);
@@ -64,7 +65,7 @@ public class OuterComputeManager : MonoBehaviour
     }
     #endregion
 
-    #region Compute Helpers
+    #region Compute Helpers 
 
     public void GenerateVoxelData(ref OuterContainer container, ref Camera mainCamera, bool renderOuter = false)
     {

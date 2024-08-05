@@ -68,37 +68,38 @@ public class MeshMemoryUsage : MonoBehaviour
         float memoryUsageMB = UnityEngine.Profiling.Profiler.GetMonoUsedSizeLong() / (1024f * 1024f);
         goTotalRAM.text = memoryUsageMB.ToString("F0") + "MB";
 
-        meshFilter = GameObject.FindAnyObjectByType<MeshFilter>();
-        if (meshFilter != null)
+        // meshFilter = GameObject.FindAnyObjectByType<MeshFilter>();
+        //find mesh instead
+        mesh = GameObject.FindFirstObjectByType<Mesh>();
+        // if (meshFilter != null)
+        
+        if (mesh != null)
         {
-            mesh = meshFilter.mesh;
-            if (mesh != null)
+            int vertexMemory = mesh.vertexCount * sizeof(float) * 3; // Each vertex has 3 floats (x, y, z)
+            int normalMemory = mesh.normals.Length * sizeof(float) * 3; // Each normal has 3 floats
+            int uvMemory = mesh.uv.Length * sizeof(float) * 2; // Each UV has 2 floats (u, v)
+            int indexMemory = mesh.triangles.Length * sizeof(int); // Each index is an int
+
+            int totalMemory = vertexMemory + normalMemory + uvMemory + indexMemory;
+
+            //Debug.Log($"Mesh Memory Usage: {totalMemory / 1024f / 1024f} MB");
+            goVertexMemory.text = (vertexMemory / 1024f / 1024f).ToString() + " MB";
+            goNormalMemory.text = (normalMemory / 1024f / 1024f).ToString() + " MB";
+            goUvMemory.text = (uvMemory / 1024f / 1024f).ToString() + " MB";
+            goIndexMemory.text = (indexMemory / 1024f / 1024f).ToString() + " MB";
+            goTotalMemory.text = (totalMemory / 1024f / 1024f).ToString() + " MB";
+
+            try
             {
-                int vertexMemory = mesh.vertexCount * sizeof(float) * 3; // Each vertex has 3 floats (x, y, z)
-                int normalMemory = mesh.normals.Length * sizeof(float) * 3; // Each normal has 3 floats
-                int uvMemory = mesh.uv.Length * sizeof(float) * 2; // Each UV has 2 floats (u, v)
-                int indexMemory = mesh.triangles.Length * sizeof(int); // Each index is an int
-
-                int totalMemory = vertexMemory + normalMemory + uvMemory + indexMemory;
-
-                //Debug.Log($"Mesh Memory Usage: {totalMemory / 1024f / 1024f} MB");
-                goVertexMemory.text = (vertexMemory / 1024f / 1024f).ToString() + " MB";
-                goNormalMemory.text = (normalMemory / 1024f / 1024f).ToString() + " MB";
-                goUvMemory.text = (uvMemory / 1024f / 1024f).ToString() + " MB";
-                goIndexMemory.text = (indexMemory / 1024f / 1024f).ToString() + " MB";
-                goTotalMemory.text = (totalMemory / 1024f / 1024f).ToString() + " MB";
-
-                try
-                {
-                    goChunksSelected.text = "NA"; // WorldManager.Instance.voxelGrid.chunks.Count.ToString();
-                    //goVoxelsSelected.text = WorldManager.Instance.voxelGrid.voxelsRepresented.ToString();
-                    goVoxelsSelected.text = WorldManager.Instance.voxelsSelected.ToString();
-                } catch
-                {
-                    goChunksSelected.text = "None";
-                    goVoxelsSelected.text = "None";
-                }
+                goChunksSelected.text = "NA"; // WorldManager.Instance.voxelGrid.chunks.Count.ToString();
+                //goVoxelsSelected.text = WorldManager.Instance.voxelGrid.voxelsRepresented.ToString();
+                goVoxelsSelected.text = WorldManager.Instance.voxelsSelected.ToString();
+            } catch
+            {
+                goChunksSelected.text = "None";
+                goVoxelsSelected.text = "None";
             }
         }
+    
     }
 }
