@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class VoxelClickHandler : MonoBehaviour
 {
-    private float transitionDelayTime = 1.0f;
     private Animator animator;
     public string sceneToLoad;
 
@@ -13,8 +12,8 @@ public class VoxelClickHandler : MonoBehaviour
     // The FOV value when zoomed in
     public float zoomedFOV = 20f;
     // The speed of the zoom
-    public float zoomInSpeed = 2f;
-    public float zoomOutSpeed = 1.01f;
+    public float zoomInSpeed = 1f;
+    public float zoomOutSpeed = 1f;
 
     private float originalFOV;
 
@@ -30,13 +29,9 @@ public class VoxelClickHandler : MonoBehaviour
     {
         if (gameObject.CompareTag("SegmentOne"))
         {
-/*            if (SCManager.Instance.isZooming == true)
-            {*/
                 Debug.Log("Mouse out! TD=" + Time.deltaTime);
                 isZoomedOut = false;
                 SCManager.Instance.isZooming = false;
-                //zoomLock = false;
-            //}
         }
     }
 
@@ -51,7 +46,6 @@ public class VoxelClickHandler : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 // Check if the object hit has the specified tag
-                //if (hit.collider.gameObject == gameObject)
                 if (hit.collider.CompareTag("SegmentOne"))
                 {
                     Debug.Log("Collided into SegmentOne. ZL="+ SCManager.Instance.isZooming);
@@ -106,7 +100,6 @@ public class VoxelClickHandler : MonoBehaviour
                 if (Camera.main.fieldOfView >= originalFOV)
                 {
                     SCManager.Instance.isZooming = true;
-                    //isZoomedOut = true;
                 }
             }
         }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class WorldManagerV1 : MonoBehaviour
 {
     public Material worldMaterial;
+    
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;
     public VoxelCell[] sourceData;

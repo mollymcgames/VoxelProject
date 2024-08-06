@@ -27,7 +27,7 @@ public class SCManager : MonoBehaviour
         GameObject cont = new GameObject("Container");
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
-        container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);
+        container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);     
 
         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
 
