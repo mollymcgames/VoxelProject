@@ -18,13 +18,13 @@ public class ComputeManager : MonoBehaviour
 
     public void Initialize(int count = 256)
     {
-        xThreads = WorldManager.Instance.worldSettings.maxWidthX / 8 + 1;
-        yThreads = WorldManager.Instance.worldSettings.maxHeightY / 8;
-        zThreads = WorldManager.Instance.worldSettings.maxDepthZ / 8;
+        xThreads = WorldManager.Instance.worldSettings.widthX / 8 + 1;
+        yThreads = WorldManager.Instance.worldSettings.heightY / 8;
+        zThreads = WorldManager.Instance.worldSettings.depthZ / 8;
 
-        noiseShader.SetInt("containerSizeX", WorldManager.Instance.worldSettings.maxWidthX);
-        noiseShader.SetInt("containerSizeY", WorldManager.Instance.worldSettings.maxHeightY);
-        noiseShader.SetInt("containerSizeZ", WorldManager.Instance.worldSettings.maxDepthZ);
+        noiseShader.SetInt("containerSizeX", WorldManager.Instance.worldSettings.widthX);
+        noiseShader.SetInt("containerSizeY", WorldManager.Instance.worldSettings.heightY);
+        noiseShader.SetInt("containerSizeZ", WorldManager.Instance.worldSettings.depthZ);
 
         for (int i = 0; i < count; i++)
         {
@@ -83,7 +83,7 @@ public class ComputeManager : MonoBehaviour
             // original callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
             callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
             voxelContainer.RenderMesh();
-        });    
+        });
     }
 
     public void RefreshVoxels(ref Container cont, int layer)

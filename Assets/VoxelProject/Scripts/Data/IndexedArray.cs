@@ -19,7 +19,7 @@ public class IndexedArray<T> where T : struct
 
     public IndexedArray()
     {
-        Create(WorldManager.WorldSettings.maxWidthX, WorldManager.WorldSettings.maxHeightY, WorldManager.WorldSettings.maxDepthZ);
+        Create(WorldManager.WorldSettings.widthX, WorldManager.WorldSettings.heightY, WorldManager.WorldSettings.depthZ);
     }
 
     public IndexedArray(int sizeX, int sizeY, int sizeZ)

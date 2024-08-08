@@ -26,9 +26,9 @@ public class WorldManagerV1 : MonoBehaviour
 
         // original sourceData = SourceDataLoader.LoadSourceData();
         // original WorldSettings = worldSettings;
-        // original WorldSettings.maxWidthX = SourceDataLoader.x;
-        // original WorldSettings.maxHeightY = SourceDataLoader.y;
-        // original WorldSettings.maxDepthZ = SourceDataLoader.z;
+        // original WorldSettings.widthX = SourceDataLoader.x;
+        // original WorldSettings.heightY = SourceDataLoader.y;
+        // original WorldSettings.depthZ = SourceDataLoader.z;
 
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 

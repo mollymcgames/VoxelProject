@@ -1,4 +1,5 @@
 using System.IO;
+using TreeEditor;
 using UnityEngine;
 
 public class SourceDataLoader : ASourceDataLoader
@@ -65,12 +66,12 @@ public class SourceDataLoader : ASourceDataLoader
         Debug.Log("Data now read in");
     }
 
-/*    private void CreateVoxelsArrayGrid()
-    {
-        // Read the voxel data
-        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFile, x, y, z, chunkSize);
-        Debug.Log("Data (grid) now read in");
-    }*/
+    /*    private void CreateVoxelsArrayGrid()
+        {
+            // Read the voxel data
+            voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFile, x, y, z, chunkSize);
+            Debug.Log("Data (grid) now read in");
+        }*/
 
     public void OpenNiftiFile(string filePath)
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class WorldManager : MonoBehaviour
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;    
     public VoxelCell[,,] sourceData;
+    public Octree octree;
+
     public int voxelsSelected = 0;
 
     //[HideInInspector]
@@ -80,8 +83,11 @@ public class WorldSettings
 {
     public int containerSize = 16;
     public int maxHeight = 128;
-    public int maxWidthX = 0;
-    public int maxDepthZ = 0;
-    public int maxHeightY = 0;
+    public int widthX = 0;
+    public int depthZ = 0;
+    public int heightY = 0;
     public int chunkSize = 32;
+
+    // Define the bounds for your voxel space (e.g., a cube with size 1000)
+    public Bounds worldBounds;
 }

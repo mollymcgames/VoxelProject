@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -71,15 +72,125 @@ public class Container : MonoBehaviour
     public void RenderMesh()
     {
         meshData.ClearData();
-        GenerateMesh();
+        GenerateMesh2();
         UploadMesh();
     }
 
     public void ReRenderMesh()
     {
-        AdaptMesh();
+        // TEMP AdaptMesh();
+        GenerateMesh2();
         UploadMesh();
         // TODO SET SOME RETURN FLAG AT THIS POINT SO THAT A FUTURE UPDATE LOOP DOESN@T ATTEMPT TO UPDATE UNTIL THE RERENDER HAS ACTUALLY FINISHED.
+    }
+
+    public float maxViewDistance = 50f; // Maximum distance to render voxels
+
+    public void GenerateMesh2()
+    {
+        List<Vector3Int> visibleVoxels = OctreeTraversal.GetVisibleVoxels(WorldManager.Instance.octree.root, mainCamera);
+        
+
+        //Vector3Int voxelBlockPosition;
+        Voxel block;
+
+        int counter = 0;
+        Vector3Int[] faceVertices = new Vector3Int[4];
+        Vector2[] faceUVs = new Vector2[4];
+
+        VoxelColor voxelColor;
+        Color voxelColorAlpha;
+        Vector2 voxelSmoothness;
+
+        // NOPE-PRIOR Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+
+        // NOPE-PRIOR // Calculate the camera's bounding box for the frustum and max distance
+        // NOPE-PRIOR Bounds cameraBounds = CalculateCameraBounds(frustumPlanes, maxViewDistance);
+
+        // NOPE-PRIOR List<Vector3Int> visibleVoxels = new List<Vector3Int>();
+        // NOPE-PRIOR         WorldManager.Instance.octree.Query(cameraBounds, visibleVoxels);
+
+        foreach (var nextVoxel in visibleVoxels)
+        {
+            //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
+            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
+            {
+                continue;
+            }
+
+            // Skip this voxel if it's below the visibility threshold
+            // TEMP if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            // TEMP    continue;
+
+            // original
+            /*            block = this[voxelBlockPosition];
+                        //Only check on solid blocks
+                        if (!block.isSolid)
+                        {
+                            Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + nextVoxel.x + "," + nextVoxel.z + "," + nextVoxel.z + "]");
+                            continue;
+                        }*/
+
+
+
+            float grayScaleValue = 128; // TEMP float.Parse(nextVoxel.color) / 255f;
+            voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+            voxelColorAlpha.a = 1;
+            voxelColorAlpha = voxelColor.color;
+            voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+
+            // TEMPif (nextVoxel.isSegmentVoxel)
+            // TEMP{
+            // TEMPCreateClickableVoxel(new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z));
+            // TEMP}
+
+            //Iterate over each face direction
+            for (int i = 0; i < 6; i++)
+            {
+                //Check if there's a solid block against this face
+                //if (checkVoxelIsSolid(voxelBlockPosition + voxelFaceChecks[i]))
+                // if (checkVoxelIsSolid(voxelBlockPosition))                
+                //     continue;
+                //if ( float.Parse(nextVoxel.color) < 18)
+                //    continue;
+
+                //Draw this face
+
+                //Collect the appropriate vertices from the default vertices and add the block position
+                for (int j = 0; j < 4; j++)
+                {
+                    //faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelBlockPosition;
+                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + nextVoxel;
+                    faceUVs[j] = voxelUVs[j];
+                }
+
+                for (int j = 0; j < 6; j++)
+                {
+                    meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
+                    meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
+                    meshData.colors.Add(voxelColorAlpha);
+                    meshData.UVs2.Add(voxelSmoothness);
+
+                    meshData.triangles.Add(counter++);
+
+                }
+            }
+        }
+    }
+
+    Bounds CalculateCameraBounds(Plane[] frustumPlanes, float maxDistance)
+    {
+        // Create a large enough bounding box around the camera
+        Vector3 cameraPosition = mainCamera.transform.position;
+        Bounds bounds = new Bounds(cameraPosition, Vector3.one * maxDistance * 2);
+
+        foreach (var plane in frustumPlanes)
+        {
+            float distance = Mathf.Abs(plane.GetDistanceToPoint(cameraPosition));
+            bounds.Encapsulate(cameraPosition + plane.normal * distance);
+        }
+
+        return bounds;
     }
 
     public void GenerateMesh()
@@ -295,7 +406,7 @@ public class Container : MonoBehaviour
     }
     public bool checkVoxelIsSolid(Vector3 point)
     {
-        if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
+        if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.widthX + 2) || (point.z > WorldManager.WorldSettings.depthZ + 2))
             return true;
         else
             // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.

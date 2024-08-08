@@ -84,7 +84,20 @@ public class MenuHandler : MonoBehaviour
             loader = DataLoaderUtils.LoadDataFile();
             WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);            
+            Debug.Log("Source data length: " + WorldManager.Instance.sourceData.Length);
+
+            WorldManager.Instance.worldSettings.widthX = loader.widthX;
+            WorldManager.Instance.worldSettings.heightY = loader.heightY;
+            WorldManager.Instance.worldSettings.depthZ = loader.depthZ;
+            WorldManager.Instance.worldSettings.worldBounds = new Bounds(Vector3.zero, new Vector3(loader.widthX*2, loader.heightY*2, loader.depthZ*2));
+
+            Debug.Log("Loaded world dimensions (header): " + WorldManager.Instance.worldSettings.widthX + ", " + WorldManager.Instance.worldSettings.heightY + ", " + WorldManager.Instance.worldSettings.depthZ);
+            Debug.Log("Created Bounds (header): " + WorldManager.Instance.worldSettings.worldBounds.ToString());
+
             niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+            
+            WorldManager.Instance.octree = loader.CreateVoxelsOctree();
+            //Debug.Log("Octree length: " + WorldManager.Instance.octree.Length());
         }
         
         string retString = "<br>Dimensions: x(" + niftiFile.Dimensions[0] + ")/ y(" + niftiFile.Dimensions[1] + ")/ z(" + niftiFile.Dimensions[2] + ") <br>Filename: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
@@ -135,9 +148,21 @@ public class MenuHandler : MonoBehaviour
             loader = DataLoaderUtils.LoadDataFile();
             WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+            Debug.Log("Source data length: " + WorldManager.Instance.sourceData.Length);
             niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+
+            WorldManager.Instance.worldSettings.widthX = loader.widthX;
+            WorldManager.Instance.worldSettings.heightY = loader.heightY;
+            WorldManager.Instance.worldSettings.depthZ = loader.depthZ;
+            WorldManager.Instance.worldSettings.worldBounds = new Bounds(Vector3.zero, new Vector3(loader.widthX*2, loader.heightY*2, loader.depthZ*2));
+
+            Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.widthX + ", " + WorldManager.Instance.worldSettings.heightY + ", " + WorldManager.Instance.worldSettings.depthZ);
+            Debug.Log("Created Bounds: " + WorldManager.Instance.worldSettings.worldBounds.ToString());
+
+            WorldManager.Instance.octree = loader.CreateVoxelsOctree();
+            //Debug.Log("Octree length: " + WorldManager.Instance.octree.Length());
         }
-        
+
         Debug.Log("Description, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip));
         Debug.Log("Dimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2]);
         Debug.Log("Filename, " + niftiFilePath);
@@ -151,13 +176,7 @@ public class MenuHandler : MonoBehaviour
             WorldManager.Instance.sourceData = loader.LoadVoxelSegmentDefinitionFileExtra(voxelSegmentDefinitionFilePath);
         }
 
-        WorldManager.Instance.worldSettings.maxWidthX = loader.widthX;
-        WorldManager.Instance.worldSettings.maxHeightY = loader.heightY;
-        WorldManager.Instance.worldSettings.maxDepthZ = loader.depthZ;
-
-        Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
-
-        // WorldManager.Instance.voxelsSelected = WorldManager.Instance.worldSettings.maxWidthX * WorldManager.Instance.worldSettings.maxHeightY * WorldManager.Instance.worldSettings.maxDepthZ;
+        // WorldManager.Instance.voxelsSelected = WorldManager.Instance.worldSettings.widthX * WorldManager.Instance.worldSettings.heightY * WorldManager.Instance.worldSettings.depthZ;
         //Debug.Log("Random voxel color 0: " + WorldManager.Instance.sourceData[20, 20, 20].getColourRGBLayer(0));
         //Debug.Log("Voxel hot color: " + WorldManager.Instance.sourceData[21, 30, 0].getHotVoxelColourRGB().ToString());
         //Debug.Log("Voxel hot bool: " + WorldManager.Instance.sourceData[21, 30, 0].isHotVoxel.ToString());

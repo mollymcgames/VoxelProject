@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using TreeEditor;
 
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
     public VoxelCell[,,] voxelData = null;
+    
+
     //public VoxelGrid voxelGrid = null;
 
     public int chunkSize = 0;
@@ -27,6 +30,24 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     }
 
     public abstract VoxelCell[,,] LoadSourceData(string filepath);
+
+    public Octree CreateVoxelsOctree()
+    {
+        //OctreeNode octree = new OctreeNode(WorldManager.Instance.worldSettings.worldBounds, 0);
+        Vector3Int rootPosition = Vector3Int.zero;
+        int rootSize = 10;
+        Octree octree = new Octree(rootPosition, rootSize);
+
+        // Insert voxels into the octree (replace this with your voxel initialization)
+        foreach (var voxel in WorldManager.Instance.sourceData)
+        {
+            octree.Insert(voxel.position, voxel);
+        }
+        
+        Debug.Log("Voxel octree created!");
+
+        return octree;
+    }
 
     //public abstract VoxelGrid LoadSourceDataGrid(string filepath);
 
