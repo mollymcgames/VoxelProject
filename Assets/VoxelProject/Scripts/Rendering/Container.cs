@@ -95,16 +95,17 @@ public class Container : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
-        foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
+        // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
+        foreach (var nextVoxel in WorldManager.Instance.sourceData)
         {
             //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
-            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
+            if (nextVoxel.Value.x < 0 || nextVoxel.Value.y < 0 || nextVoxel.Value.z < 0)
             {
                 continue;
             }
 
             // Skip this voxel if it's below the visibility threshold
-            if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            if (int.Parse(nextVoxel.Value.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
                 continue;
 
             // original
@@ -118,15 +119,15 @@ public class Container : MonoBehaviour
 
 
 
-            float grayScaleValue = float.Parse(nextVoxel.color)/255f;
+            float grayScaleValue = float.Parse(nextVoxel.Value.color)/255f;
             voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
             voxelColorAlpha.a = 1;
             voxelColorAlpha = voxelColor.color;
             voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
 
-            if (nextVoxel.isSegmentVoxel)
+            if (nextVoxel.Value.isSegmentVoxel)
             {             
-                CreateClickableVoxel(new Vector3Int(nextVoxel.x,nextVoxel.y,nextVoxel.z));
+                CreateClickableVoxel(new Vector3Int(nextVoxel.Value.x,nextVoxel.Value.y,nextVoxel.Value.z));
             }
 
             //Iterate over each face direction
@@ -145,7 +146,7 @@ public class Container : MonoBehaviour
                 for (int j = 0; j < 4; j++)
                 {
                     //faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelBlockPosition;
-                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + nextVoxel.position;
+                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + nextVoxel.Value.position;
                     faceUVs[j] = voxelUVs[j];
                 }
 
@@ -177,16 +178,16 @@ public class Container : MonoBehaviour
 
         meshData.colors = new List<Color>();
 
-        foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
+        foreach (var nextVoxel in WorldManager.Instance.sourceData)
         {
             //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
-            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
+            if (nextVoxel.Value.x < 0 || nextVoxel.Value.y < 0 || nextVoxel.Value.z < 0)
             {
                 continue;
             }
 
             // Skip this voxel if it's below the visibility threshold
-            if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            if (int.Parse(nextVoxel.Value.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
                 continue;
 
             // original
@@ -200,7 +201,7 @@ public class Container : MonoBehaviour
 
 
 
-            float grayScaleValue = float.Parse(nextVoxel.color) / 255f;
+            float grayScaleValue = float.Parse(nextVoxel.Value.color) / 255f;
 
 /*          THIS IS FOR LATER WHEN TRYING TO ADJUST TRANSPARENCY BASEd ON CAMERA LOCATION  
  *          float camDistance = Vector3.Distance(mainCamera.transform.position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);

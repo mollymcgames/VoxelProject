@@ -25,14 +25,14 @@ public class MenuHandler : MonoBehaviour
     {
         // WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_003.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         LoadAFile(false);
     }
     public string LoadHeartFileHeader()
     {
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_003.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         return LoadAFileForTheHeader();
     }
