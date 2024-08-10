@@ -145,7 +145,7 @@ public struct NoiseBuffer
         countBuffer.SetData(new uint[] { 0 });
 
         //voxelArray = new IndexedArray<Voxel>();
-        voxelArray = new Voxel[WorldManager.Instance.sourceData.Count];
+        voxelArray = new Voxel[WorldManager.Instance.voxelDictionary.Count];
         //noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
         noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(Voxel)));
         noiseBuffer.SetData(voxelArray);

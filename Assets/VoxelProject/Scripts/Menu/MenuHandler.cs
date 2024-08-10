@@ -82,7 +82,7 @@ public class MenuHandler : MonoBehaviour
             fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
             Debug.Log("Loading file: " + fileLastLoaded);            
             loader = DataLoaderUtils.LoadDataFile();
-            WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+            WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);            
             niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
         }
@@ -133,7 +133,7 @@ public class MenuHandler : MonoBehaviour
             fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
             Debug.Log("Loading file: " + fileLastLoaded);
             loader = DataLoaderUtils.LoadDataFile();
-            WorldManager.Instance.sourceData = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+            WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
         }
@@ -148,7 +148,7 @@ public class MenuHandler : MonoBehaviour
             //Use Steaming Assets folder to load the file
             string voxelSegmentDefinitionFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName);
 
-            WorldManager.Instance.sourceData = loader.LoadVoxelSegmentDefinitionFileExtra(voxelSegmentDefinitionFilePath);
+            WorldManager.Instance.voxelDictionary = loader.LoadVoxelSegmentDefinitionFileExtra(voxelSegmentDefinitionFilePath);
         }
 
         WorldManager.Instance.worldSettings.maxWidthX = loader.widthX;
@@ -158,9 +158,9 @@ public class MenuHandler : MonoBehaviour
         Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
 
         // WorldManager.Instance.voxelsSelected = WorldManager.Instance.worldSettings.maxWidthX * WorldManager.Instance.worldSettings.maxHeightY * WorldManager.Instance.worldSettings.maxDepthZ;
-        //Debug.Log("Random voxel color 0: " + WorldManager.Instance.sourceData[20, 20, 20].getColourRGBLayer(0));
-        //Debug.Log("Voxel hot color: " + WorldManager.Instance.sourceData[21, 30, 0].getHotVoxelColourRGB().ToString());
-        //Debug.Log("Voxel hot bool: " + WorldManager.Instance.sourceData[21, 30, 0].isHotVoxel.ToString());
+        //Debug.Log("Random voxel color 0: " + WorldManager.Instance.voxelDictionary[20, 20, 20].getColourRGBLayer(0));
+        //Debug.Log("Voxel hot color: " + WorldManager.Instance.voxelDictionary[21, 30, 0].getHotVoxelColourRGB().ToString());
+        //Debug.Log("Voxel hot bool: " + WorldManager.Instance.voxelDictionary[21, 30, 0].isHotVoxel.ToString());
 
         //Debug.Log("Random voxel color 0: " + WorldManager.Instance.voxelGrid.GetVoxelUsingWorldPosition(new Vector3Int(50, 50, 50)).getColourRGBLayer(0));
 
@@ -170,10 +170,10 @@ public class MenuHandler : MonoBehaviour
             int segmentLayer = 1;
             foreach (string nextSegmentFile in WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers)
             {
-                WorldManager.Instance.sourceData = loader.LoadVoxelSegmentDefinitionFile(ref WorldManager.Instance.sourceData, segmentLayer++, nextSegmentFile);
+                WorldManager.Instance.voxelDictionary = loader.LoadVoxelSegmentDefinitionFile(ref WorldManager.Instance.voxelDictionary, segmentLayer++, nextSegmentFile);
             }        
             voxelFileFormat = DataLoaderUtils.GetDataFileFormat();
-            Debug.Log("Random voxel color 1: " + WorldManager.Instance.sourceData[20, 20, 20].getColourRGBLayer(1));
+            Debug.Log("Random voxel color 1: " + WorldManager.Instance.voxelDictionary[20, 20, 20].getColourRGBLayer(1));
         }  */ 
     }
 

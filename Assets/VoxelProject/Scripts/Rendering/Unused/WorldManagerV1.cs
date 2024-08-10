@@ -24,7 +24,7 @@ public class WorldManagerV1 : MonoBehaviour
             _instance = this;
         }
 
-        // original sourceData = SourceDataLoader.LoadSourceData();
+        // original voxelDictionary = SourceDataLoader.LoadSourceData();
         // original WorldSettings = worldSettings;
         // original WorldSettings.maxWidthX = SourceDataLoader.x;
         // original WorldSettings.maxHeightY = SourceDataLoader.y;

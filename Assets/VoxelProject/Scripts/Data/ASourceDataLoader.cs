@@ -5,8 +5,8 @@ using System.IO;
 
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
-    // FIXP public VoxelCell[,,] voxelData = null;
-    public Dictionary<Vector3Int, VoxelCell> voxelData = null;
+    // FIXP public VoxelCell[,,] voxelDictionary = null;
+    public Dictionary<Vector3Int, VoxelCell> voxelDictionary = null;
     //public VoxelGrid voxelGrid = null;
 
     public int chunkSize = 0;
@@ -59,16 +59,16 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 continue;
             }
 
-            // FIXP nextSegmentVoxel = voxelData[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
-            voxelData.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelData[new Vector3Int(x, y, z)] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
-            // FIXP voxelData[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
+            // FIXP nextSegmentVoxel = voxelDictionary[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
+            voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
+            voxelDictionary[new Vector3Int(x, y, z)] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
+            // FIXP voxelDictionary[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             // TODO nextSegmentVoxel.isHotVoxel = true;
             // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
-            // TODO voxelData[x, y, z] = nextSegmentVoxel;
+            // TODO voxelDictionary[x, y, z] = nextSegmentVoxel;
         }
 
-        return voxelData;
+        return voxelDictionary;
     }
 
     public abstract object GetHeader();
@@ -104,15 +104,15 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 continue;
             }
 
-            // FIXP nextSegmentVoxel = voxelData[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
-            voxelData.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelData[new Vector3Int(x, y, z)] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
+            // FIXP nextSegmentVoxel = voxelDictionary[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
+            voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
+            voxelDictionary[new Vector3Int(x, y, z)] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             // TODO nextSegmentVoxel.isHotVoxel = true;
             // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
-            // TODO voxelData[x, y, z] = nextSegmentVoxel;
+            // TODO voxelDictionary[x, y, z] = nextSegmentVoxel;
         }
 
-        return voxelData;
+        return voxelDictionary;
     }
 
     public Vector3Int CalculateCenter(int x, int y, int z)
@@ -124,15 +124,15 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         return new Vector3Int(centerX, centerY, centerZ);
     }
 
-    /*public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> sourceData)
+    /*public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> voxelDictionary)
     {
-        Debug.Log("Data now read in, data list size: " + sourceData.Count);
+        Debug.Log("Data now read in, data list size: " + voxelDictionary.Count);
         Debug.Log("Creating chunks of size [" + chunkSize + "] cubed.");
 
         Dictionary<Vector3Int, VoxelChunk> chunks = new Dictionary<Vector3Int, VoxelChunk>();
 
         int voxelsProcessed = 0;
-        foreach (Voxel nextVoxelElement in sourceData)
+        foreach (Voxel nextVoxelElement in voxelDictionary)
         {
             Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.worldPosition, chunkSize);
 

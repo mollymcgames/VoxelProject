@@ -99,7 +99,7 @@ public class SourceDataLoaderV1 : MonoBehaviour
         //int numVoxels = width * height * depth;
 
         // Read the voxel data
-        // OLD voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
+        // OLD voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
         Debug.Log("Data now read in");
 
         return voxelData;
@@ -123,7 +123,7 @@ public class SourceDataLoaderV1 : MonoBehaviour
         //int numVoxels = width * height * depth;
 
         // Read the voxel data
-        // OLD voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
+        // OLD voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
         Debug.Log("Data now read in");
 
         return voxelData;

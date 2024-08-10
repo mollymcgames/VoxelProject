@@ -49,7 +49,7 @@ public class Container : MonoBehaviour
 
 /*    void AnimateVoxelsBasedOnDistance(float distanceToCamera)
     {
-        foreach (VoxelCell voxel in WorldManager.Instance.sourceData)
+        foreach (VoxelCell voxel in WorldManager.Instance.voxelDictionary)
         {
             if (voxel.isOuterVoxel)
             {
@@ -93,7 +93,7 @@ public class Container : MonoBehaviour
 
     private static void Traverse(Camera camera, List<VoxelCell> visibleVoxels)
     {
-        foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         {
             if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Value.Position, 4))
             {
@@ -118,8 +118,8 @@ public class Container : MonoBehaviour
 
         List<VoxelCell> visibleVoxels = GetVisibleVoxels(mainCamera);
 
-        // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
-        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.voxelDictionary)
+        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         foreach (VoxelCell nextVoxel in visibleVoxels)
         {
             //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
@@ -206,10 +206,10 @@ public class Container : MonoBehaviour
 
         List<VoxelCell> visibleVoxels = GetVisibleVoxels(mainCamera);
 
-        // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
-        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.voxelDictionary)
+        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         foreach (VoxelCell nextVoxel in visibleVoxels)
-        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         {
             //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
             if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)

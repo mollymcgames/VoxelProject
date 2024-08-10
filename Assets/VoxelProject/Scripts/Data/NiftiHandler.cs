@@ -39,8 +39,8 @@ public class NiftiHandler : MonoBehaviour
 
         int numVoxels = width * height * depth;
 
-        // FIXP VoxelCell[,,] voxelValue = new VoxelCell[niftiData.Dimensions[0], niftiData.Dimensions[1], niftiData.Dimensions[2]];
-        Dictionary < Vector3Int, VoxelCell > voxelValue = new Dictionary<Vector3Int, VoxelCell> ();
+        // FIXP VoxelCell[,,] voxelDictionary = new VoxelCell[niftiData.Dimensions[0], niftiData.Dimensions[1], niftiData.Dimensions[2]];
+        Dictionary < Vector3Int, VoxelCell > voxelDictionary = new Dictionary<Vector3Int, VoxelCell> (numVoxels);
 
         // Iterate through each voxel
         int index = 0;
@@ -54,11 +54,11 @@ public class NiftiHandler : MonoBehaviour
                     // Different NII files represent colours in different ways. Decision here is to make everything in the range
                     // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
                     string color = ( (int)((float)(niftiData.Data[index++]/calMax)*254) % 254).ToString();
-                    voxelValue.Add(new Vector3Int(x, y, z), new VoxelCell(z, y, x, color));
+                    voxelDictionary.Add(new Vector3Int(x, y, z), new VoxelCell(z, y, x, color));
                 }
             }
         }
-        return voxelValue;
+        return voxelDictionary;
     }
 
     private static string ByteToString(byte[] source)

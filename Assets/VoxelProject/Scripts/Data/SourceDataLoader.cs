@@ -15,7 +15,7 @@ public class SourceDataLoader : ASourceDataLoader
         LoadNiftiFile(filepath);
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter = CalculateCenter(niftiFile.Dimensions[0], niftiFile.Dimensions[1], niftiFile.Dimensions[2]);
         CreateVoxelsArray();
-        return voxelData;
+        return voxelDictionary;
     }
 
 /*    public override VoxelGrid LoadSourceDataGrid(string filepath)
@@ -61,9 +61,10 @@ public class SourceDataLoader : ASourceDataLoader
 
     private void CreateVoxelsArray()
     {
+        Debug.Log("Data being read in and loaded into Dictionary...");
         // Read the voxel data
-        voxelData = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
-        Debug.Log("Data now read in");
+        voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
+        Debug.Log("Data now read in and Dictionary created. Size: "+voxelDictionary.Count);
     }
 
 /*    private void CreateVoxelsArrayGrid()
