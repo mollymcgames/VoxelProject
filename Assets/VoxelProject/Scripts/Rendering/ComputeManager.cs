@@ -91,7 +91,7 @@ public class ComputeManager : MonoBehaviour
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
         {
             callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
-            voxelContainer.ReRenderMesh();
+            voxelContainer.RenderMesh();
         });
     }
 

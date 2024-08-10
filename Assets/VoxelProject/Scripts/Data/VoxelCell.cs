@@ -18,7 +18,7 @@ public class VoxelCell
 
     public bool isOuterVoxel;
 
-    public readonly Vector3Int position;
+    public readonly Vector3Int Position;
 
     public VoxelCell(int z, int y, int x, string color) // , bool isOuterVoxel)
     {
@@ -28,7 +28,7 @@ public class VoxelCell
         this.color = color;
         isSegmentVoxel = false;
         this.isOuterVoxel = false; // isOuterVoxel;
-        position = new Vector3Int(x, y, z);
+        Position = new Vector3Int(x, y, z);
     }
 
     public VoxelCell(int z, int y, int x, string color, bool isSegmentVoxel) //, bool isOuterVoxel)
@@ -39,7 +39,7 @@ public class VoxelCell
         this.color = color;
         this.isSegmentVoxel = isSegmentVoxel;
         this.isOuterVoxel = false; // isOuterVoxel;
-        position = new Vector3Int(x, y, z);
+        Position = new Vector3Int(x, y, z);
     }
 
 }

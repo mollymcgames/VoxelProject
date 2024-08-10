@@ -32,7 +32,7 @@ public class SCManager : MonoBehaviour
         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
 
         // THIS IS FOR LATER WHEN WE WANT TO DO A COOL REFRESH THING.
-        // StartCoroutine(TimedUpdateCoroutine());
+        StartCoroutine(TimedUpdateCoroutine());
     }
 
     void Update(){

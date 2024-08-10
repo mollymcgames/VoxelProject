@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
@@ -40,7 +41,7 @@ public class Container : MonoBehaviour
     {
         while (true)
         {
-            distanceToCamera = Vector3.Distance(mainCamera.transform.position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
+            distanceToCamera = Vector3.Distance(mainCamera.transform.Position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
             //AnimateVoxelsBasedOnDistance(distanceToCamera);
             yield return new WaitForSeconds(checkInterval);
         }
@@ -52,7 +53,7 @@ public class Container : MonoBehaviour
         {
             if (voxel.isOuterVoxel)
             {
-                Vector3 direction = (voxel.transform.position - voxelMeshCenter.position).normalized;
+                Vector3 direction = (voxel.transform.Position - voxelMeshCenter.Position).normalized;
                 float distanceFactor = Mathf.Clamp01((animationDistance - distanceToCamera) / animationDistance);
                 voxel.AnimateAway(direction, distanceFactor * animationDistance, animationTime);
             }
@@ -82,6 +83,24 @@ public class Container : MonoBehaviour
         // TODO SET SOME RETURN FLAG AT THIS POINT SO THAT A FUTURE UPDATE LOOP DOESN@T ATTEMPT TO UPDATE UNTIL THE RERENDER HAS ACTUALLY FINISHED.
     }
 
+    public static List<VoxelCell> GetVisibleVoxels(Camera camera)
+    {
+        List<VoxelCell> visibleVoxels = new List<VoxelCell>();
+        Traverse(camera, visibleVoxels);
+        return visibleVoxels;
+    }
+
+    private static void Traverse(Camera camera, List<VoxelCell> visibleVoxels)
+    {
+        foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        {
+            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Value.Position, 4))
+            {
+                visibleVoxels.Add(nextVoxel.Value);
+            }
+        }
+    }
+
     public void GenerateMesh()
     {
         int voxelsSelected = 0;
@@ -97,17 +116,20 @@ public class Container : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
+        List<VoxelCell> visibleVoxels = GetVisibleVoxels(mainCamera);
+
         // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
-        foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        foreach (VoxelCell nextVoxel in visibleVoxels)
         {
             //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
-            if (nextVoxel.Value.x < 0 || nextVoxel.Value.y < 0 || nextVoxel.Value.z < 0)
+            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
             {
                 continue;
             }
 
             // Skip this voxel if it's below the visibility threshold
-            if (int.Parse(nextVoxel.Value.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
                 continue;
 
             // original
@@ -121,15 +143,15 @@ public class Container : MonoBehaviour
 
 
 
-            float grayScaleValue = float.Parse(nextVoxel.Value.color)/255f;
+            float grayScaleValue = float.Parse(nextVoxel.color)/255f;
             voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
             voxelColorAlpha.a = 1;
             voxelColorAlpha = voxelColor.color;
             voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
 
-            if (nextVoxel.Value.isSegmentVoxel)
+            if (nextVoxel.isSegmentVoxel)
             {             
-                CreateClickableVoxel(new Vector3Int(nextVoxel.Value.x,nextVoxel.Value.y,nextVoxel.Value.z));
+                CreateClickableVoxel(new Vector3Int(nextVoxel.x,nextVoxel.y,nextVoxel.z));
             }
 
             //Iterate over each face direction
@@ -144,11 +166,11 @@ public class Container : MonoBehaviour
 
                 //Draw this face
 
-                //Collect the appropriate vertices from the default vertices and add the block position
+                //Collect the appropriate vertices from the default vertices and add the block Position
                 for (int j = 0; j < 4; j++)
                 {
                     //faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelBlockPosition;
-                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + nextVoxel.Value.position;
+                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + nextVoxel.Position;
                     faceUVs[j] = voxelUVs[j];
                 }
 
@@ -182,16 +204,21 @@ public class Container : MonoBehaviour
 
         meshData.colors = new List<Color>();
 
-        foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        List<VoxelCell> visibleVoxels = GetVisibleVoxels(mainCamera);
+
+        // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
+        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.sourceData)
+        foreach (VoxelCell nextVoxel in visibleVoxels)
+        // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.sourceData)
         {
             //voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
-            if (nextVoxel.Value.x < 0 || nextVoxel.Value.y < 0 || nextVoxel.Value.z < 0)
+            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
             {
                 continue;
             }
 
             // Skip this voxel if it's below the visibility threshold
-            if (int.Parse(nextVoxel.Value.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
                 continue;
 
             // original
@@ -205,10 +232,10 @@ public class Container : MonoBehaviour
 
 
 
-            float grayScaleValue = float.Parse(nextVoxel.Value.color) / 255f;
+            float grayScaleValue = float.Parse(nextVoxel.color) / 255f;
 
 /*          THIS IS FOR LATER WHEN TRYING TO ADJUST TRANSPARENCY BASEd ON CAMERA LOCATION  
- *          float camDistance = Vector3.Distance(mainCamera.transform.position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
+ *          float camDistance = Vector3.Distance(mainCamera.transform.Position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
             if (camDistance < 100f)
             {
                 grayScaleValue = AdjustGrayscale(grayScaleValue, camDistance);
