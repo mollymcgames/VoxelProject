@@ -84,6 +84,8 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
+        int voxelsSelected = 0;
+
         //Vector3Int voxelBlockPosition;
         Voxel block;
 
@@ -161,7 +163,9 @@ public class Container : MonoBehaviour
 
                 }
             }
+            voxelsSelected++;
         }
+        WorldManager.Instance.voxelsSelected = voxelsSelected;
     }
 
     float maxDistance = 200f;
@@ -170,7 +174,7 @@ public class Container : MonoBehaviour
     {
         Voxel block;
 
-        int counter = 0;
+        int voxelsSelected = 0;
 
         VoxelColor voxelColor;
         Color voxelColorAlpha;
@@ -231,7 +235,9 @@ public class Container : MonoBehaviour
                     meshData.colors.Add(voxelColorAlpha);
                 }
             }
+            voxelsSelected++;
         }
+        WorldManager.Instance.voxelsSelected = voxelsSelected;
     }
 
     float AdjustGrayscale(float originalGrayscale, float distance)
