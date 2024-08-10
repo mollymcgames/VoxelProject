@@ -9,7 +9,7 @@ public class SourceDataLoader : ASourceDataLoader
     private static Nifti.NET.Nifti niftiFile = null;
     private static Nifti.NET.Nifti niftiSegmentFile = null;    
     
-    public override Dictionary<Vector3Int, VoxelCell> LoadSourceData(string filepath)
+    public override Dictionary<long, VoxelCell> LoadSourceData(string filepath)
     {
         Debug.Log("Loading nii source data...:" + filepath);
         LoadNiftiFile(filepath);

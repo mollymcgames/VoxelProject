@@ -6,7 +6,7 @@ using System;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(MeshCollider))]
+//[RequireComponent(typeof(MeshCollider))]
 public class Container : MonoBehaviour
 {
     public Camera mainCamera;
@@ -71,6 +71,7 @@ public class Container : MonoBehaviour
 
     public void RenderMesh()
     {
+        Debug.Log("voxel generation happening!");
         SCManager.Instance.reRenderingMesh = true;
         meshData.ClearData();
         GenerateMesh();
@@ -95,7 +96,8 @@ public class Container : MonoBehaviour
     {
         foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         {
-            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Value.Position, 4))
+            // DICT AS LONG if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Value.Position, 4))
+            if (FrustumCulling.IsVoxelInView(camera, Vector3IntConvertor.DecodeVector3Int(nextVoxel.Key), 4))
             {
                 visibleVoxels.Add(nextVoxel.Value);
             }
@@ -316,17 +318,23 @@ public class Container : MonoBehaviour
             ConfigureComponents();
 
         meshFilter.mesh = meshData.mesh;
-        if (meshData.vertices.Count > 3)
+/*        if (meshData.vertices.Count > 3)
             meshCollider.sharedMesh = meshData.mesh;
-    }
+*/    }
 
     private void ConfigureComponents()
     {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
-        meshCollider = GetComponent<MeshCollider>();
-        meshCollider.convex = false;
+/*        meshCollider = GetComponent<MeshCollider>();
+        if (meshCollider != null)
+        {
+            meshCollider.convex = false;
+            //meshCollider.cookingOptions &= ~MeshColliderCookingOptions.UseFastMidphase;
+            //meshCollider.cookingOptions |= ~MeshColliderCookingOptions.CookForFasterSimulation;
+        }*/
     }
+
     public bool checkVoxelIsSolid(Vector3 point)
     {
         if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
