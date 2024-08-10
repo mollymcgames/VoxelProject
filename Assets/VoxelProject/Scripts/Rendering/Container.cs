@@ -85,23 +85,30 @@ public class Container : MonoBehaviour
         Debug.Log("voxel generation done!");
     }
 
-    public static List<VoxelCell> GetVisibleVoxels(Camera camera)
+    List<VoxelCell> visibleVoxels = null;
+
+    public List<VoxelCell> GetVisibleVoxels(Camera camera)
     {
-        List<VoxelCell> visibleVoxels = new List<VoxelCell>();
+        // if ( visibleVoxels == null)
+            visibleVoxels = new List<VoxelCell>(WorldManager.Instance.voxelDictionary.Count);
         Traverse(camera, visibleVoxels);
         return visibleVoxels;
     }
 
-    private static void Traverse(Camera camera, List<VoxelCell> visibleVoxels)
+    private void Traverse(Camera camera, List<VoxelCell> visibleVoxels)
     {
         foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         {
-            // DICT AS LONG if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Value.Position, 4))
-            if (FrustumCulling.IsVoxelInView(camera, Vector3IntConvertor.DecodeVector3Int(nextVoxel.Key), 4))
+            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Key, 4))
+            // D AS L if (FrustumCulling.IsVoxelInView(camera, Vector3IntConvertor.DecodeVector3Int(nextVoxel.Key), 4))
             {
-                visibleVoxels.Add(nextVoxel.Value);
+                visibleVoxels.Add(nextVoxel.Value);                
+            } 
+/*            else
+            {
+                visibleVoxels.Remove(nextVoxel.Value);
             }
-        }
+*/        }
     }
 
     public void GenerateMesh()
