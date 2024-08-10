@@ -10,11 +10,11 @@ public class VoxelTextHandler : MonoBehaviour
         return File.ReadAllLines(voxelTextFilePath);
     }
 
-    public static VoxelCell[] ReadVoxelData(string[] lines, int width, int height, int depth)
+    public static Voxel[] ReadVoxelData(string[] lines, int width, int height, int depth)
     {
         int numVoxels = width * height * depth;
 
-        VoxelCell[] voxelDataList = new VoxelCell[numVoxels];
+        Voxel[] voxelDataList = new Voxel[numVoxels];
         
         int index = 0;
         foreach (var line in lines)
@@ -35,7 +35,7 @@ public class VoxelTextHandler : MonoBehaviour
                 continue;
             }
 
-            voxelDataList[index++] = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
+            voxelDataList[index++] = new Voxel(parts[3]);// x,y,z,parts[3]); // Assign the parsed color color as the voxel color
         }
         return voxelDataList;
     }

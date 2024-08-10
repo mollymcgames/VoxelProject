@@ -38,19 +38,19 @@ public class SourceDataTextFileLoader : MonoBehaviour
 
     static string[] voxelFileLines = null;
 
-    static VoxelCell[] voxelData = null;
+    static Voxel[] voxelData = null;
     public static int widthX = 0;
     public static int heightY = 0;
     public static int depthZ = 0;
 
-    public static VoxelCell[] LoadSourceData()
+    public static Voxel[] LoadSourceData()
     {
         Debug.Log("Loading source data...");
         //use streaming assets for the file path
         return LoadVoxelFile("Assets/Resources/blue.txt");
     }
 
-    public static VoxelCell[] LoadSourceData(string filepath)
+    public static Voxel[] LoadSourceData(string filepath)
     {
         Debug.Log("Loading source data...");
         return LoadVoxelFile(filepath);
@@ -63,7 +63,7 @@ public class SourceDataTextFileLoader : MonoBehaviour
     }
     
 
-    public static VoxelCell[] LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
+    public static Voxel[] LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
     {
         // Load default file
         voxelFileLines = VoxelTextHandler.ReadVoxelTextFile(voxelFilePath);

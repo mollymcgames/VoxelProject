@@ -17,7 +17,7 @@ public class SourceDataTextFileLoaderAsDictionary
 
     string[] voxelFileLines = null;
 
-    VoxelCell[] voxelData = null;
+    Voxel[] voxelData = null;
     public int widthX = 0;
     public int heightY = 0;
     public int depthZ = 0;

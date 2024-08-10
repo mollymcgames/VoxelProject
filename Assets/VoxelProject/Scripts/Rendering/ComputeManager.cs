@@ -81,7 +81,7 @@ public class ComputeManager : MonoBehaviour
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
         {
             // original callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
-            callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
+            callback.GetData<VoxelOriginal>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
             voxelContainer.RenderMesh();
         });    
     }
@@ -90,7 +90,7 @@ public class ComputeManager : MonoBehaviour
     {
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
         {
-            callback.GetData<Voxel>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
+            callback.GetData<VoxelOriginal>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
             voxelContainer.ReRenderMesh();
         });
     }
@@ -136,7 +136,7 @@ public struct NoiseBuffer
     public bool Initialized;
     public bool Cleared;
     //public IndexedArray<Voxel> voxelArray;
-    public Voxel[] voxelArray;
+    public VoxelOriginal[] voxelArray;
 
     public void InitializeBuffer()
     {
@@ -145,9 +145,9 @@ public struct NoiseBuffer
         countBuffer.SetData(new uint[] { 0 });
 
         //voxelArray = new IndexedArray<Voxel>();
-        voxelArray = new Voxel[WorldManager.Instance.voxelDictionary.Count];
+        voxelArray = new VoxelOriginal[WorldManager.Instance.voxelDictionary.Count];
         //noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
-        noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(Voxel)));
+        noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(VoxelOriginal)));
         noiseBuffer.SetData(voxelArray);
         Initialized = true;
     }
@@ -160,7 +160,7 @@ public struct NoiseBuffer
         Initialized = false;
     }
     //public Voxel this[Vector3 index]
-    public Voxel this[int index]
+    public VoxelOriginal this[int index]
     {
         get
         {

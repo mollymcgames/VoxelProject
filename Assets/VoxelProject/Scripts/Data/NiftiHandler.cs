@@ -28,7 +28,7 @@ public class NiftiHandler : MonoBehaviour
 
 
     // D AS L public static Dictionary<long, VoxelCell> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
-    public static Dictionary<Vector3Int, VoxelCell> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+    public static Dictionary<Vector3Int, Voxel> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
     {
         float calMin = niftiData.Header.cal_min;
         float calMax = niftiData.Header.cal_max;
@@ -39,7 +39,7 @@ public class NiftiHandler : MonoBehaviour
         int numVoxels = width * height * depth;
 
         // FIXP VoxelCell[,,] voxelDictionary = new VoxelCell[niftiData.Dimensions[0], niftiData.Dimensions[1], niftiData.Dimensions[2]];
-        Dictionary < Vector3Int, VoxelCell > voxelDictionary = new Dictionary<Vector3Int, VoxelCell> (numVoxels);
+        Dictionary < Vector3Int, Voxel > voxelDictionary = new Dictionary<Vector3Int, Voxel> (numVoxels, new FastVector3IntComparer());
         // D AS L Dictionary < long, VoxelCell > voxelDictionary = new Dictionary<long, VoxelCell> (numVoxels);
 
         // Iterate through each voxel
@@ -55,7 +55,7 @@ public class NiftiHandler : MonoBehaviour
                     // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
                     string color = ( (int)((float)(niftiData.Data[index++]/calMax)*254) % 254).ToString();
                     // D AS L voxelDictionary.Add(Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z)), new VoxelCell(z, y, x, color));
-                    voxelDictionary.Add(new Vector3Int(x, y, z), new VoxelCell(z, y, x, color));
+                    voxelDictionary.Add(new Vector3Int(x, y, z), new Voxel(color));// z, y, x, color));
                 }
             }
         }

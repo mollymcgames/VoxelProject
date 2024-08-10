@@ -105,7 +105,7 @@ public class OuterComputeManager : MonoBehaviour
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuterDic != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuterDic.data.voxelArray.array);
+                    callback.GetData<VoxelOriginal>(0).CopyTo(OuterWorldManager.Instance.containerOuterDic.data.voxelArray.array);
                     OuterWorldManager.Instance.containerOuterDic.RenderMeshDictionary(true, transparencyValue);
                 }
             });
@@ -114,7 +114,7 @@ public class OuterComputeManager : MonoBehaviour
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInnerDic != null)
                 {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInnerDic.data.voxelArray.array);
+                    callback.GetData<VoxelOriginal>(0).CopyTo(OuterWorldManager.Instance.containerInnerDic.data.voxelArray.array);
                     OuterWorldManager.Instance.containerInnerDic.RenderMeshDictionary(false, 1f - transparencyValue);                   
                 }
             });
@@ -185,7 +185,7 @@ public struct OuterNoiseBuffer
     public ComputeBuffer countBuffer;
     public bool Initialized;
     public bool Cleared;
-    public OuterIndexedArray<Voxel> voxelArray;
+    public OuterIndexedArray<VoxelOriginal> voxelArray;
 
     public void InitializeBuffer()
     {
@@ -193,7 +193,7 @@ public struct OuterNoiseBuffer
         countBuffer.SetCounterValue(0);
         countBuffer.SetData(new uint[] { 0 });
 
-        voxelArray = new OuterIndexedArray<Voxel>();
+        voxelArray = new OuterIndexedArray<VoxelOriginal>();
         noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
         noiseBuffer.SetData(voxelArray.GetData);
         Initialized = true;
@@ -206,7 +206,7 @@ public struct OuterNoiseBuffer
 
         Initialized = false;
     }
-    public Voxel this[Vector3 index]
+    public VoxelOriginal this[Vector3 index]
     {
         get
         {

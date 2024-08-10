@@ -6,7 +6,7 @@ using System.IO;
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
     // FIXP public VoxelCell[,,] voxelDictionary = null;
-    public Dictionary<Vector3Int, VoxelCell> voxelDictionary = null;
+    public Dictionary<Vector3Int, Voxel> voxelDictionary = null;
     //D AS L public Dictionary<long, VoxelCell> voxelDictionary = null;
     //public VoxelGrid voxelGrid = null;
 
@@ -30,15 +30,15 @@ public abstract class ASourceDataLoader : ISourceDataLoader
 
     // FIXP public abstract VoxelCell[,,] LoadSourceData(string filepath);
     // D AS L public abstract Dictionary<long, VoxelCell> LoadSourceData(string filepath);
-    public abstract Dictionary<Vector3Int, VoxelCell> LoadSourceData(string filepath);
+    public abstract Dictionary<Vector3Int, Voxel> LoadSourceData(string filepath);
 
     //public abstract VoxelGrid LoadSourceDataGrid(string filepath);
 
     // FIXP public VoxelCell[,,] LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
     // D AS L public Dictionary<long, VoxelCell> LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
-    public Dictionary<Vector3Int, VoxelCell> LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
+    public Dictionary<Vector3Int, Voxel> LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
     {
-        VoxelCell nextSegmentVoxel;
+        Voxel nextSegmentVoxel;
 
         // Load the text file
         string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
@@ -66,7 +66,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             // D AS L voxelDictionary.TryGetValue(Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z)), out nextSegmentVoxel);
             // D AS L voxelDictionary[Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z))] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelDictionary[new Vector3Int(x, y, z)] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
             // FIXP voxelDictionary[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             // TODO nextSegmentVoxel.isHotVoxel = true;
             // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
@@ -84,9 +84,9 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     // 10,20,20,#FF00FF
     // public VoxelCell[,,] LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
     // D AS L public Dictionary<long, VoxelCell> LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
-    public Dictionary<Vector3Int, VoxelCell> LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
+    public Dictionary<Vector3Int, Voxel> LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
     {
-        VoxelCell nextSegmentVoxel;
+        Voxel nextSegmentVoxel;
 
         // Load the text file
         string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
@@ -114,7 +114,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             // D AS L voxelDictionary.TryGetValue(Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z)), out nextSegmentVoxel);
             // D AS L voxelDictionary[Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z))] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelDictionary[new Vector3Int(x, y, z)] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
             // TODO nextSegmentVoxel.isHotVoxel = true;
             // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
             // TODO voxelDictionary[x, y, z] = nextSegmentVoxel;

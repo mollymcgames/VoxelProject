@@ -10,8 +10,8 @@ public class OuterWorldManager : MonoBehaviour
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
     public OuterWorldSettings worldSettings;
-    public VoxelCell[] sourceDataInner;
-    public VoxelCell[] sourceDataOuter;
+    public Voxel[] sourceDataInner;
+    public Voxel[] sourceDataOuter;
 
     public OuterContainer containerOuter;
     public OuterContainer containerInner;

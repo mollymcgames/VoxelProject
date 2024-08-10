@@ -15,7 +15,7 @@ public class WorldManager : MonoBehaviour
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;    
     //public VoxelCell[,,] voxelDictionary;
-    public Dictionary<Vector3Int,VoxelCell> voxelDictionary;
+    public Dictionary<Vector3Int,Voxel> voxelDictionary;
     // D AS L public Dictionary<long,VoxelCell> voxelDictionary;
     public int voxelsSelected = 0;
 

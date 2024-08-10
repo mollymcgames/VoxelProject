@@ -47,19 +47,19 @@ public class SourceDataLoaderV1 : MonoBehaviour
 
     static Nifti.NET.Nifti niftiFile = null;
 
-    static VoxelCell[] voxelData = null;
+    static Voxel[] voxelData = null;
     public static int widthX = 0;
     public static int heightY = 0;
     public static int depthZ = 0;
 
-    public static VoxelCell[] LoadSourceData()
+    public static Voxel[] LoadSourceData()
     {
         Debug.Log("Loading source data...");
         return LoadNiftiFile();
     }
 
     
-    public static VoxelCell[] LoadSourceData(string filepath)
+    public static Voxel[] LoadSourceData(string filepath)
     {
         Debug.Log("Loading source data...");
         return LoadNiftiFile(filepath);
@@ -77,7 +77,7 @@ public class SourceDataLoaderV1 : MonoBehaviour
         niftiFile = NiftiHandler.ReadNiftiFile(filePath);
     }
 
-    public static VoxelCell[] LoadNiftiFile()
+    public static Voxel[] LoadNiftiFile()
     {
         // Load default file
         if (niftiFile == null)
@@ -105,7 +105,7 @@ public class SourceDataLoaderV1 : MonoBehaviour
         return voxelData;
     }
 
-    public static VoxelCell[] LoadNiftiFile(string filePath)
+    public static Voxel[] LoadNiftiFile(string filePath)
     {
         // original SourceDataLoader.OpenNiftiFile(filePath);            
 

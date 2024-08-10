@@ -60,8 +60,8 @@ public class OuterContainer : MonoBehaviour
 
     public void GenerateMesh(bool renderOuter = true, float transparencyValue = 1f)
     {
-        Vector3 blockPos;
-        Voxel block;
+        Vector3 blockPos = Vector3.zero;
+        VoxelOriginal block;
 
         int counter = 0;
         Vector3[] faceVertices = new Vector3[4];
@@ -71,7 +71,7 @@ public class OuterContainer : MonoBehaviour
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
 
-        VoxelCell[] sourceData = null;
+        Voxel[] sourceData = null;
         if (renderOuter)
         {
             sourceData = OuterWorldManager.Instance.sourceDataOuter;
@@ -80,7 +80,7 @@ public class OuterContainer : MonoBehaviour
         }
         int breaker = 0;
         //for (VoxelCell vc = 1; x < WorldManager.Instance.x + 1; x++)
-        foreach (VoxelCell vc in sourceData)
+        foreach (Voxel vc in sourceData)
         {
             // if (breaker >= 10000)
             //     break;
@@ -88,7 +88,7 @@ public class OuterContainer : MonoBehaviour
 
             if (vc == null)
                 continue;
-            blockPos = new Vector3(vc.x, vc.y, vc.z);
+            // just to compile! blockPos = new Vector3(vc.x, vc.y, vc.z);
             // if (vc.x < 0 || vc.y < 0 || vc.z < 0)
             // {
             //     Debug.Log("Weird voxel encountered (Loop-"+breaker+")! [" + vc.x + "," + vc.z + "," + vc.z + "]");
@@ -98,7 +98,7 @@ public class OuterContainer : MonoBehaviour
             //Only check on solid blocks
             if (!block.isSolid)
             {
-                Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.x + "," + vc.z + "," + vc.z + "]");
+                //Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.x + "," + vc.z + "," + vc.z + "]");
                 continue;
             }
 
@@ -176,7 +176,7 @@ public class OuterContainer : MonoBehaviour
     public void GenerateMeshDictionary(bool renderOuter = true, float transparencyValue = 1f)
     {
         Vector3Int blockPos;
-        Voxel block;
+        VoxelOriginal block;
 
         int counter = 0;
         Vector3Int[] faceVertices = new Vector3Int[4];
@@ -309,7 +309,7 @@ public class OuterContainer : MonoBehaviour
             return this[point].isSolid;
     }
 
-    public Voxel this[Vector3 index]
+    public VoxelOriginal this[Vector3 index]
     {
         get
         {
