@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System;
 
 
 [RequireComponent(typeof(MeshFilter))]
@@ -71,16 +71,17 @@ public class Container : MonoBehaviour
 
     public void RenderMesh()
     {
+        SCManager.Instance.reRenderingMesh = true;
         meshData.ClearData();
         GenerateMesh();
         UploadMesh();
+        SCManager.Instance.reRenderingMesh = false;     
     }
 
     public void ReRenderMesh()
     {
-        AdaptMesh();
-        UploadMesh();
-        // TODO SET SOME RETURN FLAG AT THIS POINT SO THAT A FUTURE UPDATE LOOP DOESN@T ATTEMPT TO UPDATE UNTIL THE RERENDER HAS ACTUALLY FINISHED.
+        RenderMesh();
+        Debug.Log("voxel generation done!");
     }
 
     public static List<VoxelCell> GetVisibleVoxels(Camera camera)
@@ -106,7 +107,6 @@ public class Container : MonoBehaviour
         int voxelsSelected = 0;
 
         //Vector3Int voxelBlockPosition;
-        Voxel block;
 
         int counter = 0;
         Vector3Int[] faceVertices = new Vector3Int[4];
@@ -194,7 +194,7 @@ public class Container : MonoBehaviour
 
     public void AdaptMesh()
     {
-        Voxel block;
+        //Voxel block;
 
         int voxelsSelected = 0;
 
@@ -388,22 +388,33 @@ public class Container : MonoBehaviour
         }
         public void UploadMesh(bool sharedVertices = false)
         {
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            try
+            {
+                mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
-            mesh.SetVertices(vertices);
-            mesh.SetTriangles(triangles, 0, false);
-            mesh.SetColors(colors);
+                mesh.SetVertices(vertices);
+                mesh.SetTriangles(triangles, 0, false);
+                mesh.SetColors(colors);
 
-            mesh.SetUVs(0, UVs);
-            mesh.SetUVs(2, UVs2);
+                // Debug.Log("Upload: colors=" + colors.Count);
+                // Debug.Log("Upload: vertices=" + vertices.Count);
 
-            mesh.Optimize();
+                mesh.SetUVs(0, UVs);
+                mesh.SetUVs(2, UVs2);
 
-            mesh.RecalculateNormals();
+                mesh.Optimize();
 
-            mesh.RecalculateBounds();
+                mesh.RecalculateNormals();
 
-            mesh.UploadMeshData(false);
+                mesh.RecalculateBounds();
+
+                mesh.UploadMeshData(false);
+            } catch (Exception e)
+            {
+                Debug.LogError(e.ToString());
+                Debug.Log("Error: colors="+colors.Count);
+                Debug.Log("Error: vertices=" + vertices.Count);
+            }
         }
     }
     #endregion

@@ -14,8 +14,8 @@ RWStructuredBuffer<uint> count;
 float3 chunkPosition;
 float3 seedOffset;
 
-int containerSizeX;
-int containerSizeY;
+uint3 containerSizeX;
+uint3 containerSizeY;
 
 bool generateCaves;
 bool forceFloor;

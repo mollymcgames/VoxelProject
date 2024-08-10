@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class SCManager : MonoBehaviour
 {
-    private float updateInterval = 0.1f;
+    private float updateInterval = 0.25f;
     public bool isZooming = false;
+    public bool reRenderingMesh = false;
 
     [HideInInspector]
     public Container container;
@@ -39,12 +40,12 @@ public class SCManager : MonoBehaviour
         // key is 0 for now, will be changed to a more appropriate key later
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            Debug.Log("0 key pressed, generating voxel data.");
-            ComputeManager.Instance.GenerateVoxelData(ref container, 0);
+            Debug.Log("0 key pressed, regenerating voxel data.");
+            ComputeManager.Instance.RefreshVoxels(ref container, 0);
         } else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("1 key pressed, generating voxel data.");
-            ComputeManager.Instance.GenerateVoxelData(ref container, 1);
+            Debug.Log("1 key pressed, regenerating voxel data.");
+            ComputeManager.Instance.RefreshVoxels(ref container, 1);
         }
     }
 
@@ -52,11 +53,17 @@ public class SCManager : MonoBehaviour
     {
         while (true)
         {
-            // Call the custom update method
-            ComputeManager.Instance.RefreshVoxels(ref container, 0);
+            if (SCManager.Instance.reRenderingMesh == false)
+            {
+                // Call the custom update method
+                ComputeManager.Instance.GenerateVoxelData(ref container, 0);
 
-            // Wait for the specified interval
-            yield return new WaitForSeconds(updateInterval);
+                // Wait for the specified interval
+                yield return new WaitForSeconds(updateInterval);
+            } else
+            {
+                Debug.Log("Skipping update...");
+            }
         }
     }
 }

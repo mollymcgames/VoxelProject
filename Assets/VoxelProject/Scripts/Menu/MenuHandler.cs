@@ -68,7 +68,7 @@ public class MenuHandler : MonoBehaviour
 
     private string LoadAFileForTheHeader()
     {
-        Debug.Log("Getting file header information...");
+        // Debug.Log("Getting file header information...");
         //Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
 
@@ -119,7 +119,7 @@ public class MenuHandler : MonoBehaviour
 
     private void LoadAFile(bool hasSegmentLayers)
     {
-        Debug.Log("Loading file to display it: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
+        // Debug.Log("Loading file to display it: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
         // Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
 
