@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UIElements;
 
 
 [RequireComponent(typeof(MeshFilter))]
@@ -89,8 +90,7 @@ public class Container : MonoBehaviour
 
     public Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
-        // if ( visibleVoxels == null)
-            visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
+        visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
         Traverse(camera, visibleVoxels);
         return visibleVoxels;
     }
@@ -99,23 +99,17 @@ public class Container : MonoBehaviour
     {
         foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         {
-            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Key, 4))
+            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Key, 8))
             // D AS L if (FrustumCulling.IsVoxelInView(camera, Vector3IntConvertor.DecodeVector3Int(nextVoxel.Key), 4))
             {
                 visibleVoxels.Add(nextVoxel.Key, nextVoxel.Value);  
             } 
-/*            else
-            {
-                visibleVoxels.Remove(nextVoxel.Value);
-            }
-*/        }
+        }
     }
 
     public void GenerateMesh()
     {
         int voxelsSelected = 0;
-
-        //Vector3Int voxelBlockPosition;
 
         int counter = 0;
         Vector3Int[] faceVertices = new Vector3Int[4];
@@ -140,6 +134,9 @@ public class Container : MonoBehaviour
 
             // Skip this voxel if it's below the visibility threshold
             if (int.Parse(nextVoxel.Value.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+                continue;
+
+            if (checkVoxelIsSolid(nextVoxel.Key) == false)
                 continue;
 
             // original
@@ -169,8 +166,6 @@ public class Container : MonoBehaviour
             {
                 //Check if there's a solid block against this face
                 //if (checkVoxelIsSolid(voxelBlockPosition + voxelFaceChecks[i]))
-                // if (checkVoxelIsSolid(voxelBlockPosition))                
-                //     continue;
                 //if ( float.Parse(nextVoxel.color) < 18)
                 //    continue;
 
@@ -344,17 +339,32 @@ public class Container : MonoBehaviour
         }*/
     }
 
-    public bool checkVoxelIsSolid(Vector3 point)
+    private Vector3Int[] directions = new Vector3Int[]
     {
-        if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
+        Vector3Int.up, Vector3Int.down,
+        Vector3Int.left, Vector3Int.right,
+        Vector3Int.forward, Vector3Int.back
+    };
+
+    public bool checkVoxelIsSolid(Vector3Int voxelPosition)
+    {
+        foreach (var dir in directions)
+        {
+            if (!WorldManager.Instance.voxelDictionary.ContainsKey(voxelPosition + dir))
+            {
+                return true; // If any neighbor is missing, the voxel is visible
+            }
+        }
+        return false;
+/*        if (voxelPosition.y + 2 < 0 || (voxelPosition.x > WorldManager.WorldSettings.maxWidthX + 2) || (voxelPosition.z > WorldManager.WorldSettings.maxDepthZ + 2))
             return true;
         else
             // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
-            return true; // Temp!!! this[point].isSolid;
+            return true; // Temp!!! this[voxelPosition].isSolid;*/
     }
 
     // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
-    public VoxelOriginal this[int index]
+/*    public VoxelOriginal this[int index]
     {
         get
         {
@@ -365,7 +375,7 @@ public class Container : MonoBehaviour
         {
             data[index] = value;
         }
-    }
+    }*/
 
     #region Mesh Data
 
