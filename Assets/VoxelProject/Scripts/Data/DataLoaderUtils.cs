@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class DataLoaderUtils
 {
-    public static ASourceDataLoader LoadDataFile()
+    public static ASourceDataLoader LoadDataFile(int voxelOmissionThreshold=0)
     {
         if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath.Contains(".nii"))
-            return new SourceDataLoader(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
+            return new SourceDataLoader(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, voxelOmissionThreshold);
         //else if (VoxelWorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath.Contains(".txt"))
         //    return new SourceDataTextFileLoaderAsDictionary(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
         else

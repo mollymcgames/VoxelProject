@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class SourceDataLoader : ASourceDataLoader
 {
-    public SourceDataLoader(int chunkSize) : base(chunkSize) { }
+    public SourceDataLoader(int chunkSize, int voxelOmissionThreshold) : base(chunkSize) { 
+        this.voxelOmissionThreshold = voxelOmissionThreshold;
+    }
 
     private static Nifti.NET.Nifti niftiFile = null;
     private static Nifti.NET.Nifti niftiSegmentFile = null;    
@@ -64,7 +66,7 @@ public class SourceDataLoader : ASourceDataLoader
     {
         Debug.Log("Data being read in and loaded into Dictionary...");
         // Read the voxel data
-        voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ);
+        voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ, voxelOmissionThreshold);
         Debug.Log("Data now read in and Dictionary created. Size: "+voxelDictionary.Count);
     }
 

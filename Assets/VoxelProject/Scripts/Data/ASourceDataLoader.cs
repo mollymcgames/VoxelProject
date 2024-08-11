@@ -23,6 +23,8 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     public int heightY = 0;
     public int depthZ = 0;
 
+    public int voxelOmissionThreshold = 0;
+
     public ASourceDataLoader(int chunkSize)
     {
         this.chunkSize = chunkSize;

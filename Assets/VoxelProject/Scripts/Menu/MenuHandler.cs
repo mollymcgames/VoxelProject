@@ -23,50 +23,56 @@ public class MenuHandler : MonoBehaviour
 
     public void LoadHeartFile()
     {
+        int voxelOmissionThreshold = 0;
         // WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        LoadAFile(false);
+        LoadAFile(false, voxelOmissionThreshold);
     }
     public string LoadHeartFileHeader()
     {
+        int voxelOmissionThreshold = 0;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        return LoadAFileForTheHeader();
+        return LoadAFileForTheHeader(voxelOmissionThreshold);
     }
 
     public void LoadLiverData()
     {
+        int voxelOmissionThreshold = 0;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";        
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
         // WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers = new string[] { "rkT2.nii" };
-        LoadAFile(true);
+        LoadAFile(false, voxelOmissionThreshold);
     }
 
     public string LoadLiverFileHeader()
     {
+        int voxelOmissionThreshold = 0;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
-        return LoadAFileForTheHeader();
+        return LoadAFileForTheHeader(voxelOmissionThreshold);
     }
 
     public void LoadBrainFile()
     {
+        int voxelOmissionThreshold = 18;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        LoadAFile(false);
+        LoadAFile(false, voxelOmissionThreshold);
     }
 
     public string LoadBrainFileHeader()
     {
+        int voxelOmissionThreshold = 18;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        return LoadAFileForTheHeader();
+        return LoadAFileForTheHeader(voxelOmissionThreshold);
     }
 
-    private string LoadAFileForTheHeader()
+    private string LoadAFileForTheHeader(int voxelOmissionThreshold)
     {
         // Debug.Log("Getting file header information...");
         //Use Steaming Assets folder to load the file
@@ -81,7 +87,7 @@ public class MenuHandler : MonoBehaviour
         {
             fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
             Debug.Log("Loading file: " + fileLastLoaded);            
-            loader = DataLoaderUtils.LoadDataFile();
+            loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold);
             WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);            
             niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
@@ -117,7 +123,7 @@ public class MenuHandler : MonoBehaviour
         return source != null ? System.Text.Encoding.UTF8.GetString(source) : null;
     }*/
 
-    private void LoadAFile(bool hasSegmentLayers)
+    private void LoadAFile(bool hasSegmentLayers, int voxelOmissionThreshold)
     {
         // Debug.Log("Loading file to display it: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
         // Use Steaming Assets folder to load the file
@@ -132,7 +138,7 @@ public class MenuHandler : MonoBehaviour
         {
             fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
             Debug.Log("Loading file: " + fileLastLoaded);
-            loader = DataLoaderUtils.LoadDataFile();
+            loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold);
             WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
             niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();

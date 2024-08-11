@@ -32,12 +32,9 @@ public class NiftiHandler : MonoBehaviour
         return tempNifti;
     }
 
-
     // D AS L public static Dictionary<long, VoxelCell> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
-    public static Dictionary<Vector3Int, Voxel> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth)
+    public static Dictionary<Vector3Int, Voxel> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth, int niiVoxelOmissionThreshold)
     {
-        int niiVoxelOmissionThreshold = 18;
-
         float calMin = niftiData.Header.cal_min;
         float calMax = niftiData.Header.cal_max;
         Debug.Log("CAL MIN: " + calMin);
@@ -59,7 +56,7 @@ public class NiftiHandler : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    if ((byte)niftiData.Data[index] > (byte)niiVoxelOmissionThreshold)
+                    if ((byte)niftiData.Data[index] >= (byte)niiVoxelOmissionThreshold)
                     {                        
                         // Convert the number to a string to easily access each digit
                         // Different NII files represent colours in different ways. Decision here is to make everything in the range
