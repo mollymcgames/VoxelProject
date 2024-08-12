@@ -25,16 +25,16 @@ public class MenuHandler : MonoBehaviour
     {
         int voxelOmissionThreshold = 0;
         // WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         LoadAFile(false, voxelOmissionThreshold);
     }
     public string LoadHeartFileHeader()
     {
         int voxelOmissionThreshold = 0;
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         return LoadAFileForTheHeader(voxelOmissionThreshold);
     }
@@ -192,6 +192,7 @@ public class MenuHandler : MonoBehaviour
     {
         // TODO animator = GameObject.Find("Transition").GetComponent<Animator>();
         // TODO animator.SetTrigger("TriggerTransition");
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
         SceneManager.LoadScene("Model");
     }
 
@@ -199,6 +200,7 @@ public class MenuHandler : MonoBehaviour
     {
         // TODO animator = GameObject.Find("Transition").GetComponent<Animator>();
         // TODO animator.SetTrigger("TriggerTransition");
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
         SceneManager.LoadScene("World");
     }
 }

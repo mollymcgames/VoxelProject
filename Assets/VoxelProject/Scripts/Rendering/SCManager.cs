@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SCManager : MonoBehaviour
 {
-    private float updateInterval = 0.25f;
+    private float updateInterval = 0.1f;
     public bool isZooming = false;
     public bool reRenderingMesh = false;
 
@@ -28,7 +28,7 @@ public class SCManager : MonoBehaviour
         GameObject cont = new GameObject("Container");
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
-        container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);     
+        container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);        
 
         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
 
@@ -47,6 +47,17 @@ public class SCManager : MonoBehaviour
             Debug.Log("1 key pressed, regenerating voxel data.");
             ComputeManager.Instance.RefreshVoxels(ref container, 1);
         }
+
+/*        if (SCManager.Instance.reRenderingMesh == false)
+        {
+            // Call the custom update method
+            ComputeManager.Instance.GenerateVoxelData(ref container, 0);
+        }*/
+        // USEFUL BUT SLOWS THINGS DOWN: 
+        /*        else
+                {
+                    Debug.Log("Skipping update...");
+                }*/
     }
 
     IEnumerator TimedUpdateCoroutine()

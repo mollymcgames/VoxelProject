@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -68,6 +69,11 @@ public class ComputeManager : MonoBehaviour
 
     public void GenerateVoxelData(ref Container cont, int layer)
     {
+        if (cont.data.noiseBuffer == null)
+        {
+            ComputeManager.Instance.Initialize(1);
+        }
+
         voxelContainer = cont;
         noiseShader.SetBuffer(0, "voxelArray", cont.data.noiseBuffer);
         noiseShader.SetBuffer(0, "count", cont.data.countBuffer);
@@ -80,9 +86,13 @@ public class ComputeManager : MonoBehaviour
 
         AsyncGPUReadback.Request(cont.data.noiseBuffer, (callback) =>
         {
-            // original callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
-            callback.GetData<VoxelOriginal>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
-            voxelContainer.RenderMesh();
+            try
+            {
+                // original callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
+                callback.GetData<VoxelOriginal>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
+                voxelContainer.RenderMesh();
+            }
+            catch (Exception e) { }
         });    
     }
 

@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.UIElements;
 
 
 [RequireComponent(typeof(MeshFilter))]
@@ -10,9 +8,20 @@ using UnityEngine.UIElements;
 //[RequireComponent(typeof(MeshCollider))]
 public class Container : MonoBehaviour
 {
+    private Vector3Int[] directions = new Vector3Int[]
+    {
+        Vector3Int.forward, Vector3Int.back,
+        Vector3Int.left, Vector3Int.right,
+        Vector3Int.up, Vector3Int.down
+    };
+
     public Camera mainCamera;
 
     public Vector3 containerPosition;
+
+    // This adjusts the near clipping distance for our Frustrum.
+    public float targetNearClippingDistance = 1.0f;  // Desired clipping distance
+    public float adjustmentSpeed = 2.0f;  // Speed of adjustment
 
     public NoiseBuffer data;
     private MeshData meshData = new MeshData();
@@ -72,7 +81,7 @@ public class Container : MonoBehaviour
 
     public void RenderMesh()
     {
-        Debug.Log("voxel generation happening!");
+        // USEFUL BUT SLOWS THINGS DOWN: Debug.Log("voxel generation happening!");
         SCManager.Instance.reRenderingMesh = true;
         meshData.ClearData();
         GenerateMesh();
@@ -83,32 +92,17 @@ public class Container : MonoBehaviour
     public void ReRenderMesh()
     {
         RenderMesh();
-        Debug.Log("voxel generation done!");
+        // USEFUL BUT SLOWS THINGS DOWN: Debug.Log("voxel generation done!");
     }
 
     Dictionary<Vector3Int, Voxel> visibleVoxels = null;
 
-    public Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
-    {
-        visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
-        Traverse(camera, visibleVoxels);
-        return visibleVoxels;
-    }
-
-    private void Traverse(Camera camera, Dictionary<Vector3Int, Voxel> visibleVoxels)
-    {
-        foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
-        {
-            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Key, 8))
-            // D AS L if (FrustumCulling.IsVoxelInView(camera, Vector3IntConvertor.DecodeVector3Int(nextVoxel.Key), 4))
-            {
-                visibleVoxels.Add(nextVoxel.Key, nextVoxel.Value);  
-            } 
-        }
-    }
-
     public void GenerateMesh()
     {
+        // FOR FUTURE // Adjust the near clipping distance based on target
+        // FOR FUTURE nearClippingDistance = Mathf.Lerp(nearClippingDistance, targetNearClippingDistance, Time.deltaTime * adjustmentSpeed);
+
+
         int voxelsSelected = 0;
 
         int counter = 0;
@@ -120,7 +114,7 @@ public class Container : MonoBehaviour
         Vector2 voxelSmoothness;
 
         Dictionary<Vector3Int, Voxel> visibleVoxels = GetVisibleVoxels(mainCamera);
-        Debug.Log("About to render this many potential voxels: " + visibleVoxels.Count);
+        // USEFUL BUT SLOWS THINGS DOWN: Debug.Log("About to render this many potential voxels: " + visibleVoxels.Count);
 
         // FIXP foreach (VoxelCell nextVoxel in WorldManager.Instance.voxelDictionary)
         // DICTIONARY ONLY foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
@@ -136,7 +130,7 @@ public class Container : MonoBehaviour
             if (int.Parse(nextVoxel.Value.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
                 continue;
 
-            if (checkVoxelIsSolid(nextVoxel.Key) == false)
+            if (checkVoxelIsSolid(nextVoxel.Key, ref visibleVoxels) == false)
                 continue;
 
             // original
@@ -339,18 +333,30 @@ public class Container : MonoBehaviour
         }*/
     }
 
-    private Vector3Int[] directions = new Vector3Int[]
+    public Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
-        Vector3Int.up, Vector3Int.down,
-        Vector3Int.left, Vector3Int.right,
-        Vector3Int.forward, Vector3Int.back
-    };
+        visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
+        Traverse(camera, visibleVoxels);
+        return visibleVoxels;
+    }
 
-    public bool checkVoxelIsSolid(Vector3Int voxelPosition)
+    private void Traverse(Camera camera, Dictionary<Vector3Int, Voxel> visibleVoxels)
+    {
+        foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
+        {
+            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Key, 8, WorldManager.Instance.worldSettings.nearClippingDistance))
+            // D AS L if (FrustumCulling.IsVoxelInView(camera, Vector3IntConvertor.DecodeVector3Int(nextVoxel.Key), 4))
+            {
+                visibleVoxels.Add(nextVoxel.Key, nextVoxel.Value);
+            }
+        }
+    }
+
+    public bool checkVoxelIsSolid(Vector3Int voxelPosition, ref Dictionary<Vector3Int, Voxel> visibleVoxels)
     {
         foreach (var dir in directions)
         {
-            if (!WorldManager.Instance.voxelDictionary.ContainsKey(voxelPosition + dir))
+            if (!visibleVoxels.ContainsKey(voxelPosition + dir))
             {
                 return true; // If any neighbor is missing, the voxel is visible
             }

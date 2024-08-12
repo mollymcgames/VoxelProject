@@ -10,6 +10,7 @@ public class VisibilityThreshold : MonoBehaviour
     float min = 254;
 
     public Slider visibilityThresholdSlider;
+    public Toggle invertVisibility;
     private float lastSliderValue;
     public TMP_Text visibilityThresholdValue;
     private bool sliderChanged;
@@ -22,9 +23,25 @@ public class VisibilityThreshold : MonoBehaviour
             visibilityThresholdSlider.onValueChanged.AddListener(OnSliderValueChanged);
             lastSliderValue = visibilityThresholdSlider.value;
         }
+
+        if (invertVisibility != null)
+        {
+            invertVisibility.onValueChanged.AddListener(OnToggleChanged);
+        }
+
+    }
+
+    void OnToggleChanged(bool change)
+    {
+        callCoRoutine();
     }
 
     void OnSliderValueChanged(float value)
+    {
+        callCoRoutine();
+    }
+
+    private void callCoRoutine()
     {
         sliderChanged = true;
 
@@ -56,8 +73,16 @@ public class VisibilityThreshold : MonoBehaviour
     {
         visibilityThresholdValue.text = visibilityThresholdSlider.value.ToString();
 
-        //Update the camera's field of view to be the variable returning from the Slider
-        WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = (int)lastSliderValue; // (int)m_visibilityThreshold;
+        if (invertVisibility.isOn)
+        {
+            //Update the camera's field of view to be the variable returning from the Slider        
+            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = 254 - (int)lastSliderValue; // (int)m_visibilityThreshold;
+        }
+        else
+        {
+            //Update the camera's field of view to be the variable returning from the Slider        
+            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = (int)lastSliderValue; // (int)m_visibilityThreshold;
+        }
     }
 
 }

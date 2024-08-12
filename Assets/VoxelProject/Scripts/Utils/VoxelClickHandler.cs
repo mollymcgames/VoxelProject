@@ -29,7 +29,7 @@ public class VoxelClickHandler : MonoBehaviour
     {
         if (gameObject.CompareTag("SegmentOne"))
         {
-                Debug.Log("Mouse out! TD=" + Time.deltaTime);
+                // USEFUL DEBUG BUT SLOWS THINGS DOWN Debug.Log("Mouse out! TD=" + Time.deltaTime);
                 isZoomedOut = false;
                 SCManager.Instance.isZooming = false;
         }
@@ -48,7 +48,7 @@ public class VoxelClickHandler : MonoBehaviour
                 // Check if the object hit has the specified tag
                 if (hit.collider.CompareTag("SegmentOne"))
                 {
-                    Debug.Log("Collided into SegmentOne. ZL="+ SCManager.Instance.isZooming);
+                    // USEFUL DEBUG BUG SLOWS THINGS DOWN Debug.Log("Collided into SegmentOne. ZL="+ SCManager.Instance.isZooming);
                     zoomLock = true;
                     isZoomedOut = true; // !isZoomedOut;
                     SCManager.Instance.isZooming = true;
@@ -77,6 +77,7 @@ public class VoxelClickHandler : MonoBehaviour
                         // Load the specified scene
                         animator = GameObject.Find("Transition").GetComponent<Animator>();
                         animator.SetTrigger("TriggerTransition");
+                        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
                         SceneManager.LoadScene(sceneToLoad);
                     }
                 }

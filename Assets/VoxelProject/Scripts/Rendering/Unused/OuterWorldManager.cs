@@ -97,7 +97,7 @@ public class OuterWorldManager : MonoBehaviour
         //Initialise the outer containers
         InitialiseContainers();
 
-        Debug.Log("Voxels ready check starting...");
+        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Voxels ready check starting...");
         while (sourceDataInner == null &&
             sourceDataOuter == null &&
             sourceDataInner.Length <= 0 &&
@@ -107,10 +107,10 @@ public class OuterWorldManager : MonoBehaviour
             sourceDataOuterDictionary == null &&
             sourceDataOuterDictionary.Count <= 0)
         {
-            Debug.Log("Voxels not yet ready...");
+            // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Voxels not yet ready...");
             voxelsReady = false;
         }
-        Debug.Log("Voxels now ready...");
+        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Voxels now ready...");
         voxelsReady = true;
     }
 

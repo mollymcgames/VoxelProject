@@ -66,8 +66,8 @@ public class SourceDataTextFileLoaderAsDictionary
   
     private Dictionary<Vector3Int, Chunk> ConstructChunks(List<VoxelElement> sourceData)
     {
-        Debug.Log("INNER Data now read in, data list size: " + sourceData.Count);
-        Debug.Log("Creating chunks of size ["+chunkSize+"] cubed.");
+        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("INNER Data now read in, data list size: " + sourceData.Count);
+        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Creating chunks of size ["+chunkSize+"] cubed.");
 
         Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
 
@@ -79,7 +79,7 @@ public class SourceDataTextFileLoaderAsDictionary
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
             {
-                Debug.Log("Creating new Chunk at position: "+chunkCoordinates);
+                // USEFUL BUT SLOWS THINGS DOWN: Debug.Log("Creating new Chunk at position: "+chunkCoordinates);
                 chunks[chunkCoordinates] = new Chunk(chunkCoordinates);
             }
 
@@ -87,8 +87,8 @@ public class SourceDataTextFileLoaderAsDictionary
             chunks[chunkCoordinates].AddVoxel(nextVoxelElement);
             voxelsProcessed++;
         }
-        Debug.Log("Voxels processed:" + voxelsProcessed);
-        Debug.Log("Number of chunks created: "+chunks.Count);
+        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Voxels processed:" + voxelsProcessed);
+        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Number of chunks created: "+chunks.Count);
         return chunks;
     }
 
