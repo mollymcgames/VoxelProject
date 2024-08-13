@@ -86,8 +86,8 @@ public class OuterContainer : MonoBehaviour
             //     break;
             breaker++;
 
-            if (vc == null)
-                continue;
+            //if (vc == null)
+            //    continue;
             // just to compile! blockPos = new Vector3(vc.x, vc.y, vc.z);
             // if (vc.x < 0 || vc.y < 0 || vc.z < 0)
             // {

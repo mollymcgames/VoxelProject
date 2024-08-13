@@ -400,11 +400,11 @@ public class Container : MonoBehaviour
         {
             if (!Initialized)
             {
-                vertices = new List<Vector3>(WorldManager.Instance.voxelDictionary.Count);
-                triangles = new List<int>(WorldManager.Instance.voxelDictionary.Count);
-                UVs = new List<Vector2>(WorldManager.Instance.voxelDictionary.Count);
-                UVs2 = new List<Vector2>(WorldManager.Instance.voxelDictionary.Count);
-                colors = new List<Color>(WorldManager.Instance.voxelDictionary.Count);
+                vertices = new List<Vector3>();
+                triangles = new List<int>();
+                UVs = new List<Vector2>();
+                UVs2 = new List<Vector2>();
+                colors = new List<Color>();
 
                 Initialized = true;
                 mesh = new Mesh();

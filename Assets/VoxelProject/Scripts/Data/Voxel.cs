@@ -4,7 +4,7 @@ using UnityEngine;
 /**
 * A VoxelCell represents information about a particular type of cell.
 */
-public class Voxel
+public struct Voxel
 {
     public readonly string color;
 
