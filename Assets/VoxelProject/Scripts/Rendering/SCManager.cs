@@ -48,11 +48,12 @@ public class SCManager : MonoBehaviour
             ComputeManager.Instance.RefreshVoxels(ref container, 1);
         }
 
-/*        if (SCManager.Instance.reRenderingMesh == false)
+        // Only auto update if toggle is on
+        if (WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
         {
             // Call the custom update method
             ComputeManager.Instance.GenerateVoxelData(ref container, 0);
-        }*/
+        }
         // USEFUL BUT SLOWS THINGS DOWN: 
         /*        else
                 {
@@ -64,7 +65,7 @@ public class SCManager : MonoBehaviour
     {
         while (true)
         {
-            if (SCManager.Instance.reRenderingMesh == false)
+            if (WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
             {
                 // Call the custom update method
                 ComputeManager.Instance.GenerateVoxelData(ref container, 0);

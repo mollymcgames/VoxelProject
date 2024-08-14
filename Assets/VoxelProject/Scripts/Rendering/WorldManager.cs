@@ -87,4 +87,5 @@ public class WorldSettings
     public int maxHeightY = 0;
     public int chunkSize = 32;
     public float nearClippingDistance = 85f;
+    public bool autoRefresh = false;
 }
