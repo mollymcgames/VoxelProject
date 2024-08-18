@@ -70,22 +70,18 @@ public class OuterContainer : MonoBehaviour
         VoxelColor voxelColor;
         Color voxelColorAlpha;
         Vector2 voxelSmoothness;
+        
+        Dictionary<Vector3Int, Voxel> sourceData = null;
 
-        Voxel[] sourceData = null;
         if (renderOuter)
         {
             sourceData = OuterWorldManager.Instance.sourceDataOuter;
         } else {
             sourceData = OuterWorldManager.Instance.sourceDataInner;
-        }
-        int breaker = 0;
-        //for (VoxelCell vc = 1; x < WorldManager.Instance.x + 1; x++)
-        foreach (Voxel vc in sourceData)
-        {
-            // if (breaker >= 10000)
-            //     break;
-            breaker++;
+        }        
 
+        foreach (var vc in sourceData)
+        {
             //if (vc == null)
             //    continue;
             // just to compile! blockPos = new Vector3(vc.x, vc.y, vc.z);
@@ -108,9 +104,9 @@ public class OuterContainer : MonoBehaviour
 
 
             Color color;
-            if (!ColorUtility.TryParseHtmlString("#" + vc.color, out color))
+            if (!ColorUtility.TryParseHtmlString("#" + vc.Value.color, out color))
             {
-                Debug.LogError($"Invalid color value in line: {vc.color}");
+                Debug.LogError($"Invalid color value in line: {vc.Value.color}");
                 continue;
             }            
 

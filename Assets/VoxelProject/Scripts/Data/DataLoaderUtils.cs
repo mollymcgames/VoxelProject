@@ -6,8 +6,8 @@ public class DataLoaderUtils
     {
         if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath.Contains(".nii"))
             return new SourceDataLoader(voxelOmissionThreshold);
-        //else if (VoxelWorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath.Contains(".txt"))
-        //    return new SourceDataTextFileLoaderAsDictionary(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
+        else if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath.Contains(".txt"))
+            return new SourceDataTextFileLoader(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
         else
         {
             Debug.LogError("Unknown file type, can't go on!");

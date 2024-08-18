@@ -10,8 +10,8 @@ public class OuterWorldManager : MonoBehaviour
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
     public OuterWorldSettings worldSettings;
-    public Voxel[] sourceDataInner;
-    public Voxel[] sourceDataOuter;
+    public Dictionary<Vector3Int, Voxel> sourceDataInner;
+    public Dictionary<Vector3Int, Voxel> sourceDataOuter;
 
     public OuterContainer containerOuter;
     public OuterContainer containerInner;
@@ -56,8 +56,8 @@ public class OuterWorldManager : MonoBehaviour
             _instance = this;
         }
 
-        sourceDataInner = SourceDataTextFileLoader.LoadSourceData(filepathInner);
-        sourceDataOuter = SourceDataTextFileLoader.LoadSourceData(filepathOuter);
+        sourceDataInner = new SourceDataTextFileLoader(0).LoadSourceData(filepathInner);
+        sourceDataOuter = new SourceDataTextFileLoader(0).LoadSourceData(filepathOuter);
 
         try
         {
@@ -100,8 +100,8 @@ public class OuterWorldManager : MonoBehaviour
         // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Voxels ready check starting...");
         while (sourceDataInner == null &&
             sourceDataOuter == null &&
-            sourceDataInner.Length <= 0 &&
-            sourceDataOuter.Length <= 0 &&
+            sourceDataInner.Count <= 0 &&
+            sourceDataOuter.Count <= 0 &&
             sourceDataInnerDictionary == null &&
             sourceDataInnerDictionary.Count <= 0 &&
             sourceDataOuterDictionary == null &&
