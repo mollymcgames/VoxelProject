@@ -128,7 +128,7 @@ public class Container : MonoBehaviour
             }
 
             // Skip this voxel if it's below the visibility threshold
-            if (int.Parse(nextVoxel.Value.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            if (int.Parse(nextVoxel.Value.color.ToString()) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
                 continue;
 
             if (checkVoxelIsSolid(nextVoxel.Key, ref visibleVoxels) == false)
@@ -145,7 +145,7 @@ public class Container : MonoBehaviour
 
 
 
-            float grayScaleValue = float.Parse(nextVoxel.Value.color)/255f;
+            float grayScaleValue = float.Parse(nextVoxel.Value.color.ToString())/255f;
             voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
             voxelColorAlpha.a = 1;
             voxelColorAlpha = voxelColor.color;

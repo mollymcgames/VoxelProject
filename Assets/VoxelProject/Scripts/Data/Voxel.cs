@@ -1,12 +1,12 @@
 
-using UnityEngine;
+using Unity.Collections;
 
 /**
 * A VoxelCell represents information about a particular type of cell.
 */
 public struct Voxel
 {
-    public readonly string color;
+    public readonly FixedString32Bytes color;
 
     //public readonly int z;
 

@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using Nifti.NET;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 public class SourceDataTextFileLoaderAsDictionary
 {

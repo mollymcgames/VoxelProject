@@ -129,6 +129,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
 
     public Dictionary<Vector3Int, Chunk> ConstructChunks(Dictionary<Vector3Int, Voxel> voxelDictionary)
     {
+        Vector3Int chunkCoordinates;
         Debug.Log("Data now read in, data list size: " + voxelDictionary.Count);
         Debug.Log("Creating chunks of size [" + WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize + "] cubed.");
 
@@ -138,7 +139,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         int voxelsProcessed = 0;
         foreach (var nextVoxelElement in voxelDictionary)
         {
-            Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(nextVoxelElement.Key, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
+            chunkCoordinates = Chunk.GetChunkCoordinates(nextVoxelElement.Key, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
