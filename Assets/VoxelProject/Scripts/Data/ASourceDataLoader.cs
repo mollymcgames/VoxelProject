@@ -132,7 +132,8 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         Debug.Log("Data now read in, data list size: " + voxelDictionary.Count);
         Debug.Log("Creating chunks of size [" + WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize + "] cubed.");
 
-        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
+        // Assuming the number of Chunks is going to be smaller than the straight voxels!
+        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>(voxelDictionary.Count/4);
 
         int voxelsProcessed = 0;
         foreach (var nextVoxelElement in voxelDictionary)

@@ -69,7 +69,8 @@ public class SourceDataTextFileLoaderAsDictionary
         // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("INNER Data now read in, data list size: " + sourceData.Count);
         // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Creating chunks of size ["+chunkSize+"] cubed.");
 
-        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
+        // Assuming chunks is smaller than the number of voxels.
+        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>(sourceData.Count/4, new FastVector3IntComparer());
 
         int voxelsProcessed = 0;
         foreach (var nextVoxelElement in sourceData)
@@ -110,7 +111,7 @@ public class SourceDataTextFileLoaderAsDictionary
     {
         //int numVoxels = width * height * depth;
 
-        Dictionary<Vector3Int, Voxel> voxelDataList = new Dictionary<Vector3Int, Voxel>(lines.Length);
+        Dictionary<Vector3Int, Voxel> voxelDataList = new Dictionary<Vector3Int, Voxel>(lines.Length, new FastVector3IntComparer());
 
         Debug.Log("Lines detected in file:" + lines.Length);
         int index = 0;

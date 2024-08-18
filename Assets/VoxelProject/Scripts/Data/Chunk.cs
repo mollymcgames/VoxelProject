@@ -18,7 +18,7 @@ public class Chunk
     public Chunk(Vector3Int chunkCoordinates, int chunkSize)
     {
         this.chunkPosition = chunkCoordinates;
-        this.voxels = new Dictionary<Vector3Int, Voxel>(chunkSize* chunkSize* chunkSize);
+        this.voxels = new Dictionary<Vector3Int, Voxel>(chunkSize* chunkSize* chunkSize, new FastVector3IntComparer());
         bounds = new Bounds(chunkCoordinates, new Vector3(chunkSize, chunkSize, chunkSize));
     }
 
