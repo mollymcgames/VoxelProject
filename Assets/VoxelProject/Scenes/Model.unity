@@ -1199,8 +1199,8 @@ MonoBehaviour:
     voxelDataFileName: 
     voxelDataSegmentFileName: 
     voxelSegmentLayers: []
-    voxelChunkSize: 16
-    voxelChunkFieldOfViewMultiplier: 1
+    voxelChunkSize: 64
+    voxelChunkFieldOfViewMultiplier: 6
     standardVoxelSize: {x: 1, y: 1, z: 1}
     voxelMeshCenter: {x: 0, y: 0, z: 0}
     voxelMeshContainerTagName: Untagged

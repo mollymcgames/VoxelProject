@@ -23,6 +23,10 @@ public class ComputeManager : MonoBehaviour
         yThreads = WorldManager.Instance.worldSettings.maxHeightY / 8;
         zThreads = WorldManager.Instance.worldSettings.maxDepthZ / 8;
 
+        Debug.Log("XTHREADS: " + xThreads);
+        Debug.Log("YTHREADS: " + yThreads);
+        Debug.Log("ZTHREADS: " + zThreads);
+
         noiseShader.SetInt("containerSizeX", WorldManager.Instance.worldSettings.maxWidthX);
         noiseShader.SetInt("containerSizeY", WorldManager.Instance.worldSettings.maxHeightY);
         noiseShader.SetInt("containerSizeZ", WorldManager.Instance.worldSettings.maxDepthZ);

@@ -35,7 +35,12 @@ public class VoxelTextHandler : MonoBehaviour
                 continue;
             }
 
-            voxelDataList.Add(new Vector3Int(x,y,z) , new Voxel(parts[3]));// x,y,z,parts[3]); // Assign the parsed color color as the voxel color
+            Color color;
+            if (ColorUtility.TryParseHtmlString("#" + parts[3], out color))
+            {
+                voxelDataList.Add(new Vector3Int(x, y, z), new Voxel(color.r.ToString(), color.g.ToString(), color.b.ToString()));   // parts[3]));// x,y,z,parts[3]); // Assign the parsed color color as the voxel color
+            } else { Debug.Log("Skipped! " + parts[3]); }
+            
         }
         return voxelDataList;
     }

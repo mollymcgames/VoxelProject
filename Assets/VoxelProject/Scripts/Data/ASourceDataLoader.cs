@@ -17,9 +17,9 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     public int minY = 0;
     public int minZ = 0;
 
-    public int widthX = 0;
-    public int heightY = 0;
-    public int depthZ = 0;
+    public int X = 0;
+    public int Y = 0;
+    public int Z = 0;
 
     public int voxelOmissionThreshold = 0;
 
@@ -61,7 +61,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             // D AS L voxelDictionary.TryGetValue(Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z)), out nextSegmentVoxel);
             // D AS L voxelDictionary[Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z))] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), parts[3].Replace("#", ""), parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
             // FIXP voxelDictionary[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             // TODO nextSegmentVoxel.isHotVoxel = true;
             // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
@@ -109,7 +109,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             // D AS L voxelDictionary.TryGetValue(Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z)), out nextSegmentVoxel);
             // D AS L voxelDictionary[Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z))] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), parts[3].Replace("#", ""), parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
             // TODO nextSegmentVoxel.isHotVoxel = true;
             // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
             // TODO voxelDictionary[x, y, z] = nextSegmentVoxel;

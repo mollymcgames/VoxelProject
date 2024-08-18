@@ -14,16 +14,16 @@ public class SourceDataTextFileLoaderAsDictionary
     string[] voxelFileLines = null;
 
     Voxel[] voxelData = null;
-    public int widthX = 0;
-    public int heightY = 0;
-    public int depthZ = 0;
+    public int X = 0;
+    public int Y = 0;
+    public int Z = 0;
 
-    public Dictionary<Vector3Int, Chunk> LoadSourceData()
+/*    public Dictionary<Vector3Int, Chunk> LoadSourceData()
     {
         Debug.Log("Loading source data...");
         //use streaming assets for the file path
         return LoadVoxelFile("Assets/Resources/blue.txt");
-    }
+    }*/
 
     public Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
     {
@@ -48,13 +48,13 @@ public class SourceDataTextFileLoaderAsDictionary
         //Debug.Log("Data now read in, data list size: "+voxelDataList.Count);
 
         // Get the dimensions
-        widthX = maxX - minX; //voxelFileLines.Dimensions[0];
-        heightY = maxY - minY; //voxelFileLines.Dimensions[1];
-        depthZ = maxZ - minZ; //voxelFileLines.Dimensions[2];
+        X = maxX - minX; //voxelFileLines.Dimensions[0];
+        Y = maxY - minY; //voxelFileLines.Dimensions[1];
+        Z = maxZ - minZ; //voxelFileLines.Dimensions[2];
 
-        Debug.Log("DICTIONARY width:" + widthX);
-        Debug.Log("DICTIONARY height:" + heightY);
-        Debug.Log("DICTIONARY depth:" + depthZ);
+        Debug.Log("DICTIONARY width:" + X);
+        Debug.Log("DICTIONARY height:" + Y);
+        Debug.Log("DICTIONARY depth:" + Z);
 
         return ConstructChunks(voxelDataList);
 
@@ -136,7 +136,7 @@ public class SourceDataTextFileLoaderAsDictionary
             if (z>maxZ) maxZ = z;
             if (z<minZ) minZ = z;   
                
-            voxelDataList.Add(new Vector3Int(x, y, z), new Voxel(parts[3])); // Assign the parsed color color as the voxel color
+            voxelDataList.Add(new Vector3Int(x, y, z), new Voxel(parts[3], parts[3], parts[3])); // Assign the parsed color color as the voxel color
         }
         Debug.Log("Lines processed:" + index);
         return voxelDataList;

@@ -128,8 +128,8 @@ public class Container : MonoBehaviour
             }
 
             // Skip this voxel if it's below the visibility threshold
-            if (int.Parse(nextVoxel.Value.color.ToString()) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
-                continue;
+            //if (int.Parse(nextVoxel.Value.color.ToString()) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
+            //    continue;
 
             if (checkVoxelIsSolid(nextVoxel.Key, ref visibleVoxels) == false)
                 continue;
@@ -144,8 +144,7 @@ public class Container : MonoBehaviour
                         }*/
 
 
-
-            float grayScaleValue = float.Parse(nextVoxel.Value.color.ToString())/255f;
+            float grayScaleValue = float.Parse(nextVoxel.Value.colorR.ToString())/255f;
             voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
             voxelColorAlpha.a = 1;
             voxelColorAlpha = voxelColor.color;
@@ -344,18 +343,18 @@ public class Container : MonoBehaviour
         // This will hold the voxels that are ultimately doing to be visible.
         visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
 
-        foreach (var chunk in WorldManager.Instance.voxelChunks)
+/*        foreach (var chunk in WorldManager.Instance.voxelChunks)
         {
             if (FrustumCulling.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
             {
                 // Only check individual voxels within the chunk if the chunk is visible
                 TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
             }
-        }
+        }*/
 
         FrustumCulling.DropFrustrumPlanes();
 
-        //Traverse(camera, visibleVoxels);
+        Traverse(camera, visibleVoxels);
 
         return visibleVoxels;
 

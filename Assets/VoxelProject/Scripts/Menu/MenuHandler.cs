@@ -26,7 +26,9 @@ public class MenuHandler : MonoBehaviour
         int voxelOmissionThreshold = 0;
         // WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         LoadAFile(false, voxelOmissionThreshold);
     }
@@ -34,7 +36,9 @@ public class MenuHandler : MonoBehaviour
     {
         int voxelOmissionThreshold = 0;
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         return LoadAFileForTheHeader(voxelOmissionThreshold);
     }
@@ -144,9 +148,12 @@ public class MenuHandler : MonoBehaviour
             niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
         }
         
-        Debug.Log("Description, " + System.Text.Encoding.Default.GetString(niftiFile.Header.descrip));
         Debug.Log("Dimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2]);
         Debug.Log("Filename, " + niftiFilePath);
+
+        WorldManager.Instance.worldSettings.maxWidthX = loader.X;
+        WorldManager.Instance.worldSettings.maxHeightY = loader.Y;
+        WorldManager.Instance.worldSettings.maxDepthZ = loader.Z;
 
         if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName != null)
         {
@@ -156,10 +163,6 @@ public class MenuHandler : MonoBehaviour
 
             WorldManager.Instance.voxelDictionary = loader.LoadVoxelSegmentDefinitionFileExtra(voxelSegmentDefinitionFilePath);
         }
-
-        WorldManager.Instance.worldSettings.maxWidthX = loader.widthX;
-        WorldManager.Instance.worldSettings.maxHeightY = loader.heightY;
-        WorldManager.Instance.worldSettings.maxDepthZ = loader.depthZ;
 
         Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
 

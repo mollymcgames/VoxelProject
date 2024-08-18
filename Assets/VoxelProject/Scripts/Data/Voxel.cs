@@ -6,7 +6,9 @@ using Unity.Collections;
 */
 public struct Voxel
 {
-    public readonly FixedString32Bytes color;
+    public readonly FixedString32Bytes colorR;
+    public readonly FixedString32Bytes colorG;
+    public readonly FixedString32Bytes colorB;
 
     //public readonly int z;
 
@@ -20,23 +22,27 @@ public struct Voxel
 
     //public readonly Vector3Int Position;
 
-    public Voxel(string color)//int z, int y, int x, string color) // , bool isOuterVoxel)
+    public Voxel(string colorR, string colorG, string colorB)//int z, int y, int x, string color) // , bool isOuterVoxel)
     {
         //this.z = z;
         //this.y = y;
         //this.x = x;
-        this.color = color;
+        this.colorR = colorR;
+        this.colorG = colorG;
+        this.colorB = colorB;
         isSegmentVoxel = false;
         //this.isOuterVoxel = false; // isOuterVoxel;
         //Position = new Vector3Int(x, y, z);
     }
 
-    public Voxel(string color, bool isSegmentVoxel)//int z, int y, int x, string color, bool isSegmentVoxel) //, bool isOuterVoxel)
+    public Voxel(string colorR, string colorG, string colorB, bool isSegmentVoxel)//int z, int y, int x, string color, bool isSegmentVoxel) //, bool isOuterVoxel)
     {
         //this.z = z;
         //this.y = y;
         //this.x = x;
-        this.color = color;
+        this.colorR = colorR;
+        this.colorG = colorG;
+        this.colorB = colorB;
         this.isSegmentVoxel = isSegmentVoxel;
         //this.isOuterVoxel = false; // isOuterVoxel;
         //Position = new Vector3Int(x, y, z);

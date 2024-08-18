@@ -42,13 +42,13 @@ public class SourceDataLoader : ASourceDataLoader
         niftiFile = ReadNiftiFile(filePath);
 
         // Get the dimensions
-        widthX = niftiFile.Dimensions[0];
-        heightY = niftiFile.Dimensions[1];
-        depthZ = niftiFile.Dimensions[2];
+        X = niftiFile.Dimensions[0];
+        Y = niftiFile.Dimensions[1];
+        Z = niftiFile.Dimensions[2];
 
-        Debug.Log("NII width:" + widthX);
-        Debug.Log("NII height:" + heightY);
-        Debug.Log("NII depth:" + depthZ);
+        Debug.Log("NII width:" + X);
+        Debug.Log("NII height:" + Y);
+        Debug.Log("NII depth:" + Z);
     }
 
     private void LoadNiftiSegmentFile(string filePath)
@@ -57,9 +57,9 @@ public class SourceDataLoader : ASourceDataLoader
         niftiSegmentFile = ReadNiftiFile(filePath);
 
         // Get the dimensions
-        widthX = niftiSegmentFile.Dimensions[0];
-        heightY = niftiSegmentFile.Dimensions[1];
-        depthZ = niftiSegmentFile.Dimensions[2];
+        X = niftiSegmentFile.Dimensions[0];
+        Y = niftiSegmentFile.Dimensions[1];
+        Z = niftiSegmentFile.Dimensions[2];
 
         // Rebuild chunks
         WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
@@ -69,7 +69,7 @@ public class SourceDataLoader : ASourceDataLoader
     {
         Debug.Log("Data being read in and loaded into Dictionary...");
         // Read the voxel data
-        voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, widthX, heightY, depthZ, voxelOmissionThreshold);
+        voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, X, Y, Z, voxelOmissionThreshold);
         Debug.Log("Data now read in and Dictionary created. Size: "+voxelDictionary.Count);
     }
 

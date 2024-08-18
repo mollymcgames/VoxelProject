@@ -56,18 +56,22 @@ public class OuterWorldManager : MonoBehaviour
             _instance = this;
         }
 
-        sourceDataInner = new SourceDataTextFileLoader(0).LoadSourceData(filepathInner);
-        sourceDataOuter = new SourceDataTextFileLoader(0).LoadSourceData(filepathOuter);
+        SourceDataTextFileLoader innerLoader = new SourceDataTextFileLoader(0);
+        SourceDataTextFileLoader outerLoader = new SourceDataTextFileLoader(0);
 
+        sourceDataInner = innerLoader.LoadSourceData(filepathInner);
+        sourceDataOuter = outerLoader.LoadSourceData(filepathOuter);
+
+        SourceDataTextFileLoaderAsDictionary loaderInnerAsDict = null;
         try
         {
-            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(chunkInnerSize);
-            sourceDataInnerDictionary = loader.LoadSourceData(filepathInner);
-            tempwidthX = loader.widthX;
-            tempheightY = loader.heightY;
-            tempdepthZ = loader.depthZ;
+            loaderInnerAsDict = new SourceDataTextFileLoaderAsDictionary(chunkInnerSize);
+            sourceDataInnerDictionary = loaderInnerAsDict.LoadSourceData(filepathInner);
+            tempwidthX = loaderInnerAsDict.X;
+            tempheightY = loaderInnerAsDict.Y;
+            tempdepthZ = loaderInnerAsDict.Z;
 
-            sourceDataOuterDictionary = loader.LoadSourceData(filepathOuter);
+            sourceDataOuterDictionary = loaderInnerAsDict.LoadSourceData(filepathOuter);
 
         }
         catch (Exception e)
@@ -75,13 +79,14 @@ public class OuterWorldManager : MonoBehaviour
             Debug.LogError(e.ToString());
         }
 
+        SourceDataTextFileLoaderAsDictionary loaderOuterAsDict = null;
         try
         {
-            SourceDataTextFileLoaderAsDictionary loader = new SourceDataTextFileLoaderAsDictionary(chunkOuterSize);
-            sourceDataOuterDictionary = loader.LoadSourceData(filepathOuter);
-            tempwidthX = loader.widthX;
-            tempheightY = loader.heightY;
-            tempdepthZ = loader.depthZ;                       
+            loaderOuterAsDict = new SourceDataTextFileLoaderAsDictionary(chunkOuterSize);
+            sourceDataOuterDictionary = loaderOuterAsDict.LoadSourceData(filepathOuter);
+            tempwidthX = loaderOuterAsDict.X;
+            tempheightY = loaderOuterAsDict.Y;
+            tempdepthZ = loaderOuterAsDict.Z;                       
         }
         catch (Exception e)
         {
@@ -90,9 +95,9 @@ public class OuterWorldManager : MonoBehaviour
 
         WorldSettings = worldSettings;
         WorldSettings = worldSettings;
-        WorldSettings.maxWidthX = SourceDataTextFileLoader.widthX;
-        WorldSettings.maxHeightY = SourceDataTextFileLoader.heightY;
-        WorldSettings.maxDepthZ = SourceDataTextFileLoader.depthZ;
+        WorldSettings.maxWidthX = outerLoader.X;
+        WorldSettings.maxHeightY = outerLoader.Y;
+        WorldSettings.maxDepthZ = outerLoader.Z;
 
         //Initialise the outer containers
         InitialiseContainers();

@@ -104,9 +104,9 @@ public class OuterContainer : MonoBehaviour
 
 
             Color color;
-            if (!ColorUtility.TryParseHtmlString("#" + vc.Value.color, out color))
+            if (!ColorUtility.TryParseHtmlString("#" + vc.Value.colorR, out color))
             {
-                Debug.LogError($"Invalid color value in line: {vc.Value.color}");
+                Debug.LogError($"Invalid color value in line: {vc.Value.colorR}");
                 continue;
             }            
 
@@ -237,7 +237,7 @@ public class OuterContainer : MonoBehaviour
                 voxelColor = new VoxelColor();
 
                 Color color;
-                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElementInChunk.Value.color, out color))
+                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElementInChunk.Value.colorR, out color))
                 {
                     //Debug.LogError($"Invalid color value in line: {nextVoxelElementInChunk.colorString}");
                     continue;
