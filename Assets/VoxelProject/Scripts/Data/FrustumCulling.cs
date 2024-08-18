@@ -3,11 +3,26 @@ using UnityEngine;
 public class FrustumCulling
 {
     private static Plane[] planes;
-    private static Bounds bounds;
+
+    public static void CalculateFrustrumPlanes(Camera camera)
+    {
+        planes = GeometryUtility.CalculateFrustumPlanes(camera);
+    }
+
+    public static void DropFrustrumPlanes()
+    {
+        planes = null;
+    }
+
+    public static bool IsChunkInView(ref Bounds bounds)
+    {
+        return GeometryUtility.TestPlanesAABB(planes, bounds);
+    }
 
     public static bool IsVoxelInView(Camera camera, Vector3Int position, int size, float nearClippingDistance)
     {
-        planes = GeometryUtility.CalculateFrustumPlanes(camera);
+        Bounds bounds;
+        //planes = GeometryUtility.CalculateFrustumPlanes(camera);
         bounds = new Bounds(position, new Vector3Int(size, size, size));
 
         // Check if the voxel is within the frustum

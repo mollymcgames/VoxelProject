@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /**
@@ -8,23 +9,27 @@ using UnityEngine;
  */
 public class Chunk
 {
-    public Vector3Int chunkCoordinates { get; private set; }
-    public List<VoxelElement> voxels { get; private set; }
+    public Bounds bounds;
 
-    public Chunk(Vector3Int chunkCoordinates)
+    public Vector3Int chunkPosition { get; private set; }
+    public Dictionary<Vector3Int, Voxel> voxels { get; private set; }
+
+    // Creates a new Chunk, including it's Unity "Bounds" which makes doing Frustrum visibility calculations quicker later on.
+    public Chunk(Vector3Int chunkCoordinates, int chunkSize)
     {
-        this.chunkCoordinates = chunkCoordinates;
-        this.voxels = new List<VoxelElement>();
+        this.chunkPosition = chunkCoordinates;
+        this.voxels = new Dictionary<Vector3Int, Voxel>(chunkSize* chunkSize* chunkSize);
+        bounds = new Bounds(chunkCoordinates, new Vector3(chunkSize, chunkSize, chunkSize));
     }
 
-    public void AddVoxel(int x, int y, int z)
+/*    public void AddVoxel(int x, int y, int z)
     {
         AddVoxel(new VoxelElement(new Vector3Int(x, y, z)));
-    }
+    }*/
 
-    public void AddVoxel(VoxelElement voxel)
+    public void AddVoxel(Vector3Int position, Voxel voxel)
     {
-        voxels.Add(voxel);
+        voxels.Add(position, voxel);
     }
     public static Vector3Int GetChunkCoordinates(Vector3 voxelPosition, int chunkSize)
     {

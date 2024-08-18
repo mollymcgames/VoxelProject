@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SourceDataLoader : ASourceDataLoader
 {
-    public SourceDataLoader(int chunkSize, int voxelOmissionThreshold) : base(chunkSize) { 
+    public SourceDataLoader(int voxelOmissionThreshold) { 
         this.voxelOmissionThreshold = voxelOmissionThreshold;
     }
 
@@ -18,6 +18,7 @@ public class SourceDataLoader : ASourceDataLoader
         LoadNiftiFile(filepath);
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter = CalculateCenter(niftiFile.Dimensions[0], niftiFile.Dimensions[1], niftiFile.Dimensions[2]);
         CreateVoxelsArray();
+        WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
         return voxelDictionary;
     }
 
@@ -60,6 +61,9 @@ public class SourceDataLoader : ASourceDataLoader
         widthX = niftiSegmentFile.Dimensions[0];
         heightY = niftiSegmentFile.Dimensions[1];
         depthZ = niftiSegmentFile.Dimensions[2];
+
+        // Rebuild chunks
+        WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
     }
 
     private void CreateVoxelsArray()
@@ -77,10 +81,10 @@ public class SourceDataLoader : ASourceDataLoader
         Debug.Log("Data (grid) now read in");
     }*/
 
-    public void OpenNiftiFile(string filePath)
+/*    public void OpenNiftiFile(string filePath)
     {
         niftiFile = ReadNiftiFile(filePath);
-    }
+    }*/
 
     private Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
     {

@@ -72,10 +72,11 @@ public class SCManager : MonoBehaviour
 
                 // Wait for the specified interval
                 yield return new WaitForSeconds(updateInterval);
-            } else
-            {
-                Debug.Log("Skipping update...");
-            }
+            } 
+            //else
+            //{
+            //    Debug.Log("Skipping update...");
+            //}
         }
     }
 }

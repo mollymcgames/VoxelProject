@@ -10,8 +10,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     //D AS L public Dictionary<long, VoxelCell> voxelDictionary = null;
     //public VoxelGrid voxelGrid = null;
 
-    public int chunkSize = 0;
-
     public int maxX = 0;
     public int maxY = 0;
     public int maxZ = 0;
@@ -24,11 +22,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     public int depthZ = 0;
 
     public int voxelOmissionThreshold = 0;
-
-    public ASourceDataLoader(int chunkSize)
-    {
-        this.chunkSize = chunkSize;
-    }
 
     // FIXP public abstract VoxelCell[,,] LoadSourceData(string filepath);
     // D AS L public abstract Dictionary<long, VoxelCell> LoadSourceData(string filepath);
@@ -134,34 +127,32 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         return new Vector3Int(centerX, centerY, centerZ);
     }
 
-    /*public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> voxelDictionary)
+    public Dictionary<Vector3Int, Chunk> ConstructChunks(Dictionary<Vector3Int, Voxel> voxelDictionary)
     {
         Debug.Log("Data now read in, data list size: " + voxelDictionary.Count);
-        Debug.Log("Creating chunks of size [" + chunkSize + "] cubed.");
+        Debug.Log("Creating chunks of size [" + WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize + "] cubed.");
 
-        Dictionary<Vector3Int, VoxelChunk> chunks = new Dictionary<Vector3Int, VoxelChunk>();
+        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
 
         int voxelsProcessed = 0;
-        foreach (Voxel nextVoxelElement in voxelDictionary)
+        foreach (var nextVoxelElement in voxelDictionary)
         {
-            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.worldPosition, chunkSize);
+            Vector3Int chunkCoordinates = Chunk.GetChunkCoordinates(nextVoxelElement.Key, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
             {
-                Debug.Log("Creating new Chunk at worldPosition: " + chunkCoordinates);
-                chunks[chunkCoordinates] = new VoxelChunk(chunkCoordinates);
+                // Debug.Log("Creating new Chunk at worldPosition: " + chunkPosition);
+                chunks[chunkCoordinates] = new Chunk(chunkCoordinates, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
             }
 
             // Add voxel to the corresponding chunk
-            // MEMORY SAVER: If we know the coordinates, which we're using as a chunk index, why do we
-            // need to save the coordinates twice (i.e. in the voxel object)?
-            chunks[chunkCoordinates].AddVoxel(nextVoxelElement);
+            chunks[chunkCoordinates].AddVoxel(nextVoxelElement.Key, nextVoxelElement.Value);
             voxelsProcessed++;
         }
         Debug.Log("Voxels processed:" + voxelsProcessed);
         Debug.Log("Number of chunks created: " + chunks.Count);
         return chunks;
-    }*/
+    }
 
 }

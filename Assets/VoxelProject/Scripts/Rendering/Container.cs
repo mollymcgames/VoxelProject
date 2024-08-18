@@ -334,11 +334,65 @@ public class Container : MonoBehaviour
         }*/
     }
 
+    Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
+
     public Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
+        // Pre-calculate the Frustrum planes so that it isn't calculated each loop!
+        FrustumCulling.CalculateFrustrumPlanes(camera);
+
+        // This will hold the voxels that are ultimately doing to be visible.
         visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
-        Traverse(camera, visibleVoxels);
+
+        foreach (var chunk in WorldManager.Instance.voxelChunks)
+        {
+            if (FrustumCulling.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
+            {
+                // Only check individual voxels within the chunk if the chunk is visible
+                TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
+            }
+        }
+
+        FrustumCulling.DropFrustrumPlanes();
+
+        //Traverse(camera, visibleVoxels);
+
         return visibleVoxels;
+
+    }
+
+    private void TraverseVisibleChunk(ref Camera camera, Vector3Int chunkPosition, ref Dictionary<Vector3Int, Voxel> visibleVoxels)
+    {
+        Chunk chunkValue = null;
+        WorldManager.Instance.voxelChunks.TryGetValue(chunkPosition, out chunkValue);
+
+        if (chunkValue != null)
+        {
+            foreach(var nextVoxelInChunk in chunkValue.voxels)
+            {
+                if (FrustumCulling.IsVoxelInView(camera, nextVoxelInChunk.Key, 100, WorldManager.Instance.worldSettings.nearClippingDistance))
+                {
+                    visibleVoxels.Add(nextVoxelInChunk.Key, nextVoxelInChunk.Value);
+                }
+            }
+        }
+
+
+/*        for (int x = 0; x < chunkSize; x++)
+        {
+            for (int y = 0; y < chunkSize; y++)
+            {
+                for (int z = 0; z < chunkSize; z++)
+                {                    
+                    Vector3Int voxelPosition = new Vector3Int(x, y, z) + Vector3Int.FloorToInt(chunkPosition);
+
+                    if (FrustumCulling.IsVoxelInView(camera, voxelPosition, 100, WorldManager.Instance.worldSettings.nearClippingDistance))
+                    {
+                        visibleVoxels.Add(voxelPosition, WorldManager.Instance.voxelDictionary[voxelPosition]);
+                    }
+                }
+            }
+        }*/
     }
 
     private void Traverse(Camera camera, Dictionary<Vector3Int, Voxel> visibleVoxels)

@@ -1165,8 +1165,8 @@ MonoBehaviour:
     maxWidthX: 0
     maxDepthZ: 0
     maxHeightY: 0
-    chunkSize: 32
     nearClippingDistance: 105
+    autoRefresh: 0
   container: {fileID: 0}
 --- !u!4 &1171129835
 Transform:
@@ -1217,8 +1217,8 @@ MonoBehaviour:
     maxWidthX: 0
     maxDepthZ: 0
     maxHeightY: 0
-    chunkSize: 16
     nearClippingDistance: 85
+    autoRefresh: 0
   voxelsSelected: 0
   menuHandler: {fileID: 1171129838}
 --- !u!114 &1171129838

@@ -5,7 +5,7 @@ public class DataLoaderUtils
     public static ASourceDataLoader LoadDataFile(int voxelOmissionThreshold=0)
     {
         if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath.Contains(".nii"))
-            return new SourceDataLoader(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, voxelOmissionThreshold);
+            return new SourceDataLoader(voxelOmissionThreshold);
         //else if (VoxelWorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath.Contains(".txt"))
         //    return new SourceDataTextFileLoaderAsDictionary(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
         else

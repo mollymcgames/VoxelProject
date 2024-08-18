@@ -221,16 +221,18 @@ public class OuterContainer : MonoBehaviour
         int breaker = 0;
 
         // Now prep those 27 chunks for rendering....
-        foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
+        //foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
+
+        foreach(var nextChunk in renderVectors)
         {
-            foreach (VoxelElement nextVoxelElement in nextChunk.Value.voxels)
+            foreach (var nextVoxelElementInChunk in nextChunk.Value.voxels)
             {
-                blockPos = nextVoxelElement.position;
+                blockPos = nextVoxelElementInChunk.Key;
                 block = this[blockPos];
                 //Only check on solid blocks
                 if (!block.isSolid)
                 {
-                    //Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElement.Position.x + "," + nextVoxelElement.Position.y + "," + nextVoxelElement.Position.z + "]");
+                    //Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElementInChunk.Position.x + "," + nextVoxelElementInChunk.Position.y + "," + nextVoxelElementInChunk.Position.z + "]");
                     continue;
                 }
 
@@ -239,9 +241,9 @@ public class OuterContainer : MonoBehaviour
                 voxelColor = new VoxelColor();
 
                 Color color;
-                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElement.colorString, out color))
+                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElementInChunk.Value.color, out color))
                 {
-                    //Debug.LogError($"Invalid color value in line: {nextVoxelElement.colorString}");
+                    //Debug.LogError($"Invalid color value in line: {nextVoxelElementInChunk.colorString}");
                     continue;
                 }
 
