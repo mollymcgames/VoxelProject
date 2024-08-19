@@ -6,6 +6,13 @@ public class SourceDataTextFileLoaderAsDictionary
 {
     public int chunkSize = 0;
 
+    private int maxX = 0;
+    private int maxY = 0;
+    private int maxZ = 0;
+    private int minX = 0;
+    private int minY = 0;
+    private int minZ = 0;
+
     public SourceDataTextFileLoaderAsDictionary(int chunkSize)
     {
         this.chunkSize = chunkSize;
@@ -18,25 +25,16 @@ public class SourceDataTextFileLoaderAsDictionary
     public int Y = 0;
     public int Z = 0;
 
-/*    public Dictionary<Vector3Int, Chunk> LoadSourceData()
-    {
-        Debug.Log("Loading source data...");
-        //use streaming assets for the file path
-        return LoadVoxelFile("Assets/Resources/blue.txt");
-    }*/
-
     public Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
     {
         Debug.Log("Loading source data as Dictionary...");
         return LoadVoxelFile(filepath);
     }    
 
-
     public string[] GetHeader()
     {
         return voxelFileLines;
     }
-    
 
     public Dictionary<Vector3Int, Chunk> LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
     {
@@ -44,8 +42,7 @@ public class SourceDataTextFileLoaderAsDictionary
         voxelFileLines = ReadVoxelTextFile(voxelFilePath);
 
         // Read the voxel data
-        Dictionary<Vector3Int, Voxel> voxelDataList = ReadVoxelData(voxelFileLines);
-        //Debug.Log("Data now read in, data list size: "+voxelDataList.Count);
+        Dictionary<Vector3Int, Voxel> voxelDataList = ReadVoxelData(voxelFileLines);        
 
         // Get the dimensions
         X = maxX - minX; //voxelFileLines.Dimensions[0];
@@ -62,9 +59,6 @@ public class SourceDataTextFileLoaderAsDictionary
   
     private Dictionary<Vector3Int, Chunk> ConstructChunks(Dictionary<Vector3Int, Voxel> sourceData)
     {
-        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("INNER Data now read in, data list size: " + sourceData.Count);
-        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Creating chunks of size ["+chunkSize+"] cubed.");
-
         // Assuming chunks is smaller than the number of voxels.
         Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>(sourceData.Count/4, new FastVector3IntComparer());
 
@@ -76,7 +70,6 @@ public class SourceDataTextFileLoaderAsDictionary
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
             {
-                // USEFUL BUT SLOWS THINGS DOWN: Debug.Log("Creating new Chunk at position: "+chunkPosition);
                 chunks[chunkCoordinates] = new Chunk(chunkCoordinates, chunkSize);
             }
 
@@ -84,8 +77,6 @@ public class SourceDataTextFileLoaderAsDictionary
             chunks[chunkCoordinates].AddVoxel(nextVoxelElement.Key, nextVoxelElement.Value);
             voxelsProcessed++;
         }
-        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Voxels processed:" + voxelsProcessed);
-        // USEFUL BUT SLOWS THINGS DOWN:Debug.Log("Number of chunks created: "+chunks.Count);
         return chunks;
     }
 
@@ -95,13 +86,6 @@ public class SourceDataTextFileLoaderAsDictionary
         // Load the text file
         return File.ReadAllLines(voxelTextFilePath);
     }
-
-    private int maxX = 0;
-    private int maxY = 0;
-    private int maxZ = 0;
-    private int minX = 0;
-    private int minY = 0;
-    private int minZ = 0;
 
     private Dictionary<Vector3Int, Voxel> ReadVoxelData(string[] lines)
     {

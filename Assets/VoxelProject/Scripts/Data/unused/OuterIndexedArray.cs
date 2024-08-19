@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
 
 [System.Serializable]
@@ -19,7 +16,6 @@ public class OuterIndexedArray<T> where T : struct
 
     public OuterIndexedArray()
     {
-//        Create(WorldManager.WorldSettings.containerSize, WorldManager.WorldSettings.maxHeight); - original size
         Create(OuterWorldManager.WorldSettings.maxWidthX, OuterWorldManager.WorldSettings.maxHeightY, OuterWorldManager.WorldSettings.maxDepthZ);
     }
 
@@ -69,15 +65,6 @@ public class OuterIndexedArray<T> where T : struct
         {
             Vector3 unityCoords = coord;
 
-            // if (unityCoords.x < 0 || unityCoords.x > size.x ||
-            //     unityCoords.y < 0 || unityCoords.y > size.y ||
-            //     unityCoords.z < 0 || unityCoords.z > size.z)
-            // {
-            //     Debug.LogError($"Coordinates GET out of bounds! {coord}");
-            //     return default(T);
-            // }
-            // return array[IndexFromCoord(coord)];
-
             // Adjust coordinates to wrap around the array
             unityCoords.x = (unityCoords.x % size.x + size.x) % size.x;
             unityCoords.y = (unityCoords.y % size.y + size.y) % size.y;
@@ -89,13 +76,6 @@ public class OuterIndexedArray<T> where T : struct
         {
             Vector3 unityCoords = (coord);
 
-            // if (unityCoords.x < 0 || unityCoords.x >= size.x ||
-            //     unityCoords.y < 0 || unityCoords.y >= size.y ||
-            //     unityCoords.z < 0 || unityCoords.z >= size.z)
-            // {
-            //     Debug.LogError($"Coordinates SET out of bounds! {coord}");
-            //     return;
-            // }
             array[IndexFromCoord(coord)] = value;
 
             // Adjust coordinates to wrap around the array

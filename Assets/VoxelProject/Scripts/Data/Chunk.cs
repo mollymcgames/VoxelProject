@@ -21,15 +21,11 @@ public class Chunk
         bounds = new Bounds(chunkCoordinates, new Vector3(chunkSize, chunkSize, chunkSize));
     }
 
-/*    public void AddVoxel(int x, int y, int z)
-    {
-        AddVoxel(new VoxelElement(new Vector3Int(x, y, z)));
-    }*/
-
     public void AddVoxel(Vector3Int position, Voxel voxel)
     {
         voxels.Add(position, voxel);
     }
+
     public static Vector3Int GetChunkCoordinates(Vector3 voxelPosition, int chunkSize)
     {
         // Calculate chunk coordinates

@@ -3,14 +3,13 @@ using UnityEngine;
 
 public class SourceDataLoader : ASourceDataLoader
 {
+    private static Nifti.NET.Nifti niftiFile = null;
+    private static Nifti.NET.Nifti niftiSegmentFile = null;
+
     public SourceDataLoader(int voxelOmissionThreshold) { 
         this.voxelOmissionThreshold = voxelOmissionThreshold;
     }
-
-    private static Nifti.NET.Nifti niftiFile = null;
-    private static Nifti.NET.Nifti niftiSegmentFile = null;    
     
-    // D AS L public override Dictionary<long, VoxelCell> LoadSourceData(string filepath)
     public override Dictionary<Vector3Int, Voxel> LoadSourceData(string filepath)
     {
         Debug.Log("Loading nii source data...:" + filepath);
@@ -21,21 +20,11 @@ public class SourceDataLoader : ASourceDataLoader
         return voxelDictionary;
     }
 
-/*    public override VoxelGrid LoadSourceDataGrid(string filepath)
-    {
-        Debug.Log("Loading nii source data in GRID format...:" + filepath);
-        LoadNiftiFile(filepath);
-        CreateVoxelsArrayGrid();
-        return voxelGrid;
-    }*/
-   
     public override object GetHeader()
     {
         return niftiFile;
     }
-
-    #region
-    //private Dictionary<Vector3Int, Chunk> LoadNiftiFile(string niftiFilePath)
+    
     private void LoadNiftiFile(string filePath)
     {
         // Load default file
@@ -73,23 +62,10 @@ public class SourceDataLoader : ASourceDataLoader
         Debug.Log("Data now read in and Dictionary created. Size: "+voxelDictionary.Count);
     }
 
-/*    private void CreateVoxelsArrayGrid()
-    {
-        // Read the voxel data
-        voxelGrid = NiftiHandler.ReadNiftiDataGrid(niftiFile, x, y, z, chunkSize);
-        Debug.Log("Data (grid) now read in");
-    }*/
-
-/*    public void OpenNiftiFile(string filePath)
-    {
-        niftiFile = ReadNiftiFile(filePath);
-    }*/
-
     private Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
     {
         // Load the NIfTI file
         return NiftiHandler.ReadNiftiFile(niftiFilePath);
     }
-    #endregion
 
 }

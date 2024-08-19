@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class VoxelColor
 {
+    public Color color;
+    public float metallic;
+    public float smoothness;
 
     public VoxelColor(float r, float g, float b)
     {
@@ -27,8 +28,4 @@ public class VoxelColor
         metallic = 0.0f;
         smoothness = 0.0f;
     }
-
-    public Color color;
-    public float metallic;
-    public float smoothness;
 }

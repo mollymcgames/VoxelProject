@@ -5,10 +5,7 @@ using System.IO;
 
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
-    // FIXP public VoxelCell[,,] voxelDictionary = null;
     public Dictionary<Vector3Int, Voxel> voxelDictionary = null;
-    //D AS L public Dictionary<long, VoxelCell> voxelDictionary = null;
-    //public VoxelGrid voxelGrid = null;
 
     public int maxX = 0;
     public int maxY = 0;
@@ -23,14 +20,8 @@ public abstract class ASourceDataLoader : ISourceDataLoader
 
     public int voxelOmissionThreshold = 0;
 
-    // FIXP public abstract VoxelCell[,,] LoadSourceData(string filepath);
-    // D AS L public abstract Dictionary<long, VoxelCell> LoadSourceData(string filepath);
     public abstract Dictionary<Vector3Int, Voxel> LoadSourceData(string filepath);
 
-    //public abstract VoxelGrid LoadSourceDataGrid(string filepath);
-
-    // FIXP public VoxelCell[,,] LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
-    // D AS L public Dictionary<long, VoxelCell> LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
     public Dictionary<Vector3Int, Voxel> LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
     {
         Voxel nextSegmentVoxel;
@@ -41,7 +32,11 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         int index = 0;
         foreach (var segmentVoxelLine in segmentVoxels)
         {
-            if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#")) continue; // Skip empty lines and comments
+            // Skip empty lines and comments
+            if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#"))
+            {
+                continue;
+            }
 
             var parts = segmentVoxelLine.Split(',');
             if (parts.Length != 4)
@@ -57,15 +52,8 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 continue;
             }
 
-            // FIXP nextSegmentVoxel = voxelDictionary[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
-            // D AS L voxelDictionary.TryGetValue(Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z)), out nextSegmentVoxel);
-            // D AS L voxelDictionary[Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z))] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
             voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), parts[3].Replace("#", ""), parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
-            // FIXP voxelDictionary[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
-            // TODO nextSegmentVoxel.isHotVoxel = true;
-            // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
-            // TODO voxelDictionary[x, y, z] = nextSegmentVoxel;
         }
 
         return voxelDictionary;
@@ -77,8 +65,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     // e.g.
     // 10,10,20,#FF0000
     // 10,20,20,#FF00FF
-    // public VoxelCell[,,] LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
-    // D AS L public Dictionary<long, VoxelCell> LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
     public Dictionary<Vector3Int, Voxel> LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
     {
         Voxel nextSegmentVoxel;
@@ -97,6 +83,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 Debug.LogError($"Invalid line format: {segmentVoxelLine}");
                 continue;
             }
+
             if (!int.TryParse(parts[0], out int x) ||
                 !int.TryParse(parts[1], out int y) ||
                 !int.TryParse(parts[2], out int z))
@@ -105,14 +92,8 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 continue;
             }
 
-            // FIXP nextSegmentVoxel = voxelDictionary[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
-            // D AS L voxelDictionary.TryGetValue(Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z)), out nextSegmentVoxel);
-            // D AS L voxelDictionary[Vector3IntConvertor.EncodeVector3Int(new Vector3Int(x, y, z))] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), parts[3].Replace("#", ""), parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
-            // TODO nextSegmentVoxel.isHotVoxel = true;
-            // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
-            // TODO voxelDictionary[x, y, z] = nextSegmentVoxel;
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), parts[3].Replace("#", ""), parts[3].Replace("#", ""), true);            
         }
 
         return voxelDictionary;
@@ -144,7 +125,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
             {
-                // Debug.Log("Creating new Chunk at worldPosition: " + chunkPosition);
                 chunks[chunkCoordinates] = new Chunk(chunkCoordinates, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
             }
 
