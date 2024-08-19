@@ -3,11 +3,19 @@ using TMPro;
 
 public class MeshMouseOverInfoPanel : MonoBehaviour
 {
-    public GameObject popupPanel;  // Reference to the panel GameObject
+    // Reference to the panel GameObjects
+    public GameObject popupPanel;
     public TextMeshProUGUI popupText;
-    public LayerMask layerMask;    // Layer mask to specify which layers to interact with
-    private float hideDelay = 1.5f; // Time to wait before hiding the panel
+
+    // Layer mask to specify which layers to interact with
+    public LayerMask layerMask;
+
+    // Time to wait before hiding the panel
+    private float hideDelay = 1.5f;
     private float hideTimer = 0f;
+
+    private bool hasMouseExited = false;
+    public bool loadingData = false;
 
     string brainText, liverText, heartText = null;
 
@@ -16,9 +24,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
         // Initially hide the panel
         popupPanel.SetActive(false);        
     }
-
-    private bool hasMouseExited = false;
-    public bool loadingData = false;
 
     void OnMouseExit()
     {

@@ -24,7 +24,7 @@ public class MenuHandler : MonoBehaviour
     public void LoadHeartFile()
     {
         int voxelOmissionThreshold = 0;
-        // WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
@@ -78,8 +78,7 @@ public class MenuHandler : MonoBehaviour
 
     private string LoadAFileForTheHeader(int voxelOmissionThreshold)
     {
-        // Debug.Log("Getting file header information...");
-        //Use Steaming Assets folder to load the file
+        // Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
 
         // Load in one voxel model, currently support types are .txt and .nii files.
@@ -92,9 +91,8 @@ public class MenuHandler : MonoBehaviour
             fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
             Debug.Log("Loading file: " + fileLastLoaded);            
             loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold);
-            WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-            //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);            
-            niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+            WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);   
+            niftiFile = (Nifti.NET.Nifti)loader.GetHeader();
         }
         
         string retString = "<br>Dimensions: x(" + niftiFile.Dimensions[0] + ")/ y(" + niftiFile.Dimensions[1] + ")/ z(" + niftiFile.Dimensions[2] + ") <br>Filename: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
@@ -113,23 +111,10 @@ public class MenuHandler : MonoBehaviour
         {
             return "";
         }
-
-/*        string response = string.Empty;
-
-        foreach (byte b in bytes)
-            response += (Char)b;
-
-        return response;
-*/    }
-
-/*    private string ConvertByteToString(this byte[] source)
-    {
-        return source != null ? System.Text.Encoding.UTF8.GetString(source) : null;
-    }*/
+    }
 
     private void LoadAFile(bool hasSegmentLayers, int voxelOmissionThreshold)
     {
-        // Debug.Log("Loading file to display it: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
         // Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
 
@@ -144,8 +129,7 @@ public class MenuHandler : MonoBehaviour
             Debug.Log("Loading file: " + fileLastLoaded);
             loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold);
             WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-            //original WorldManager.Instance.voxelGrid = loader.LoadSourceDataGrid(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-            niftiFile = (Nifti.NET.Nifti)loader.GetHeader(); // SourceDataLoader.GetHeader();
+            niftiFile = (Nifti.NET.Nifti)loader.GetHeader();
         }
         
         Debug.Log("Dimensions, " + niftiFile.Dimensions[0] + ", " + niftiFile.Dimensions[1] + ", " + niftiFile.Dimensions[2]);
@@ -165,25 +149,6 @@ public class MenuHandler : MonoBehaviour
         }
 
         Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
-
-        // WorldManager.Instance.voxelsSelected = WorldManager.Instance.worldSettings.maxWidthX * WorldManager.Instance.worldSettings.maxHeightY * WorldManager.Instance.worldSettings.maxDepthZ;
-        //Debug.Log("Random voxel color 0: " + WorldManager.Instance.voxelDictionary[20, 20, 20].getColourRGBLayer(0));
-        //Debug.Log("Voxel hot color: " + WorldManager.Instance.voxelDictionary[21, 30, 0].getHotVoxelColourRGB().ToString());
-        //Debug.Log("Voxel hot bool: " + WorldManager.Instance.voxelDictionary[21, 30, 0].isHotVoxel.ToString());
-
-        //Debug.Log("Random voxel color 0: " + WorldManager.Instance.voxelGrid.GetVoxelUsingWorldPosition(new Vector3Int(50, 50, 50)).getColourRGBLayer(0));
-
-        // TODO
-/*        if (hasSegmentLayers)
-        {
-            int segmentLayer = 1;
-            foreach (string nextSegmentFile in WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers)
-            {
-                WorldManager.Instance.voxelDictionary = loader.LoadVoxelSegmentDefinitionFile(ref WorldManager.Instance.voxelDictionary, segmentLayer++, nextSegmentFile);
-            }        
-            voxelFileFormat = DataLoaderUtils.GetDataFileFormat();
-            Debug.Log("Random voxel color 1: " + WorldManager.Instance.voxelDictionary[20, 20, 20].getColourRGBLayer(1));
-        }  */ 
     }
 
     public void LoadZoom()

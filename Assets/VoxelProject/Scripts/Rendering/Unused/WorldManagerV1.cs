@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldManagerV1 : MonoBehaviour
@@ -11,6 +9,9 @@ public class WorldManagerV1 : MonoBehaviour
     public Voxel[] sourceData;
 
     public Container container;
+
+    public static WorldSettings WorldSettings;
+    private static WorldManagerV1 _instance;
 
     void Start()
     {
@@ -24,12 +25,6 @@ public class WorldManagerV1 : MonoBehaviour
             _instance = this;
         }
 
-        // original voxelDictionary = SourceDataLoader.LoadSourceData();
-        // original WorldSettings = worldSettings;
-        // original WorldSettings.maxWidthX = SourceDataLoader.x;
-        // original WorldSettings.maxHeightY = SourceDataLoader.y;
-        // original WorldSettings.maxDepthZ = SourceDataLoader.z;
-
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         ComputeManager.Instance.Initialize(1);
@@ -37,12 +32,7 @@ public class WorldManagerV1 : MonoBehaviour
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
         container.Initialize(worldMaterial, Vector3.zero);
-
-        //ComputeManager.Instance.GenerateVoxelData(ref container);
     }
-
-    public static WorldSettings WorldSettings;
-    private static WorldManagerV1 _instance;
 
     public static WorldManagerV1 Instance
     {

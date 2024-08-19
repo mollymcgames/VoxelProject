@@ -4,7 +4,6 @@ using UnityEngine;
 public class WorldManager : MonoBehaviour
 {
     // Vector3Int's are used as they use up less memory than floats and also
-
     [Header("Voxel Mesh Settings")]
     [SerializeField]
     public VoxelMeshConfigurationSettings voxelMeshConfigurationSettings;
@@ -12,19 +11,17 @@ public class WorldManager : MonoBehaviour
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;    
-    //public VoxelCell[,,] voxelDictionary;
     public Dictionary<Vector3Int,Voxel> voxelDictionary;
 
     // The based dictionary to store chunks by vector location
     public Dictionary<Vector3Int, Chunk> voxelChunks;
 
-    // D AS L public Dictionary<long,VoxelCell> voxelDictionary;
     public int voxelsSelected = 0;
 
-    //[HideInInspector]
-    // CULLING public VoxelGrid voxelGrid = null;
-
     public MenuHandler menuHandler;
+
+    public static WorldSettings WorldSettings;
+    private static WorldManager _instance;
 
     void Start()
     {
@@ -45,9 +42,6 @@ public class WorldManager : MonoBehaviour
         WorldSettings = worldSettings;
     }
 
-    public static WorldSettings WorldSettings;
-    private static WorldManager _instance;    
-
     public static WorldManager Instance
     {
         get
@@ -57,25 +51,6 @@ public class WorldManager : MonoBehaviour
             return _instance;
         }
     }
-
-    /*    public Chunk GetChunkAt(Vector3 globalPosition)
-        {
-            // Calculate the chunk's starting worldPosition based on the global worldPosition
-            Vector3Int chunkPosition = new Vector3Int(
-                Mathf.FloorToInt(globalPosition.x / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
-                Mathf.FloorToInt(globalPosition.y / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
-                Mathf.FloorToInt(globalPosition.z / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize
-            );
-
-            // Retrieve and return the chunk at the calculated worldPosition
-            if (chunks.TryGetValue(chunkPosition, out Chunk chunk))
-            {
-                return chunk;
-            }
-
-            // Return null if no chunk exists at the worldPosition
-            return null;
-        }*/
 }
 
 
