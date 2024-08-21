@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * This class implements the EqualityComparer interface and is used to help make 
+ * a Dictionary with a Vector3Int key perform faster.
+ */
 public class FastVector3IntComparer : IEqualityComparer<Vector3Int>
 {
     public bool Equals(Vector3Int a, Vector3Int b)

@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class OuterWorldManager : MonoBehaviour
@@ -42,7 +40,6 @@ public class OuterWorldManager : MonoBehaviour
 
     public int chunkFieldOfViewMultiplierInner = 1;
     public int chunkFieldOfViewMultiplierOuter = 1;
-
 
     void Start()
     {
@@ -164,7 +161,6 @@ public class OuterWorldManager : MonoBehaviour
         OuterComputeManager.Instance.Initialize(1);
     }
 
-
     GameObject InstantiateContainerPosition(string name, Vector3Int position)
     {
         GameObject cont = new GameObject(name);
@@ -181,7 +177,6 @@ public class OuterWorldManager : MonoBehaviour
         collider.isTrigger = true; // Enable IsTrigger
         collider.size = new Vector3Int(11, 9, 9); // Adjust the size as needed
     }
-
     
     void OnApplicationQuit()
     {

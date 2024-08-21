@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/**
+ * This class converts a Vector3Int to a Long equivalent and viceversa
+ */
 public class Vector3IntConvertor
 {
     public static long EncodeVector3Int(Vector3Int v)

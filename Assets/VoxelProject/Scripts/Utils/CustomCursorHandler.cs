@@ -49,19 +49,7 @@ public class CustomCursorHandler : MonoBehaviour
                 // Change the cursor to the custom cursor
                 Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
             }
-/*            else
-            {
-                Debug.Log("Changing curose off");
-                // Revert to the default cursor
-                Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
-            }*/
         }
-/*        else
-        {
-            Debug.Log("Changing curose revert");
-            // Revert to the default cursor if nothing is hit
-            Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
-        }*/
     }
 
     Texture2D CursorTexture()

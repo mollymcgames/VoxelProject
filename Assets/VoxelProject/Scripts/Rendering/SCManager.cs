@@ -31,9 +31,6 @@ public class SCManager : MonoBehaviour
         container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);        
 
         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
-
-        // THIS IS FOR LATER WHEN WE WANT TO DO A COOL REFRESH THING.
-        //StartCoroutine(TimedUpdateCoroutine());
     }
 
     void Update(){
@@ -53,30 +50,6 @@ public class SCManager : MonoBehaviour
         {
             // Call the custom update method
             ComputeManager.Instance.GenerateVoxelData(ref container, 0);
-        }
-        // USEFUL BUT SLOWS THINGS DOWN: 
-        /*        else
-                {
-                    Debug.Log("Skipping update...");
-                }*/
-    }
-
-    IEnumerator TimedUpdateCoroutine()
-    {
-        while (true)
-        {
-            if (WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
-            {
-                // Call the custom update method
-                ComputeManager.Instance.GenerateVoxelData(ref container, 0);
-
-                // Wait for the specified interval
-                yield return new WaitForSeconds(updateInterval);
-            } 
-            //else
-            //{
-            //    Debug.Log("Skipping update...");
-            //}
         }
     }
 }

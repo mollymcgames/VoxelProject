@@ -20,10 +20,6 @@ public class Container : MonoBehaviour
 
     public Vector3 containerPosition;
 
-    // This adjusts the near clipping distance for our Frustrum.
-    public float targetNearClippingDistance = 1.0f;  // Desired clipping distance
-    public float adjustmentSpeed = 2.0f;  // Speed of adjustment
-
     public NoiseBuffer data;
     private MeshData meshData = new MeshData();
 
@@ -36,8 +32,9 @@ public class Container : MonoBehaviour
     // Update loop interval to check the camera distance
     private float checkInterval = 0.1f;
     float distanceToCamera = 0f;
-
     float maxDistance = 200f;
+
+    Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
     public void Initialize(Material mat, Vector3 position)
     {
@@ -46,36 +43,7 @@ public class Container : MonoBehaviour
         data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
-
-        //distanceCheckCoroutine = StartCoroutine(CheckCameraDistanceCoroutine());
     }
-
-/*    IEnumerator CheckCameraDistanceCoroutine()
-    {
-        while (true)
-        {
-            distanceToCamera = Vector3.Distance(mainCamera.transform.Position, WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter);
-            //AnimateVoxelsBasedOnDistance(distanceToCamera);
-            yield return new WaitForSeconds(checkInterval);
-        }
-    }*/
-
-/*    void AnimateVoxelsBasedOnDistance(float distanceToCamera)
-    {
-        foreach (VoxelCell voxel in WorldManager.Instance.voxelDictionary)
-        {
-            if (voxel.isOuterVoxel)
-            {
-                Vector3 direction = (voxel.transform.Position - voxelMeshCenter.Position).normalized;
-                float distanceFactor = Mathf.Clamp01((animationDistance - distanceToCamera) / animationDistance);
-                voxel.AnimateAway(direction, distanceFactor * animationDistance, animationTime);
-            }
-            else
-            {
-                voxel.ResetPosition();
-            }
-        }
-    }*/
 
     public void ClearData()
     {
@@ -84,7 +52,6 @@ public class Container : MonoBehaviour
 
     public void RenderMesh()
     {
-        // USEFUL BUT SLOWS THINGS DOWN: Debug.Log("voxel generation happening!");
         SCManager.Instance.reRenderingMesh = true;
         meshData.ClearData();
         GenerateMesh();
@@ -95,16 +62,11 @@ public class Container : MonoBehaviour
     public void ReRenderMesh()
     {
         RenderMesh();
-        // USEFUL BUT SLOWS THINGS DOWN:
         Debug.Log("voxel generation done!");
     }    
 
     public void GenerateMesh()
     {
-        // FOR FUTURE // Adjust the near clipping distance based on target
-        // FOR FUTURE nearClippingDistance = Mathf.Lerp(nearClippingDistance, targetNearClippingDistance, Time.deltaTime * adjustmentSpeed);
-
-
         int voxelsSelected = 0;
 
         int counter = 0;
@@ -158,7 +120,6 @@ public class Container : MonoBehaviour
                     meshData.UVs2.Add(voxelSmoothness);
 
                     meshData.triangles.Add(counter++);
-
                 }
             }
             voxelsSelected++;
@@ -212,7 +173,9 @@ public class Container : MonoBehaviour
         meshData.UploadMesh();
 
         if (meshRenderer == null)
+        {
             ConfigureComponents();
+        }
 
         meshFilter.mesh = meshData.mesh;
     }
@@ -222,8 +185,6 @@ public class Container : MonoBehaviour
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
-
-    Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
     public Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
@@ -290,8 +251,6 @@ public class Container : MonoBehaviour
         return false;
     }
 
-    #region Mesh Data
-
     public struct MeshData
     {
         public Mesh mesh;
@@ -354,9 +313,7 @@ public class Container : MonoBehaviour
             }
         }
     }
-    #endregion
 
-    #region Static Variables
     static readonly Vector3Int[] voxelVertices = new Vector3Int[8]
     {
             new Vector3Int(0,0,0),//0
@@ -407,6 +364,5 @@ public class Container : MonoBehaviour
             {0,1,2,1,3,2},
             {0,2,3,0,3,1},
     };
-    #endregion
 }
 

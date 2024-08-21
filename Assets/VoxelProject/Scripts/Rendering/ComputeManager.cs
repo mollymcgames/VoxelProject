@@ -37,9 +37,6 @@ public class ComputeManager : MonoBehaviour
         }
     }
 
-    #region Noise Buffers
-
-    #region Pooling
     public NoiseBuffer GetNoiseBuffer()
     {
         if (availableNoiseComputeBuffers.Count > 0)
@@ -67,9 +64,6 @@ public class ComputeManager : MonoBehaviour
         ClearVoxelData(buffer);
         availableNoiseComputeBuffers.Enqueue(buffer);
     }
-    #endregion
-
-    #region Compute Helpers
 
     public void GenerateVoxelData(ref Container cont, int layer)
     {
@@ -115,8 +109,6 @@ public class ComputeManager : MonoBehaviour
         noiseShader.SetBuffer(1, "voxelArray", buffer.noiseBuffer);
         noiseShader.Dispatch(1, xThreads, yThreads, zThreads);
     }
-    #endregion
-    #endregion
 
     private void OnApplicationQuit()
     {
@@ -149,7 +141,6 @@ public struct NoiseBuffer
     public ComputeBuffer countBuffer;
     public bool Initialized;
     public bool Cleared;
-    //public IndexedArray<Voxel> voxelArray;
     public VoxelOriginal[] voxelArray;
 
     public void InitializeBuffer()
@@ -173,7 +164,7 @@ public struct NoiseBuffer
 
         Initialized = false;
     }
-    //public Voxel this[Vector3 index]
+
     public VoxelOriginal this[int index]
     {
         get

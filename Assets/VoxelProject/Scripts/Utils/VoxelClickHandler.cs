@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,9 +28,8 @@ public class VoxelClickHandler : MonoBehaviour
     {
         if (gameObject.CompareTag("SegmentOne"))
         {
-                // USEFUL DEBUG BUT SLOWS THINGS DOWN Debug.Log("Mouse out! TD=" + Time.deltaTime);
-                isZoomedOut = false;
-                SCManager.Instance.isZooming = false;
+            isZoomedOut = false;
+            SCManager.Instance.isZooming = false;
         }
     }
 
@@ -48,9 +46,8 @@ public class VoxelClickHandler : MonoBehaviour
                 // Check if the object hit has the specified tag
                 if (hit.collider.CompareTag("SegmentOne"))
                 {
-                    // USEFUL DEBUG BUG SLOWS THINGS DOWN Debug.Log("Collided into SegmentOne. ZL="+ SCManager.Instance.isZooming);
                     zoomLock = true;
-                    isZoomedOut = true; // !isZoomedOut;
+                    isZoomedOut = true;
                     SCManager.Instance.isZooming = true;
                 }
             }
@@ -105,4 +102,5 @@ public class VoxelClickHandler : MonoBehaviour
             }
         }
     }
+
 }

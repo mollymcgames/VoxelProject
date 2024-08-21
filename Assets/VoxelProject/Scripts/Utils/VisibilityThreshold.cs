@@ -29,6 +29,7 @@ public class VisibilityThreshold : MonoBehaviour
         {
             invertVisibility.onValueChanged.AddListener(OnToggleChangedVisibility);
         }
+
         if (enableAutoRefresh != null)
         {
             enableAutoRefresh.onValueChanged.AddListener(OnToggleChangedRefresh);

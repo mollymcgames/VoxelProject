@@ -10,10 +10,12 @@ public class WorldManager : MonoBehaviour
 
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
-    public WorldSettings worldSettings;    
+    public WorldSettings worldSettings;
+
+    // The Vector3Int based dictionary to store Voxels by vector location
     public Dictionary<Vector3Int,Voxel> voxelDictionary;
 
-    // The based dictionary to store chunks by vector location
+    // The Vector3Int based dictionary to store chunks by vector location
     public Dictionary<Vector3Int, Chunk> voxelChunks;
 
     public int voxelsSelected = 0;
@@ -25,9 +27,6 @@ public class WorldManager : MonoBehaviour
 
     void Start()
     {
-/*        if (animator == null)
-            animator = GameObject.Find("Transition").GetComponent<Animator>();*/
-
         if (_instance != null)
         {
             if (_instance != this)

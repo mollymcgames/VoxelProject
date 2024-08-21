@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
 public class OuterComputeManager : MonoBehaviour
 {
@@ -32,9 +29,6 @@ public class OuterComputeManager : MonoBehaviour
         }
     }
 
-    #region Noise Buffers
-
-    #region Pooling
     public OuterNoiseBuffer GetNoiseBuffer()
     {
         if (availableNoiseComputeBuffers.Count > 0)
@@ -63,10 +57,7 @@ public class OuterComputeManager : MonoBehaviour
         ClearVoxelData(buffer);
         availableNoiseComputeBuffers.Enqueue(buffer);
     }
-    #endregion
-
-    #region Compute Helpers 
-
+    
     public void GenerateVoxelData(ref OuterContainer container, ref Camera mainCamera, bool renderOuter = false)
     {
         if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null && !OuterWorldManager.Instance.quitting)
@@ -81,26 +72,7 @@ public class OuterComputeManager : MonoBehaviour
             noiseShader.Dispatch(0, xThreads, yThreads, zThreads);
 
             float transparencyValue = AdjustMaterialTransparency(ref container, ref mainCamera);
-            //Debug.Log("New Transparency Value: " + transparencyValue);
-
-/*            AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
-            {
-                if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuter != null)
-                {
-                    callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerOuter.data.voxelArray.array);
-                    OuterWorldManager.Instance.containerOuter.RenderMesh(true, transparencyValue);
-                }
-            });*/
-
-            // AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
-            // {
-            //     if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerInner != null)
-            //     {
-            //         callback.GetData<Voxel>(0).CopyTo(OuterWorldManager.Instance.containerInner.data.voxelArray.array);
-            //         OuterWorldManager.Instance.containerInner.RenderMesh(false, 1f - transparencyValue);
-            //     }
-            // });
-
+           
             AsyncGPUReadback.Request(container.data.noiseBuffer, (callback) =>
             {
                 if (OuterWorldManager.Instance != null && OuterWorldManager.Instance.containerOuterDic != null)
@@ -133,15 +105,6 @@ public class OuterComputeManager : MonoBehaviour
         // alpha should be 0 if close and 1 if far
         float alpha = Mathf.InverseLerp(minDistance, maxDistance, distance);
 
-/*        if (container != null)
-        {
-            Debug.Log("Adjusting transparency with alpha: " + alpha);
-        }
-        else
-        {
-            Debug.LogWarning("No Renderer found on the container.");
-        }
-*/
         return alpha;
     }
 
@@ -151,8 +114,7 @@ public class OuterComputeManager : MonoBehaviour
         noiseShader.SetBuffer(1, "voxelArray", buffer.noiseBuffer);
         noiseShader.Dispatch(1, xThreads, yThreads, zThreads);
     }
-    #endregion
-    #endregion
+     
 
     private void OnApplicationQuit()
     {

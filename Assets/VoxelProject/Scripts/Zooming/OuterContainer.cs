@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 
@@ -82,24 +80,13 @@ public class OuterContainer : MonoBehaviour
 
         foreach (var vc in sourceData)
         {
-            //if (vc == null)
-            //    continue;
-            // just to compile! blockPos = new Vector3(vc.x, vc.y, vc.z);
-            // if (vc.x < 0 || vc.y < 0 || vc.z < 0)
-            // {
-            //     Debug.Log("Weird voxel encountered (Loop-"+breaker+")! [" + vc.x + "," + vc.z + "," + vc.z + "]");
-            //     continue;
-            // }
             block = this[blockPos];
             //Only check on solid blocks
             if (!block.isSolid)
             {
-                //Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + vc.x + "," + vc.z + "," + vc.z + "]");
                 continue;
             }
 
-            // float grayScaleValue = float.Parse(vc.color)/255f;
-            // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
             voxelColor = new VoxelColor();
 
 
@@ -116,15 +103,7 @@ public class OuterContainer : MonoBehaviour
             //Iterate over each face direction
             for (int i = 0; i < 6; i++)
             {
-                //Check if there's a solid block against this face
-                //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
-                // if (checkVoxelIsSolid(blockPos))                
-                //     continue;
-                // if ( float.Parse(vc.color) < 18)
-                //     continue;
-
                 //Draw this face
-
                 //Collect the appropriate vertices from the default vertices and add the block Position
                 for (int j = 0; j < 4; j++)
                 {
@@ -140,7 +119,6 @@ public class OuterContainer : MonoBehaviour
                     meshData.UVs2.Add(voxelSmoothness);
 
                     meshData.triangles.Add(counter++);
-
                 }
             }
         }
@@ -157,8 +135,6 @@ public class OuterContainer : MonoBehaviour
             {
                 for (int z = -chunkDistanceMultiplier * chunkSize; z <= chunkDistanceMultiplier * chunkSize; z += chunkSize)
                 {
-                    //if (x == 0 && y == 0 && z == 0) 
-                    //    continue; // Skip the current Position
                     Vector3Int newPoint = new Vector3Int(position.x + x, position.y + y, position.z + z);
                     sourceData.TryGetValue(newPoint, out Chunk chunk);
                     if ( chunk != null)
@@ -187,8 +163,6 @@ public class OuterContainer : MonoBehaviour
         Dictionary<Vector3Int, Chunk> sourceData = null;
         if (renderOuter)
         {
-            //Debug.Log("[OUTER] We need to render a chunk for this camera Position: " + Vector3Int.FloorToInt(mainCamera.transform.Position));
-
             // Using the current camera Position, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
             chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkOuterSize);
@@ -200,8 +174,6 @@ public class OuterContainer : MonoBehaviour
         }
         else
         {
-            //Debug.Log("[INNER] We need to render a chunk for this camera Position: " + Vector3Int.FloorToInt(mainCamera.transform.Position));
-
             // Using the current camera Position, calculate the relevant chunk coordinates.
             // This is going to form the centre point for the selection of chunks we're going to render....
             chunkCoordinates = Chunk.GetChunkCoordinates(Vector3Int.FloorToInt(mainCamera.transform.position), chunkInnerSize);
@@ -212,13 +184,10 @@ public class OuterContainer : MonoBehaviour
             renderVectors = GetSurroundingChunks(chunkCoordinates, chunkFieldOfViewMultiplierInner, chunkInnerSize, sourceData);
 
         }
-        //Debug.Log(renderOuter?"[OUTER]":"[INNER]"+" Number of chunks selected: "+renderVectors.Count );
 
         int breaker = 0;
 
         // Now prep those 27 chunks for rendering....
-        //foreach (KeyValuePair<Vector3Int, Chunk> nextChunk in renderVectors)
-
         foreach(var nextChunk in renderVectors)
         {
             foreach (var nextVoxelElementInChunk in nextChunk.Value.voxels)
@@ -228,7 +197,6 @@ public class OuterContainer : MonoBehaviour
                 //Only check on solid blocks
                 if (!block.isSolid)
                 {
-                    //Debug.Log("Non solid block encountered (Loop-" + breaker + ")! [" + nextVoxelElementInChunk.Position.x + "," + nextVoxelElementInChunk.Position.y + "," + nextVoxelElementInChunk.Position.z + "]");
                     continue;
                 }
 
@@ -239,7 +207,6 @@ public class OuterContainer : MonoBehaviour
                 Color color;
                 if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElementInChunk.Value.colorR, out color))
                 {
-                    //Debug.LogError($"Invalid color value in line: {nextVoxelElementInChunk.colorString}");
                     continue;
                 }
 
@@ -249,15 +216,7 @@ public class OuterContainer : MonoBehaviour
                 //Iterate over each face direction
                 for (int i = 0; i < 6; i++)
                 {
-                    //Check if there's a solid block against this face
-                    //if (checkVoxelIsSolid(blockPos + voxelFaceChecks[i]))
-                    // if (checkVoxelIsSolid(blockPos))                
-                    //     continue;
-                    // if ( float.Parse(vc.color) < 18)
-                    //     continue;
-
                     //Draw this face
-
                     //Collect the appropriate vertices from the default vertices and add the block Position
                     for (int j = 0; j < 4; j++)
                     {
