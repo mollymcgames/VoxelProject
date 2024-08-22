@@ -9,6 +9,8 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 public class Container : MonoBehaviour
 {
     Dictionary<Vector3Int, Voxel> visibleVoxels = null;
+    Dictionary<Vector3Int, Voxel> worldVoxels = null;
+    Dictionary<Vector3Int, Chunk> worldChunks = null;
 
     private Vector3Int[] directions = new Vector3Int[]
     {
@@ -50,6 +52,9 @@ public class Container : MonoBehaviour
 
     public void Initialize(Material mat, Vector3 position)
     {
+        worldVoxels = WorldManager.Instance.voxelDictionary;
+        worldChunks = WorldManager.Instance.voxelChunks;
+
         mainCamera = Camera.main;
         ConfigureComponents();
         data = ComputeManager.Instance.GetNoiseBuffer();
@@ -204,9 +209,9 @@ public class Container : MonoBehaviour
     private Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
         // This will hold the voxels that are ultimately doing to be visible.
-        visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
+        visibleVoxels = new Dictionary<Vector3Int, Voxel>(worldVoxels.Count, new FastVector3IntComparer());
 
-        foreach (var chunk in WorldManager.Instance.voxelChunks)
+        foreach (var chunk in worldChunks)
         {
             if (frustrumCullingCalculator.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
             {
@@ -225,7 +230,7 @@ public class Container : MonoBehaviour
     private void TraverseVisibleChunk(ref Camera camera, Vector3Int chunkPosition, ref Dictionary<Vector3Int, Voxel> visibleVoxels)
     {       
         Chunk chunkValue = null;
-        if (WorldManager.Instance.voxelChunks.TryGetValue(chunkPosition, out chunkValue) == false)
+        if (worldChunks.TryGetValue(chunkPosition, out chunkValue) == false)
             return;
 
         foreach(var nextVoxelInChunk in chunkValue.voxels)
@@ -239,7 +244,7 @@ public class Container : MonoBehaviour
 
     private void Traverse(Camera camera, Dictionary<Vector3Int, Voxel> visibleVoxels)
     {
-        foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
+        foreach (var nextVoxel in worldVoxels)
         {
             if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxel.Key, nearClippingDistance))
             {
