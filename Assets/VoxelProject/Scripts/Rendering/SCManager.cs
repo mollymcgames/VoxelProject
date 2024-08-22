@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class SCManager : MonoBehaviour
 {
-    private float updateInterval = 0.1f;
+    private float updateInterval = 0.5f;
+    private float timeSinceLastUpdate = 0f;
     public bool isZooming = false;
     public bool reRenderingMesh = false;
 
@@ -33,23 +34,31 @@ public class SCManager : MonoBehaviour
         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
     }
 
-    void Update(){
+    void Update() 
+    {
+        // Accumulate time since last update
+        timeSinceLastUpdate += Time.deltaTime;
+
         // key is 0 for now, will be changed to a more appropriate key later
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             Debug.Log("0 key pressed, regenerating voxel data.");
             ComputeManager.Instance.RefreshVoxels(ref container, 0);
-        } else if (Input.GetKeyDown(KeyCode.Alpha1))
+        } 
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("1 key pressed, regenerating voxel data.");
             ComputeManager.Instance.RefreshVoxels(ref container, 1);
         }
 
         // Only auto update if toggle is on
-        if (WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
+        if (timeSinceLastUpdate >= updateInterval && WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
         {
             // Call the custom update method
             ComputeManager.Instance.GenerateVoxelData(ref container, 0);
+            
+            // Reset the timer
+            timeSinceLastUpdate = 0f;
         }
     }
 }

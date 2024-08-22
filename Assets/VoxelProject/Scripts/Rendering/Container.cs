@@ -37,6 +37,17 @@ public class Container : MonoBehaviour
 
     Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
+    int meshCounter = 0;
+    int voxelsSelected = 0;
+    VoxelColor voxelColor;
+    Color voxelColorAlpha;
+    Vector2 voxelSmoothness;
+    Vector3Int[] faceVertices = new Vector3Int[4];
+    Vector2[] faceUVs = new Vector2[4];
+    FrustumCulling frustrumCullingCalculator;
+
+    float nearClippingDistance = WorldManager.Instance.worldSettings.nearClippingDistance;
+
     public void Initialize(Material mat, Vector3 position)
     {
         mainCamera = Camera.main;
@@ -44,6 +55,9 @@ public class Container : MonoBehaviour
         data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
+
+        // Pre-calculate the Frustrum planes so that it isn't calculated each loop!
+        frustrumCullingCalculator = new FrustumCulling(mainCamera, 8);
     }
 
     public void ClearData()
@@ -65,14 +79,6 @@ public class Container : MonoBehaviour
         RenderMesh();
         Debug.Log("voxel generation done!");
     }
-
-    int meshCounter = 0;
-    int voxelsSelected = 0;
-    VoxelColor voxelColor;
-    Color voxelColorAlpha;
-    Vector2 voxelSmoothness;
-    Vector3Int[] faceVertices = new Vector3Int[4];
-    Vector2[] faceUVs = new Vector2[4];
 
     public void GenerateMesh()
     {
@@ -197,15 +203,12 @@ public class Container : MonoBehaviour
 
     private Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
-        // Pre-calculate the Frustrum planes so that it isn't calculated each loop!
-        FrustumCulling.CalculateFrustrumPlanes(camera);
-
         // This will hold the voxels that are ultimately doing to be visible.
         visibleVoxels = new Dictionary<Vector3Int, Voxel>(WorldManager.Instance.voxelDictionary.Count, new FastVector3IntComparer());
 
         foreach (var chunk in WorldManager.Instance.voxelChunks)
         {
-            if (FrustumCulling.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
+            if (frustrumCullingCalculator.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
             {
                 // Only check individual voxels within the chunk if the chunk is visible
                 TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
@@ -214,26 +217,22 @@ public class Container : MonoBehaviour
 
         // Traverse(camera, visibleVoxels);
 
-        FrustumCulling.DropFrustrumPlanes();        
+        frustrumCullingCalculator.DropFrustrumPlanes();        
 
         return visibleVoxels;
     }
 
     private void TraverseVisibleChunk(ref Camera camera, Vector3Int chunkPosition, ref Dictionary<Vector3Int, Voxel> visibleVoxels)
-    {
-        float nearClippingDistance = WorldManager.Instance.worldSettings.nearClippingDistance;
-
+    {       
         Chunk chunkValue = null;
         if (WorldManager.Instance.voxelChunks.TryGetValue(chunkPosition, out chunkValue) == false)
             return;
 
         foreach(var nextVoxelInChunk in chunkValue.voxels)
         {
-            if (FrustumCulling.IsVoxelInView(camera, nextVoxelInChunk.Key, 8, nearClippingDistance))
+            if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.Key, nearClippingDistance))
             {
                 visibleVoxels[nextVoxelInChunk.Key] = nextVoxelInChunk.Value;
-                //visibleVoxels.Add(nextVoxelInChunk.Key, nextVoxelInChunk.Value);
-                //AddVoxelIntoRenderMesh(nextVoxelInChunk.Key, nextVoxelInChunk.Value);
             }
         }
     }
@@ -242,11 +241,9 @@ public class Container : MonoBehaviour
     {
         foreach (var nextVoxel in WorldManager.Instance.voxelDictionary)
         {
-            if (FrustumCulling.IsVoxelInView(camera, nextVoxel.Key, 8, WorldManager.Instance.worldSettings.nearClippingDistance))
+            if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxel.Key, nearClippingDistance))
             {
                 visibleVoxels[nextVoxel.Key] = nextVoxel.Value;
-                //visibleVoxels.Add(nextVoxel.Key, nextVoxel.Value);
-                //AddVoxelIntoRenderMesh(nextVoxel.Key, nextVoxel.Value);
             }
         }
     }
