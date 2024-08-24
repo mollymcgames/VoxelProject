@@ -48,6 +48,7 @@ public class VisibilityThreshold : MonoBehaviour
 
     void OnSliderValueChanged(float value)
     {
+        Debug.Log("Slide changed");
         callCoRoutine();
     }
 
@@ -70,8 +71,11 @@ public class VisibilityThreshold : MonoBehaviour
         // Wait for 1 second
         yield return new WaitForSeconds(1f);
 
+        Debug.Log("Delayed thing");
+
         if (sliderChanged && lastSliderValue != visibilityThresholdSlider.value)
         {
+            Debug.Log("Delayed thing happening");
             // Update the mesh only if the slider color has changed
             lastSliderValue = visibilityThresholdSlider.value;
             sliderChanged = false;
@@ -86,12 +90,12 @@ public class VisibilityThreshold : MonoBehaviour
         if (invertVisibility.isOn)
         {
             //Update the camera's field of view to be the variable returning from the Slider        
-            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = 254 - (int)lastSliderValue; // (int)m_visibilityThreshold;
+            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = 254 - (int)lastSliderValue;
         }
         else
         {
             //Update the camera's field of view to be the variable returning from the Slider        
-            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = (int)lastSliderValue; // (int)m_visibilityThreshold;
+            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = (int)lastSliderValue;
         }
     }
 

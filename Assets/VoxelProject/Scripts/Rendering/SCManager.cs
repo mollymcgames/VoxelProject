@@ -44,15 +44,18 @@ public class SCManager : MonoBehaviour
         {
             Debug.Log("0 key pressed, regenerating voxel data.");
             ComputeManager.Instance.RefreshVoxels(ref container, 0);
+            return;
         } 
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("1 key pressed, regenerating voxel data.");
             ComputeManager.Instance.RefreshVoxels(ref container, 1);
+            return;
         }
 
         // Only auto update if toggle is on
-        if (timeSinceLastUpdate >= updateInterval && WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
+        //if (timeSinceLastUpdate >= updateInterval && WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
+        if (WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
         {
             // Call the custom update method
             ComputeManager.Instance.GenerateVoxelData(ref container, 0);

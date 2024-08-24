@@ -1,4 +1,4 @@
-
+using System;
 using Unity.Collections;
 
 /**
@@ -9,6 +9,7 @@ public struct Voxel
     public readonly FixedString32Bytes colorR;
     public readonly FixedString32Bytes colorG;
     public readonly FixedString32Bytes colorB;
+    public readonly int color;
 
     public readonly bool isSegmentVoxel;
 
@@ -17,6 +18,7 @@ public struct Voxel
         this.colorR = colorR;
         this.colorG = colorG;
         this.colorB = colorB;
+        this.color = Int32.Parse(colorR);
         isSegmentVoxel = false;
     }
 
@@ -25,6 +27,7 @@ public struct Voxel
         this.colorR = colorR;
         this.colorG = colorG;
         this.colorB = colorB;
+        this.color = Int32.Parse(colorR);
         this.isSegmentVoxel = isSegmentVoxel;
     }
 }

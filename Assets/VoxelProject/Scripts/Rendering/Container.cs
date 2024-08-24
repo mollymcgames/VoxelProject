@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
-
+using Unity.Collections;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -36,6 +36,7 @@ public class Container : MonoBehaviour
     private float checkInterval = 0.1f;
     float distanceToCamera = 0f;
     float maxDistance = 200f;
+    private int visibilityThreshold = 0;
 
     Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
@@ -87,12 +88,21 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
+        visibilityThreshold = WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold;
+
         voxelsSelected = 0;
         meshCounter = 0;
         faceVertices = new Vector3Int[4];
         faceUVs = new Vector2[4];
 
         Dictionary<Vector3Int, Voxel> visibleVoxels = GetVisibleVoxels(mainCamera);
+
+        // Pre-allocate capacity to avoid resizing lists
+        meshData.vertices.Capacity = visibleVoxels.Count * 24; // 6 faces * 4 vertices per face
+        meshData.triangles.Capacity = visibleVoxels.Count * 36; // 6 faces * 6 indices per face
+        meshData.UVs.Capacity = visibleVoxels.Count * 24;
+        meshData.UVs2.Capacity = visibleVoxels.Count * 24;
+        meshData.colors.Capacity = visibleVoxels.Count * 24;
 
         foreach (var nextVoxel in visibleVoxels)
         {
@@ -104,6 +114,12 @@ public class Container : MonoBehaviour
     private int AddVoxelIntoRenderMesh(Vector3Int voxelPosition, Voxel voxel)
     {
         if (voxelPosition.x < 0 || voxelPosition.y < 0 || voxelPosition.z < 0)
+        {
+            return voxelsSelected;
+        }
+
+        // Skip this voxel if it's below the visibility threshold
+        if (voxel.color <= visibilityThreshold)
         {
             return voxelsSelected;
         }
@@ -134,15 +150,26 @@ public class Container : MonoBehaviour
                 faceUVs[j] = voxelUVs[j];
             }
 
+            // Batch adding vertices, UVs, and triangles
             for (int j = 0; j < 6; j++)
             {
-                meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
-                meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
+                int vertexIndex = voxelTris[i, j];
+                meshData.vertices.Add(faceVertices[vertexIndex]);
+                meshData.UVs.Add(faceUVs[vertexIndex]);
                 meshData.colors.Add(voxelColorAlpha);
                 meshData.UVs2.Add(voxelSmoothness);
-
                 meshData.triangles.Add(meshCounter++);
             }
+
+            /*            for (int j = 0; j < 6; j++)
+                        {
+                            meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
+                            meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
+                            meshData.colors.Add(voxelColorAlpha);
+                            meshData.UVs2.Add(voxelSmoothness);
+
+                            meshData.triangles.Add(meshCounter++);
+                        }*/
         }
         return voxelsSelected++;
     }
@@ -235,6 +262,8 @@ public class Container : MonoBehaviour
 
         foreach(var nextVoxelInChunk in chunkValue.voxels)
         {
+            // KJP MOVE VOXEL VISIBLE STUFF HERE - MIGHT BE FASTER
+
             if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.Key, nearClippingDistance))
             {
                 visibleVoxels[nextVoxelInChunk.Key] = nextVoxelInChunk.Value;
