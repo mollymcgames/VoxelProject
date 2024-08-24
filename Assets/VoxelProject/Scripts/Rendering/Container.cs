@@ -124,7 +124,7 @@ public class Container : MonoBehaviour
             return voxelsSelected;
         }
 
-        if (checkVoxelIsSolid(voxelPosition, ref visibleVoxels) == false)
+        if (checkVoxelIsSolid(voxelPosition, visibleVoxels) == false)
         {
             return voxelsSelected;
         }
@@ -160,16 +160,6 @@ public class Container : MonoBehaviour
                 meshData.UVs2.Add(voxelSmoothness);
                 meshData.triangles.Add(meshCounter++);
             }
-
-            /*            for (int j = 0; j < 6; j++)
-                        {
-                            meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
-                            meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
-                            meshData.colors.Add(voxelColorAlpha);
-                            meshData.UVs2.Add(voxelSmoothness);
-
-                            meshData.triangles.Add(meshCounter++);
-                        }*/
         }
         return voxelsSelected++;
     }
@@ -233,8 +223,12 @@ public class Container : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
+    private int chunksOnDisplay = 0;
+
     private Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
+        chunksOnDisplay = 0;
+
         // This will hold the voxels that are ultimately doing to be visible.
         visibleVoxels = new Dictionary<Vector3Int, Voxel>(worldVoxels.Count, new FastVector3IntComparer());
 
@@ -244,13 +238,16 @@ public class Container : MonoBehaviour
             {
                 // Only check individual voxels within the chunk if the chunk is visible
                 TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
+                chunksOnDisplay++;
             }
         }
 
         // Traverse(camera, visibleVoxels);
 
-        frustrumCullingCalculator.DropFrustrumPlanes();        
+        //frustrumCullingCalculator.DropFrustrumPlanes();
 
+        WorldManager.Instance.chunksOnDisplay = chunksOnDisplay;
+        
         return visibleVoxels;
     }
 
@@ -262,8 +259,6 @@ public class Container : MonoBehaviour
 
         foreach(var nextVoxelInChunk in chunkValue.voxels)
         {
-            // KJP MOVE VOXEL VISIBLE STUFF HERE - MIGHT BE FASTER
-
             if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.Key, nearClippingDistance))
             {
                 visibleVoxels[nextVoxelInChunk.Key] = nextVoxelInChunk.Value;
@@ -282,11 +277,13 @@ public class Container : MonoBehaviour
         }
     }
 
-    private bool checkVoxelIsSolid(Vector3Int voxelPosition, ref Dictionary<Vector3Int, Voxel> visibleVoxels)
-    {
-        foreach (var dir in directions)
+    private Voxel outVoxel;
+
+    private bool checkVoxelIsSolid(Vector3Int voxelPosition, Dictionary<Vector3Int, Voxel> visibleVoxels)
+    {        
+        for (int i=0; i<directions.Length;i++ )
         {
-            if (!visibleVoxels.ContainsKey(voxelPosition + dir))
+            if (!visibleVoxels.TryGetValue(voxelPosition + directions[i], out outVoxel))
             {
                 // If any neighbour is missing, the voxel is visible
                 return true;

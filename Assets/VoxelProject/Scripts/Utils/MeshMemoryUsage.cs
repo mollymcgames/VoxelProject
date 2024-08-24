@@ -23,7 +23,12 @@ public class MeshMemoryUsage : MonoBehaviour
 
     private MeshFilter meshFilter;
     private Mesh mesh;
-    //private Process currentProcess;
+
+    private int vertexMemory = 0;
+    private int normalMemory = 0;
+    private int uvMemory = 0;
+    private int indexMemory = 0;
+    private int totalMemory = 0;
 
     void Start()
     {
@@ -31,8 +36,6 @@ public class MeshMemoryUsage : MonoBehaviour
         timeSinceLastUpdate = 0.0f;
         frames = 0;
         fps = 0.0f;
-        //currentProcess = Process.GetCurrentProcess();
-        //UnityEngine.Debug.Log("CP: "+currentProcess.ToString());
     }
 
     void Update()
@@ -52,11 +55,6 @@ public class MeshMemoryUsage : MonoBehaviour
             {
                 goFPS.text = Mathf.RoundToInt(fps).ToString();
             }
-            else
-            {
-                // Optionally, log FPS to console
-                UnityEngine.Debug.Log("FPS: " + Mathf.RoundToInt(fps));
-            }
 
             // Reset the counters
             frames = 0;
@@ -68,21 +66,16 @@ public class MeshMemoryUsage : MonoBehaviour
         float memoryUsageMB = UnityEngine.Profiling.Profiler.GetMonoUsedSizeLong() / (1024f * 1024f);
         goTotalRAM.text = memoryUsageMB.ToString("F0") + "MB";
 
-        // meshFilter = GameObject.FindAnyObjectByType<MeshFilter>();
-        //find mesh instead
         mesh = GameObject.FindFirstObjectByType<Mesh>();
-        // if (meshFilter != null)
         
         if (mesh != null)
         {
-            int vertexMemory = mesh.vertexCount * sizeof(float) * 3; // Each vertex has 3 floats (x, y, z)
-            int normalMemory = mesh.normals.Length * sizeof(float) * 3; // Each normal has 3 floats
-            int uvMemory = mesh.uv.Length * sizeof(float) * 2; // Each UV has 2 floats (u, v)
-            int indexMemory = mesh.triangles.Length * sizeof(int); // Each index is an int
+            vertexMemory = mesh.vertexCount * sizeof(float) * 3; // Each vertex has 3 floats (x, y, z)
+            normalMemory = mesh.normals.Length * sizeof(float) * 3; // Each normal has 3 floats
+            uvMemory = mesh.uv.Length * sizeof(float) * 2; // Each UV has 2 floats (u, v)
+            indexMemory = mesh.triangles.Length * sizeof(int); // Each index is an int
+            totalMemory = vertexMemory + normalMemory + uvMemory + indexMemory;
 
-            int totalMemory = vertexMemory + normalMemory + uvMemory + indexMemory;
-
-            //Debug.Log($"Mesh Memory Usage: {totalMemory / 1024f / 1024f} MB");
             goVertexMemory.text = (vertexMemory / 1024f / 1024f).ToString() + " MB";
             goNormalMemory.text = (normalMemory / 1024f / 1024f).ToString() + " MB";
             goUvMemory.text = (uvMemory / 1024f / 1024f).ToString() + " MB";
@@ -91,15 +84,14 @@ public class MeshMemoryUsage : MonoBehaviour
 
             try
             {
-                goChunksSelected.text = "NA"; // WorldManager.Instance.voxelGrid.chunks.Count.ToString();
-                //goVoxelsSelected.text = WorldManager.Instance.voxelGrid.voxelsRepresented.ToString();
+                goChunksSelected.text = WorldManager.Instance.chunksOnDisplay.ToString();
                 goVoxelsSelected.text = WorldManager.Instance.voxelsSelected.ToString();
-            } catch
+            } 
+            catch
             {
                 goChunksSelected.text = "None";
                 goVoxelsSelected.text = "None";
             }
         }
-    
     }
 }

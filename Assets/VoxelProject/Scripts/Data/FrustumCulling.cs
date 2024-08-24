@@ -42,10 +42,13 @@ public class FrustumCulling
         return GeometryUtility.TestPlanesAABB(planes, bounds);
     }
 
+    private bool inFrustum = false;
+    private float distanceToCamera = 0f;
+
     public bool IsVoxelInView(Camera camera, Vector3Int position, float nearClippingDistance)
     {
-        bool inFrustum = false;
-        float distanceToCamera = 0f;
+        inFrustum = false;
+        distanceToCamera = 0f;
         if (position != lastPosition)
         {
             bounds = new Bounds(position, boundsBox);

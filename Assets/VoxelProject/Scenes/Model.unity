@@ -1199,8 +1199,8 @@ MonoBehaviour:
     voxelDataFileName: 
     voxelDataSegmentFileName: 
     voxelSegmentLayers: []
-    voxelChunkSize: 64
-    voxelChunkFieldOfViewMultiplier: 6
+    voxelChunkSize: 16
+    voxelChunkFieldOfViewMultiplier: 3
     standardVoxelSize: {x: 1, y: 1, z: 1}
     voxelMeshCenter: {x: 0, y: 0, z: 0}
     voxelMeshContainerTagName: Untagged
@@ -1220,6 +1220,7 @@ MonoBehaviour:
     nearClippingDistance: 85
     autoRefresh: 0
   voxelsSelected: 0
+  chunksOnDisplay: 0
   menuHandler: {fileID: 1171129838}
 --- !u!114 &1171129838
 MonoBehaviour:

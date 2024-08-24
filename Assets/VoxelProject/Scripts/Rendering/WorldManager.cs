@@ -19,6 +19,7 @@ public class WorldManager : MonoBehaviour
     public Dictionary<Vector3Int, Chunk> voxelChunks;
 
     public int voxelsSelected = 0;
+    public int chunksOnDisplay = 0;
 
     public MenuHandler menuHandler;
 
