@@ -49,6 +49,8 @@ public class Container : MonoBehaviour
     Vector2[] faceUVs = new Vector2[4];
     FrustumCulling frustrumCullingCalculator;
 
+    private Voxel outVoxel;
+
     float nearClippingDistance = WorldManager.Instance.worldSettings.nearClippingDistance;
 
     public void Initialize(Material mat, Vector3 position)
@@ -140,10 +142,10 @@ public class Container : MonoBehaviour
             CreateClickableVoxel(voxelPosition);
         }
 
-        //Iterate over each face direction
+        // Iterate over each face direction
         for (int i = 0; i < 6; i++)
         {
-            //Collect the appropriate vertices from the default vertices and add the block Position
+            // Collect the appropriate vertices from the default vertices and add the block Position
             for (int j = 0; j < 4; j++)
             {
                 faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelPosition;
@@ -244,7 +246,7 @@ public class Container : MonoBehaviour
 
         // Traverse(camera, visibleVoxels);
 
-        //frustrumCullingCalculator.DropFrustrumPlanes();
+        frustrumCullingCalculator.DropFrustrumPlanes();
 
         WorldManager.Instance.chunksOnDisplay = chunksOnDisplay;
         
@@ -276,8 +278,6 @@ public class Container : MonoBehaviour
             }
         }
     }
-
-    private Voxel outVoxel;
 
     private bool checkVoxelIsSolid(Vector3Int voxelPosition, Dictionary<Vector3Int, Voxel> visibleVoxels)
     {        
