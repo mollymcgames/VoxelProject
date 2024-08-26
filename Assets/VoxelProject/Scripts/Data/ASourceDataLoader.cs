@@ -96,6 +96,8 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(Int32.Parse(parts[3].Replace("#", "")) , true);            
         }
 
+        WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
+
         return voxelDictionary;
     }
 

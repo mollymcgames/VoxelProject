@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class VoxelTextHandler : MonoBehaviour
 {
+    public static int xOffset = 16;
+    public static int yOffset = 0;
+    public static int zOffset = 0;
+
     public static string[] ReadVoxelTextFile(string voxelTextFilePath)
     {
         // Load the text file
@@ -13,10 +17,6 @@ public class VoxelTextHandler : MonoBehaviour
 
     public static Dictionary<Vector3Int, Voxel> ReadVoxelData(string[] lines, int width, int height, int depth)
     {
-        int xOffset = 16; 
-        int yOffset = 0;
-        int zOffset = 0;
-
         int numVoxels = width * height * depth;
 
         Dictionary<Vector3Int, Voxel> voxelDataList = new Dictionary<Vector3Int, Voxel>(numVoxels, new FastVector3IntComparer());
@@ -49,14 +49,8 @@ public class VoxelTextHandler : MonoBehaviour
             if (ColorUtility.TryParseHtmlString("#" + parts[3], out color))
             {
                 Debug.Log("Processing... " + parts[3]);
-                // voxelDataList.Add(new Vector3Int(x, y, z), new Voxel(color.r.ToString(), color.g.ToString(), color.b.ToString()));   // parts[3]));// x,y,z,parts[3]); // Assign the parsed color color as the voxel color
-                voxelDataList.Add(new Vector3Int(x+xOffset, y+yOffset, z+zOffset), new Voxel((int)color.r));// x,y,z,parts[3]); // Assign the parsed color color as the voxel color
-            } 
-            else 
-            { 
-                Debug.Log("Skipped! " + parts[3]); 
-            }
-            
+                voxelDataList.Add(new Vector3Int(x+xOffset, y+yOffset, z+zOffset), new Voxel((int)color.r));
+            }             
         }
         return voxelDataList;
     }
