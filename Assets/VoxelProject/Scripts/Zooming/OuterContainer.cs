@@ -24,6 +24,9 @@ public class OuterContainer : MonoBehaviour
     public int chunkFieldOfViewMultiplierInner = OuterWorldManager.Instance.chunkFieldOfViewMultiplierInner;
     public int chunkFieldOfViewMultiplierOuter = OuterWorldManager.Instance.chunkFieldOfViewMultiplierOuter;
 
+    private VoxelColor voxelColor;
+    private Vector2 voxelSmoothness;
+    private Color voxelColorAlpha;
 
     public void Start(){
         mainCamera = Camera.main;
@@ -35,6 +38,9 @@ public class OuterContainer : MonoBehaviour
         data = OuterComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
+
+        // Create a color vector that represents a metallic gleam
+        voxelSmoothness = new Vector2(0.0f, 0.0f);
     }
 
     public void ClearData()
@@ -65,9 +71,8 @@ public class OuterContainer : MonoBehaviour
         Vector3[] faceVertices = new Vector3[4];
         Vector2[] faceUVs = new Vector2[4];
 
-        VoxelColor voxelColor;
-        Color voxelColorAlpha;
-        Vector2 voxelSmoothness;
+        // VoxelColor voxelColor;
+        // Color voxelColorAlpha;
         
         Dictionary<Vector3Int, Voxel> sourceData = null;
 
@@ -91,15 +96,16 @@ public class OuterContainer : MonoBehaviour
 
 
             Color color;
-            if (!ColorUtility.TryParseHtmlString("#" + vc.Value.colorR, out color))
+            if (!ColorUtility.TryParseHtmlString("#" + vc.Value.colorInGrayScale().ToString(), out color))
             {
-                Debug.LogError($"Invalid color value in line: {vc.Value.colorR}");
+                Debug.LogError($"Invalid color value in line: {vc.Value.colorInGrayScale()}");
                 continue;
             }            
 
             voxelColorAlpha = color;
             voxelColorAlpha.a = transparencyValue; //THIS IS WHERE THE ALPHA VALUE IS SET 
-            voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+            // voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+            
             //Iterate over each face direction
             for (int i = 0; i < 6; i++)
             {
@@ -154,9 +160,9 @@ public class OuterContainer : MonoBehaviour
         Vector3Int[] faceVertices = new Vector3Int[4];
         Vector2[] faceUVs = new Vector2[4];
 
-        VoxelColor voxelColor;
+        // VoxelColor voxelColor;
         Color voxelColorAlpha;
-        Vector2 voxelSmoothness;
+        // Vector2 voxelSmoothness;
 
         Vector3Int chunkCoordinates = Vector3Int.zero;
         Dictionary<Vector3Int, Chunk> renderVectors = null;
@@ -202,17 +208,18 @@ public class OuterContainer : MonoBehaviour
 
                 // float grayScaleValue = float.Parse(vc.color)/255f;
                 // voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
-                voxelColor = new VoxelColor();
+                // voxelColor = new VoxelColor();
 
-                Color color;
-                if (!ColorUtility.TryParseHtmlString("#" + nextVoxelElementInChunk.Value.colorR, out color))
+                /*Color color;
+                if (!ColorUtility.TryParseHtmlString("#" + vc.Value.colorInGrayScale().ToString(), out color))
                 {
+                    Debug.LogError($"Invalid color value in line: {vc.Value.colorInGrayScale()}");
                     continue;
-                }
+                }*/
 
-                voxelColorAlpha = color;
+                voxelColorAlpha = nextVoxelElementInChunk.Value.color();
                 voxelColorAlpha.a = transparencyValue; //THIS IS WHERE THE ALPHA VALUE IS SET 
-                voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+                // voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
                 //Iterate over each face direction
                 for (int i = 0; i < 6; i++)
                 {

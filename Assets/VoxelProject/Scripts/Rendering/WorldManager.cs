@@ -64,4 +64,5 @@ public class WorldSettings
     public int maxHeightY = 0;
     public float nearClippingDistance = 85f;
     public bool autoRefresh = false;
+    public bool grayScaleMode = false;
 }

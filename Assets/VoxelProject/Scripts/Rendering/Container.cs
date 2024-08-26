@@ -42,16 +42,17 @@ public class Container : MonoBehaviour
 
     int meshCounter = 0;
     int voxelsSelected = 0;
-    VoxelColor voxelColor;
-    Color voxelColorAlpha;
-    Vector2 voxelSmoothness;
-    Vector3Int[] faceVertices = new Vector3Int[4];
-    Vector2[] faceUVs = new Vector2[4];
-    FrustumCulling frustrumCullingCalculator;
+    private VoxelColor voxelColor;
+    private Color voxelColorAlpha;
+    private Vector2 voxelSmoothness;
+    private Vector3Int[] faceVertices = new Vector3Int[4];
+    private Vector2[] faceUVs = new Vector2[4];
+    private FrustumCulling frustrumCullingCalculator;
 
     private Voxel outVoxel;
+    private bool grayScaleMode = true;
 
-    float nearClippingDistance = WorldManager.Instance.worldSettings.nearClippingDistance;
+    private float nearClippingDistance = WorldManager.Instance.worldSettings.nearClippingDistance;
 
     public void Initialize(Material mat, Vector3 position)
     {
@@ -66,6 +67,9 @@ public class Container : MonoBehaviour
 
         // Pre-calculate the Frustrum planes so that it isn't calculated each loop!
         frustrumCullingCalculator = new FrustumCulling(mainCamera, 8);
+
+        // Create a color vector that represents a metallic gleam
+        voxelSmoothness = new Vector2(0.0f, 0.0f);
     }
 
     public void ClearData()
@@ -75,6 +79,8 @@ public class Container : MonoBehaviour
 
     public void RenderMesh()
     {
+        visibilityThreshold = WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold;
+        grayScaleMode = WorldManager.Instance.worldSettings.grayScaleMode;
         SCManager.Instance.reRenderingMesh = true;
         meshData.ClearData();
         GenerateMesh();
@@ -90,8 +96,6 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
-        visibilityThreshold = WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold;
-
         voxelsSelected = 0;
         meshCounter = 0;
         faceVertices = new Vector3Int[4];
@@ -113,6 +117,8 @@ public class Container : MonoBehaviour
         WorldManager.Instance.voxelsSelected = voxelsSelected;
     }
 
+    float grayScaleValue = 0f;
+
     private int AddVoxelIntoRenderMesh(Vector3Int voxelPosition, Voxel voxel)
     {
         if (voxelPosition.x < 0 || voxelPosition.y < 0 || voxelPosition.z < 0)
@@ -121,7 +127,7 @@ public class Container : MonoBehaviour
         }
 
         // Skip this voxel if it's below the visibility threshold
-        if (voxel.color <= visibilityThreshold)
+        if (voxel.colorGrayScale <= visibilityThreshold)
         {
             return voxelsSelected;
         }
@@ -131,11 +137,17 @@ public class Container : MonoBehaviour
             return voxelsSelected;
         }
 
-        float grayScaleValue = float.Parse(voxel.colorR.ToString()) / 255f;
-        voxelColor = new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+        if (grayScaleMode)
+        {
+            voxelColorAlpha = voxel.colorInGrayScale(); //new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+        }
+        else
+        {
+            voxelColorAlpha = voxel.color();
+        }
         voxelColorAlpha.a = 1;
-        voxelColorAlpha = voxelColor.color;
-        voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
+        //voxelColorAlpha = voxelColor.color;
+        //voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);        
 
         if (voxel.isSegmentVoxel)
         {

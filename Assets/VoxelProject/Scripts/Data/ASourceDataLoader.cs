@@ -53,7 +53,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             }
 
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), parts[3].Replace("#", ""), parts[3].Replace("#", ""), true);// x, y, z, parts[3].Replace("#", ""), true);
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(Int32.Parse(parts[3].Replace("#", "")), true);// x, y, z, parts[3].Replace("#", ""), true);
         }
 
         return voxelDictionary;
@@ -93,7 +93,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
             }
 
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
-            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(parts[3].Replace("#", ""), parts[3].Replace("#", ""), parts[3].Replace("#", ""), true);            
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(Int32.Parse(parts[3].Replace("#", "")) , true);            
         }
 
         return voxelDictionary;

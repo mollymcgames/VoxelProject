@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -120,7 +121,7 @@ public class SourceDataTextFileLoaderAsDictionary
             if (z>maxZ) maxZ = z;
             if (z<minZ) minZ = z;   
                
-            voxelDataList.Add(new Vector3Int(x, y, z), new Voxel(parts[3], parts[3], parts[3])); // Assign the parsed color color as the voxel color
+            voxelDataList.Add(new Vector3Int(x, y, z), new Voxel(Int32.Parse(parts[3]))); // Assign the parsed color color as the voxel color
         }
         Debug.Log("Lines processed:" + index);
         return voxelDataList;
