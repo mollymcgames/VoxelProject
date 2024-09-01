@@ -152,10 +152,28 @@ public class MenuHandler : MonoBehaviour
             WorldManager.Instance.voxelDictionary = loader.LoadVoxelSegmentDefinitionFileExtra(voxelSegmentDefinitionFilePath);
         }
 
+        DetermineInitialCameraLocation();
+
         Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
     }
 
-    public void LoadZoom()
+    private void DetermineInitialCameraLocation()
+    {
+        Vector3Int minCorner = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
+        Vector3Int maxCorner = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
+        
+        foreach (var key in WorldManager.Instance.voxelChunks.Keys)
+        {
+            minCorner = Vector3Int.Min(minCorner, key);
+            maxCorner = Vector3Int.Max(maxCorner, key);
+        }
+        Vector3Int centerChunkPosition = (minCorner + maxCorner) / 2;
+        
+        WorldManager.Instance.worldSettings.intialCameraPosition = new Vector3Int(centerChunkPosition.x, centerChunkPosition.y + 10, centerChunkPosition.z - 10);
+        Debug.Log("Camera will be pointed at:" + WorldManager.Instance.worldSettings.intialCameraPosition);
+    }
+
+public void LoadZoom()
     {
         SceneManager.LoadScene("Zooming");
     }

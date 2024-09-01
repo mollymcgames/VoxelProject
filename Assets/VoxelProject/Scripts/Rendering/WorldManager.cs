@@ -65,4 +65,5 @@ public class WorldSettings
     public float nearClippingDistance = 85f;
     public bool autoRefresh = false;
     public bool grayScaleMode = true;
+    public Vector3Int intialCameraPosition = Vector3Int.zero;
 }

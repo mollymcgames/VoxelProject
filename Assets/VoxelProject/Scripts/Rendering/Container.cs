@@ -59,7 +59,11 @@ public class Container : MonoBehaviour
         worldVoxels = WorldManager.Instance.voxelDictionary;
         worldChunks = WorldManager.Instance.voxelChunks;
 
+        // Aim the camera at the most central position in all the chunks.
         mainCamera = Camera.main;
+        Camera.main.transform.position = WorldManager.Instance.worldSettings.intialCameraPosition;
+        Camera.main.transform.LookAt(WorldManager.Instance.worldSettings.intialCameraPosition);
+
         ConfigureComponents();
         data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
