@@ -902,7 +902,7 @@ GameObject:
   - component: {fileID: 771648129}
   - component: {fileID: 771648131}
   m_Layer: 0
-  m_Name: ModelInfoPanel
+  m_Name: ModelInfoPanelBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -915,7 +915,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771648127}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -923,10 +923,10 @@ RectTransform:
   - {fileID: 1859121158}
   m_Father: {fileID: 770917365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 318, y: -1.8183594}
-  m_SizeDelta: {x: -694.6115, y: -309.1202}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 143.80002, y: 102.99999}
+  m_SizeDelta: {x: 350, y: -55.12021}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &771648129
 MonoBehaviour:
@@ -941,7 +941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.03886223, g: 0, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.1919812, b: 0.3490566, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
@@ -973,7 +973,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771648127}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
@@ -1167,6 +1167,8 @@ MonoBehaviour:
     maxHeightY: 0
     nearClippingDistance: 105
     autoRefresh: 0
+    grayScaleMode: 1
+    intialCameraPosition: {x: 0, y: 0, z: 0}
   container: {fileID: 0}
 --- !u!4 &1171129835
 Transform:
@@ -1219,6 +1221,8 @@ MonoBehaviour:
     maxHeightY: 0
     nearClippingDistance: 85
     autoRefresh: 0
+    grayScaleMode: 1
+    intialCameraPosition: {x: 0, y: 0, z: 0}
   voxelsSelected: 0
   chunksOnDisplay: 0
   menuHandler: {fileID: 1171129838}
@@ -1542,16 +1546,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1859121157}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 771648128}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0, y: -2.1835}
+  m_AnchoredPosition: {x: 570.6001, y: 84.20002}
   m_SizeDelta: {x: 494.545, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1859121159
@@ -1590,15 +1594,15 @@ MonoBehaviour:
     An amazing
     popup!'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190311
-  m_fontColor: {r: 0.9056604, g: 0, b: 0, a: 1}
+    rgba: 4294114040
+  m_fontColor: {r: 0.97273296, g: 0.9811321, b: 0.9487362, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1615,12 +1619,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.9
+  m_fontSize: 8
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 10
-  m_fontSizeMax: 30
+  m_fontSizeMin: 8
+  m_fontSizeMax: 10
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -1651,7 +1655,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.004638672, y: 0, z: -5.454712, w: 0}
+  m_margin: {x: 0.44335938, y: 95.190994, z: 378.4159, w: 40.40515}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

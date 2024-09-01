@@ -59,7 +59,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 {
                     if (hit.collider.gameObject.CompareTag("Heart"))
                     {
-                        popupText.color = Color.red;
+                        //popupText.color = Color.red;
                         popupText.text = "Loading Heart data, please wait...";
 
                         // Show the panel
@@ -75,7 +75,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                     }
                     else if (hit.collider.gameObject.CompareTag("Liver"))
                     {
-                        popupText.color = Color.yellow;
+                        //popupText.color = Color.yellow;
                         popupText.text = "Loading Liver data, please wait...";
 
                         // Show the panel
@@ -91,7 +91,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                     }
                     else if (hit.collider.gameObject.CompareTag("Brain"))
                     {
-                        popupText.color = Color.cyan;
+                        //popupText.color = Color.cyan;
                         popupText.text = "Loading Brain data, please wait...";
 
                         // Show the panel
