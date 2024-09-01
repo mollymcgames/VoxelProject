@@ -28,7 +28,9 @@ public class MenuHandler : MonoBehaviour
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "template.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";        
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         LoadAFile(false, voxelOmissionThreshold);
     }
@@ -38,7 +40,9 @@ public class MenuHandler : MonoBehaviour
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "template.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         return LoadAFileForTheHeader(voxelOmissionThreshold);
     }

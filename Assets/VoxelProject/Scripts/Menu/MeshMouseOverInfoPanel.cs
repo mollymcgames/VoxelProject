@@ -59,20 +59,28 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 {
                     if (hit.collider.gameObject.CompareTag("Heart"))
                     {
+                        popupText.color = Color.red;
+                        popupText.text = "Loading Heart data, please wait...";
+
+                        // Show the panel
+                        popupPanel.SetActive(true);
+
                         if (heartText == null)
                         {
                             loadingData = true;
                             heartText = WorldManager.Instance.menuHandler.LoadHeartFileHeader();
                             heartText = "Heart!<br>" + heartText;
                         }
-                        popupText.text = heartText;
-                        popupText.color = Color.red;
-
-                        // Show the panel
-                        popupPanel.SetActive(true);                      
+                        popupText.text = heartText;                        
                     }
                     else if (hit.collider.gameObject.CompareTag("Liver"))
                     {
+                        popupText.color = Color.yellow;
+                        popupText.text = "Loading Liver data, please wait...";
+
+                        // Show the panel
+                        popupPanel.SetActive(true);
+
                         if (liverText == null)
                         {
                             loadingData = true;
@@ -80,13 +88,15 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                             liverText = "Liver!<br>" + liverText;
                         }
                         popupText.text = liverText;
-                        popupText.color = Color.yellow;
-
-                        // Show the panel
-                        popupPanel.SetActive(true);
                     }
                     else if (hit.collider.gameObject.CompareTag("Brain"))
                     {
+                        popupText.color = Color.cyan;
+                        popupText.text = "Loading Brain data, please wait...";
+
+                        // Show the panel
+                        popupPanel.SetActive(true);
+
                         if (brainText == null)
                         {
                             loadingData = true;
@@ -94,10 +104,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                             brainText = "Brain!<br>" + brainText;
                         }
                         popupText.text = brainText;
-                        popupText.color = Color.cyan;
-
-                        // Show the panel
-                        popupPanel.SetActive(true);
                     }
 
                     // Optionally, you can worldPosition the panel at the mouse worldPosition

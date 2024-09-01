@@ -17,10 +17,10 @@ public class NiftiHandler : MonoBehaviour
             foreach (var item in tempNifti.Data)
             {
                 if (tempNifti.Data[index] < calMin)
-                    calMin = tempNifti.Data[index];
+                    calMin = (float)tempNifti.Data[index];
 
                 if (tempNifti.Data[index] > calMax)
-                    calMax = tempNifti.Data[index];
+                    calMax = (float)tempNifti.Data[index];
 
                 index++;
             }
