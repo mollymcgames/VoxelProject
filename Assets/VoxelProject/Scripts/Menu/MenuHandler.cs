@@ -169,7 +169,7 @@ public class MenuHandler : MonoBehaviour
         }
         Vector3Int centerChunkPosition = (minCorner + maxCorner) / 2;
         
-        WorldManager.Instance.worldSettings.intialCameraPosition = new Vector3Int(centerChunkPosition.x, centerChunkPosition.y + 10, centerChunkPosition.z - 10);
+        WorldManager.Instance.worldSettings.intialCameraPosition = new Vector3Int(centerChunkPosition.x, centerChunkPosition.y + 10, centerChunkPosition.z - 100);
         Debug.Log("Camera will be pointed at:" + WorldManager.Instance.worldSettings.intialCameraPosition);
     }
 
