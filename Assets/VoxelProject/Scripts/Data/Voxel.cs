@@ -10,36 +10,25 @@ using UnityEngine;
 */
 public struct Voxel
 {
-/*    public readonly float colorR;
-    public readonly float colorG;
-    public readonly float colorB;*/
     public readonly int colorGrayScale;
 
     public readonly bool isSegmentVoxel;
 
     public Voxel(int colorGreyScale)
     {
-/*        this.colorR = colorR;
-        this.colorG = colorG;
-        this.colorB = colorB;
-*/      
         this.colorGrayScale = colorGreyScale;
         isSegmentVoxel = false;
     }
 
     public Voxel(int colorGreyScale, bool isSegmentVoxel)
     {
-/*        this.colorR = colorR;
-        this.colorG = colorG;
-        this.colorB = colorB;
-*/
         this.colorGrayScale = colorGreyScale;
         this.isSegmentVoxel = isSegmentVoxel;
     }
 
     public UnityEngine.Color color()
     {
-        // Normalize the grayscale value to the range [0, 1]
+        // Normalise the greyscale value to the range [0, 1]
         float normalizedValue = colorGrayScale / 254f;
 
         if (normalizedValue < 0.5f)
@@ -56,7 +45,7 @@ public struct Voxel
 
     public UnityEngine.Color colorInGrayScale()
     {
-        // Normalize the grayscale value to the range [0, 1]
+        // Normalise the greyscale value to the range [0, 1]
         float normalizedValue = colorGrayScale / 254f;
 
         return new UnityEngine.Color(normalizedValue, normalizedValue, normalizedValue);

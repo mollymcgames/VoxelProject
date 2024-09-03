@@ -90,8 +90,6 @@ public class SourceDataTextFileLoaderAsDictionary
 
     private Dictionary<Vector3Int, Voxel> ReadVoxelData(string[] lines)
     {
-        //int numVoxels = width * height * depth;
-
         Dictionary<Vector3Int, Voxel> voxelDataList = new Dictionary<Vector3Int, Voxel>(lines.Length, new FastVector3IntComparer());
 
         Debug.Log("Lines detected in file:" + lines.Length);

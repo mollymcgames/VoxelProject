@@ -143,15 +143,13 @@ public class Container : MonoBehaviour
 
         if (grayScaleMode)
         {
-            voxelColorAlpha = voxel.colorInGrayScale(); //new VoxelColor(grayScaleValue, grayScaleValue, grayScaleValue);
+            voxelColorAlpha = voxel.colorInGrayScale();
         }
         else
         {
             voxelColorAlpha = voxel.color();
         }
         voxelColorAlpha.a = 1;
-        //voxelColorAlpha = voxelColor.color;
-        //voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);        
 
         if (voxel.isSegmentVoxel)
         {
@@ -275,13 +273,14 @@ public class Container : MonoBehaviour
         if (worldChunks.TryGetValue(chunkPosition, out chunkValue) == false)
             return;
 
-        foreach(var nextVoxelInChunk in chunkValue.voxels)
+        foreach (var nextVoxelInChunk in chunkValue.voxels)
         {
             if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.Key, nearClippingDistance))
             {
                 visibleVoxels[nextVoxelInChunk.Key] = nextVoxelInChunk.Value;
             }
         }
+
     }
 
     private void Traverse(Camera camera, Dictionary<Vector3Int, Voxel> visibleVoxels)

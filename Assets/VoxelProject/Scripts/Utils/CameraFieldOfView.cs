@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 public class CameraFieldOfView : MonoBehaviour
 {
-    //This is the field of view that the Camera has
+    // This is the field of view that the Camera has
     float m_FieldOfView;
     public float sensitivity = 0.1f; // Sensitivity of mouse movement
     private bool isDragging = false;
     private float lastMouseY;
 
-    //Set up the maximum and minimum values the Slider can return (you can change these)
+    // Set up the maximum and minimum values the Slider can return
     float max = 150.0f;
     float min = 20.0f;
 
@@ -21,13 +21,12 @@ public class CameraFieldOfView : MonoBehaviour
 
     void Start()
     {
-        //Start the Camera field of view at 60
+        // Start the Camera field of view at 60
         m_FieldOfView = 60.0f;
     }
 
     void Update()
     {
-        //Debug.Log("SC zooming? " + SCManager.Instance.isZooming);
         if (SCManager.Instance.isZooming == false)
         {
             // Check if the mouse wheel button is pressed
@@ -58,7 +57,7 @@ public class CameraFieldOfView : MonoBehaviour
                 Camera.main.fieldOfView = m_FieldOfView;
             }
 
-            //Update the camera's field of view to be the variable returning from the Slider
+            // Update the camera's field of view to be the variable returning from the Slider
             m_FieldOfView = fovSlider.value;
             fovValue.text = ((int)fovSlider.value).ToString();
             Camera.main.fieldOfView = m_FieldOfView;

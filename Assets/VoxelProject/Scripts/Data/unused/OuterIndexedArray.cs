@@ -26,7 +26,6 @@ public class OuterIndexedArray<T> where T : struct
 
     private void Create(int sizeX, int sizeY, int sizeZ)
     {
-        //size = new Vector3Int(sizeX + 3, sizeY + 1, sizeZ + 3); - original size
         size = new Vector3Int(sizeX, sizeY, sizeZ);
         array = new T[Count];
         initialized = true;

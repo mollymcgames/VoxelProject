@@ -54,7 +54,6 @@ public class SCManager : MonoBehaviour
         }
 
         // Only auto update if toggle is on
-        //if (timeSinceLastUpdate >= updateInterval && WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
         if (WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
         {
             // Call the custom update method

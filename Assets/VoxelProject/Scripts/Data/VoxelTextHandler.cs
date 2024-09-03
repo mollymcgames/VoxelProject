@@ -48,7 +48,6 @@ public class VoxelTextHandler : MonoBehaviour
             Color color;
             if (ColorUtility.TryParseHtmlString("#" + parts[3], out color))
             {
-                Debug.Log("Processing... " + parts[3]);
                 voxelDataList.Add(new Vector3Int(x+xOffset, y+yOffset, z+zOffset), new Voxel((int)color.r));
             }             
         }

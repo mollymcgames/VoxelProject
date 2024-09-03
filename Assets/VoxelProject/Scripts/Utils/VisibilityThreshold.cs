@@ -60,7 +60,6 @@ public class VisibilityThreshold : MonoBehaviour
 
     void OnSliderValueChanged(float value)
     {
-        Debug.Log("Slide changed");
         callCoRoutine();
     }
 
@@ -83,11 +82,8 @@ public class VisibilityThreshold : MonoBehaviour
         // Wait for 1 second
         yield return new WaitForSeconds(1f);
 
-        Debug.Log("Delayed thing");
-
         if (sliderChanged && lastSliderValue != visibilityThresholdSlider.value)
         {
-            Debug.Log("Delayed thing happening");
             // Update the mesh only if the slider color has changed
             lastSliderValue = visibilityThresholdSlider.value;
             sliderChanged = false;

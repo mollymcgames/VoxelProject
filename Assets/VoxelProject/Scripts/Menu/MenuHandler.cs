@@ -30,7 +30,10 @@ public class MenuHandler : MonoBehaviour
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "template.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";        
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";        
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "MR_Gd.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spleen_56.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         LoadAFile(false, voxelOmissionThreshold);
     }
@@ -42,7 +45,10 @@ public class MenuHandler : MonoBehaviour
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "template.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";
+        //'WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "MR_Gd.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spleen_56.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         return LoadAFileForTheHeader(voxelOmissionThreshold);
     }
@@ -52,7 +58,6 @@ public class MenuHandler : MonoBehaviour
         int voxelOmissionThreshold = 0;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";        
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
-        // WorldManager.Instance.voxelMeshConfigurationSettings.voxelSegmentLayers = new string[] { "rkT2.nii" };
         LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -146,7 +151,7 @@ public class MenuHandler : MonoBehaviour
         if (WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName != null)
         {
             Debug.Log("Loading Voxel Segment Definition File: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName);
-            //Use Steaming Assets folder to load the file
+            // Use Steaming Assets folder to load the file
             string voxelSegmentDefinitionFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName);
 
             WorldManager.Instance.voxelDictionary = loader.LoadVoxelSegmentDefinitionFileExtra(voxelSegmentDefinitionFilePath);
@@ -180,16 +185,12 @@ public void LoadZoom()
 
     public void BackButton()
     {
-        // TODO animator = GameObject.Find("Transition").GetComponent<Animator>();
-        // TODO animator.SetTrigger("TriggerTransition");
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
         SceneManager.LoadScene("Model");
     }
 
     public void BackToWorldButton()
     {
-        // TODO animator = GameObject.Find("Transition").GetComponent<Animator>();
-        // TODO animator.SetTrigger("TriggerTransition");
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
         SceneManager.LoadScene("World");
     }

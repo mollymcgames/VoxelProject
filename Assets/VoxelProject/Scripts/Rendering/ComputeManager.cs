@@ -86,7 +86,6 @@ public class ComputeManager : MonoBehaviour
         {
             try
             {
-                // original callback.GetData<Voxel>(0).CopyTo(WorldManager.Instance.container.data.voxelArray.array);
                 callback.GetData<VoxelOriginal>(0).CopyTo(SCManager.Instance.container.data.voxelArray);
                 voxelContainer.RenderMesh();
             }
@@ -149,9 +148,7 @@ public struct NoiseBuffer
         countBuffer.SetCounterValue(0);
         countBuffer.SetData(new uint[] { 0 });
 
-        //voxelArray = new IndexedArray<Voxel>();
         voxelArray = new VoxelOriginal[WorldManager.Instance.voxelDictionary.Count];
-        //noiseBuffer = new ComputeBuffer(voxelArray.Count, 4);
         noiseBuffer = new ComputeBuffer(voxelArray.Length, Marshal.SizeOf(typeof(VoxelOriginal)));
         noiseBuffer.SetData(voxelArray);
         Initialized = true;

@@ -59,7 +59,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 {
                     if (hit.collider.gameObject.CompareTag("Heart"))
                     {
-                        //popupText.color = Color.red;
                         popupText.text = "Loading Heart data, please wait...";
 
                         // Show the panel
@@ -75,7 +74,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                     }
                     else if (hit.collider.gameObject.CompareTag("Liver"))
                     {
-                        //popupText.color = Color.yellow;
                         popupText.text = "Loading Liver data, please wait...";
 
                         // Show the panel
@@ -91,7 +89,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                     }
                     else if (hit.collider.gameObject.CompareTag("Brain"))
                     {
-                        //popupText.color = Color.cyan;
                         popupText.text = "Loading Brain data, please wait...";
 
                         // Show the panel
@@ -105,10 +102,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                         }
                         popupText.text = brainText;
                     }
-
-                    // Optionally, you can worldPosition the panel at the mouse worldPosition
-                    //Vector3 mousePos = Input.mousePosition;
-                    //popupPanel.transform.worldPosition = mousePos + new Vector3(popupPanel.GetComponent<RectTransform>().rect.width / 2, popupPanel.GetComponent<RectTransform>().rect.height / 2, 0);
 
                     // Set isMouseOver to true and reset the hide timer
                     hideTimer = 0f;

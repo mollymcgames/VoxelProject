@@ -70,10 +70,14 @@ public class MeshMemoryUsage : MonoBehaviour
         
         if (mesh != null)
         {
-            vertexMemory = mesh.vertexCount * sizeof(float) * 3; // Each vertex has 3 floats (x, y, z)
-            normalMemory = mesh.normals.Length * sizeof(float) * 3; // Each normal has 3 floats
-            uvMemory = mesh.uv.Length * sizeof(float) * 2; // Each UV has 2 floats (u, v)
-            indexMemory = mesh.triangles.Length * sizeof(int); // Each index is an int
+            // Each vertex has 3 floats (x, y, z)
+            vertexMemory = mesh.vertexCount * sizeof(float) * 3;
+            // Each normal has 3 floats
+            normalMemory = mesh.normals.Length * sizeof(float) * 3;
+            // Each UV has 2 floats (u, v)
+            uvMemory = mesh.uv.Length * sizeof(float) * 2;
+            // Each index is an int
+            indexMemory = mesh.triangles.Length * sizeof(int); 
             totalMemory = vertexMemory + normalMemory + uvMemory + indexMemory;
 
             goVertexMemory.text = (vertexMemory / 1024f / 1024f).ToString() + " MB";
