@@ -18,7 +18,28 @@ public class MenuHandler : MonoBehaviour
     {
         animator = GameObject.Find("Transition").GetComponent<Animator>();
         animator.SetTrigger("TriggerTransition");
-        SceneManager.LoadScene("World");
+        SceneManager.LoadScene("World");        
+    }
+
+    public void LoadWorldScene()
+    {
+        animator = GameObject.Find("Transition").GetComponent<Animator>();
+        animator.SetTrigger("TriggerTransition");        
+        SceneManager.LoadScene("Model");
+    }
+
+    public void LoadInstructionsScene()
+    {
+        animator = GameObject.Find("Transition").GetComponent<Animator>();
+        animator.SetTrigger("TriggerTransition");
+        SceneManager.LoadScene("MenuInstructions");
+    }
+
+    public void LoadMenuScene()
+    {
+        animator = GameObject.Find("Transition").GetComponent<Animator>();
+        animator.SetTrigger("TriggerTransition");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void LoadHeartFile()
