@@ -86,6 +86,7 @@ public class Container : MonoBehaviour
     {
         visibilityThreshold = WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold;
         grayScaleMode = WorldManager.Instance.worldSettings.grayScaleMode;
+        sparseVoxels = WorldManager.Instance.worldSettings.sparseVoxels;
         SCManager.Instance.reRenderingMesh = true;
         meshData.ClearData();
         GenerateMesh();
@@ -100,8 +101,7 @@ public class Container : MonoBehaviour
     }
 
     public void GenerateMesh()
-    {
-        sparseVoxels = WorldManager.Instance.worldSettings.sparseVoxels;
+    {        
         voxelsSelected = 0;
         meshCounter = 0;
         faceVertices = new Vector3Int[4];
@@ -116,10 +116,8 @@ public class Container : MonoBehaviour
         meshData.UVs2.Capacity = visibleVoxels.Count * 24;
         meshData.colors.Capacity = visibleVoxels.Count * 24;
 
-        // fff foreach (var nextVoxel in visibleVoxels)
         foreach (var nextVoxel in visibleVoxels.Values.ToList<Voxel>())
         {
-            //AddVoxelIntoRenderMesh(nextVoxel.Key, nextVoxel.Value);
             AddVoxelIntoRenderMesh(nextVoxel.position, nextVoxel);
         }
         WorldManager.Instance.voxelsSelected = voxelsSelected;
@@ -140,7 +138,6 @@ public class Container : MonoBehaviour
             return;
         }
 
-        // fff if (checkVoxelIsSolid(voxelPosition, visibleVoxels) == false)
         if (checkVoxelIsSolid(voxel, visibleVoxels) == false)
         {
             return;
@@ -279,14 +276,11 @@ public class Container : MonoBehaviour
         Chunk chunkValue = null;
         if (worldChunks.TryGetValue(chunkPosition, out chunkValue) == false)
             return;
-
-        // fff foreach (var nextVoxelInChunk in chunkValue.voxels)
+        
         foreach (var nextVoxelInChunk in chunkValue.voxels.Values.ToList<Voxel>())
         {
-            // fff if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.Key, nearClippingDistance))
             if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.position, nearClippingDistance))
             {
-                // fff visibleVoxels[nextVoxelInChunk.Key] = nextVoxelInChunk.Value;
                 visibleVoxels[nextVoxelInChunk.position] = nextVoxelInChunk;
             }
         }
@@ -304,7 +298,6 @@ public class Container : MonoBehaviour
         }
     }
 
-    // fff private bool checkVoxelIsSolid(Vector3Int voxelPosition, Dictionary<Vector3Int, Voxel> visibleVoxels)
     private bool checkVoxelIsSolid(Voxel voxelPosition, Dictionary<Vector3Int, Voxel> visibleVoxels)
     {
         if (sparseVoxels == true)

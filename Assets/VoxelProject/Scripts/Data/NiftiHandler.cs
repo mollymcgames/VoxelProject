@@ -60,7 +60,6 @@ public class NiftiHandler : MonoBehaviour
                         // Different NII files represent colours in different ways. Decision here is to make everything in the range
                         // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
                         int colorGreyScale = ((int)((float)(niftiData.Data[index] / calMax) * 254) % 254);                        
-                        // fff voxelDictionary.Add(new Vector3Int(x, y, z), new Voxel(colorGreyScale));
                         voxelDictionary.Add(new Vector3Int(x, y, z), new Voxel(colorGreyScale, new Vector3Int(x, y, z)));
                         voxelsLoaded++;
                     }
