@@ -14,16 +14,32 @@ public class Voxel
 
     public readonly bool isSegmentVoxel;
 
+    public readonly Vector3Int position;
+
     public Voxel(int colorGreyScale)
     {
         this.colorGrayScale = colorGreyScale;
         isSegmentVoxel = false;
     }
 
+    public Voxel(int colorGreyScale, Vector3Int position)
+    {
+        this.colorGrayScale = colorGreyScale;
+        isSegmentVoxel = false;
+        this.position = position;
+    }
+
     public Voxel(int colorGreyScale, bool isSegmentVoxel)
     {
         this.colorGrayScale = colorGreyScale;
         this.isSegmentVoxel = isSegmentVoxel;
+    }
+
+    public Voxel(int colorGreyScale, bool isSegmentVoxel, Vector3Int position)
+    {
+        this.colorGrayScale = colorGreyScale;
+        this.isSegmentVoxel = isSegmentVoxel;
+        this.position = position;
     }
 
     public UnityEngine.Color color()
