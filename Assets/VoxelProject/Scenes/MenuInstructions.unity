@@ -1075,17 +1075,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The "Grey Scale Mode" button toggles between grey scale and artificial
-    colour mode.
+  m_text: '- "Grey Scale Mode" button toggles between grey scale and artificial colour
+    mode.
 
-    The "Visibility slider" will hide darker voxels and provide
-    an alternative view. The Invert button toggles this so brigher voxels are hidden.
+    - "Visibility slider" will hide darker voxels and provide an alternative
+    view. The Invert button toggles this so brigher voxels are hidden.
 
-    The
-    "FoV slider" zooms the camera in and out.
+    - "FoV
+    slider" zooms the camera in and out.
 
-    The "Auto Refresh" button toggles
-    the auto refresh mode. Note on larger voxel models this can affect performance.'
+    - "Auto Refresh" button toggles the
+    auto refresh mode. Note on larger voxel models this can affect performance.
+
+    -
+    "Sparse voxels" skips the voxel neighbour scanning check.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1148,7 +1151,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 43.17776, y: 0, z: -621.70514, w: -344.7158}
+  m_margin: {x: -49.150597, y: -41.22751, z: -705.93256, w: -189.70116}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1532,7 +1535,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -248, y: 172}
+  m_AnchoredPosition: {x: -248, y: 8}
   m_SizeDelta: {x: 277.1067, y: 281.2015}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &943111097
@@ -1694,7 +1697,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -227.57062, y: 0, z: -350.15265, w: -90.440346}
+  m_margin: {x: -326.0441, y: 0, z: -446.63464, w: -55.722572}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1743,7 +1746,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 14, y: 200}
+  m_AnchoredPosition: {x: -545, y: -256}
   m_SizeDelta: {x: 360, y: 138.7731}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1111509994
@@ -2202,7 +2205,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: dfeb8944cfcbd514fbffb36dd6707107, type: 3}
+  m_Texture: {fileID: 2800000, guid: a9009683443cfe641bd831b40221b0e8, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -2254,8 +2257,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 490.0819, y: -56}
-  m_SizeDelta: {x: 817.8356, y: 652.7402}
+  m_AnchoredPosition: {x: 430.4385, y: -68.141}
+  m_SizeDelta: {x: 1010.5295, y: 650.46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1580554063
 MonoBehaviour:
@@ -2329,7 +2332,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 14, y: 235}
+  m_AnchoredPosition: {x: 14, y: 95}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1599509861
@@ -2416,7 +2419,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -286.08655, w: -332.10495}
+  m_margin: {x: 0, y: 0, z: -286.08655, w: -161.0577}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2584,8 +2587,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -481.6992, y: -60}
-  m_SizeDelta: {x: 824.6017, y: 659.74}
+  m_AnchoredPosition: {x: -508, y: 91}
+  m_SizeDelta: {x: 837.7069, y: 332.1776}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1934046256
 MonoBehaviour:

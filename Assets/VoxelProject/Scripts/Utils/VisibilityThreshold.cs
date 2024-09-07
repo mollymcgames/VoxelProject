@@ -13,6 +13,7 @@ public class VisibilityThreshold : MonoBehaviour
     public Toggle invertVisibility;
     public Toggle enableAutoRefresh;
     public Toggle grayScaleMode;
+    public Toggle sparseVoxels;
     private float lastSliderValue;
     public TMP_Text visibilityThresholdValue;
     private bool sliderChanged;
@@ -41,6 +42,10 @@ public class VisibilityThreshold : MonoBehaviour
             grayScaleMode.onValueChanged.AddListener(OnToggleGrayScaleMode);
         }
 
+        if (sparseVoxels != null)
+        {
+            sparseVoxels.onValueChanged.AddListener(OnToggleSparseVoxels);
+        }
     }
 
     void OnToggleChangedVisibility(bool change)
@@ -56,6 +61,11 @@ public class VisibilityThreshold : MonoBehaviour
     void OnToggleGrayScaleMode(bool change)
     {
         WorldManager.Instance.worldSettings.grayScaleMode = !WorldManager.Instance.worldSettings.grayScaleMode;
+    }
+
+    void OnToggleSparseVoxels(bool change)
+    {
+        WorldManager.Instance.worldSettings.sparseVoxels = !WorldManager.Instance.worldSettings.sparseVoxels;
     }
 
     void OnSliderValueChanged(float value)

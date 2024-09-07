@@ -6,7 +6,7 @@ public class LiverLoader : MonoBehaviour
 
     void OnMouseDown() {
         cch.RestoreDefaultCursor();
-        WorldManager.Instance.menuHandler.LoadLiverData();
+        WorldManager.Instance.menuHandler.LoadLiverFile();
         WorldManager.Instance.menuHandler.LoadNextScene();
     }
 }

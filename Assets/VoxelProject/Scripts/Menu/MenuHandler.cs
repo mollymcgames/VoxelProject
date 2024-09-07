@@ -42,7 +42,7 @@ public class MenuHandler : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void LoadHeartFile()
+    public string LoadHeartFile()
     {
         int voxelOmissionThreshold = 0;
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
@@ -54,81 +54,26 @@ public class MenuHandler : MonoBehaviour
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";        
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "MR_Gd.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spleen_56.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
+        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lungs.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        LoadAFile(false, voxelOmissionThreshold);
-    }
-    public string LoadHeartFileHeader()
-    {
-        int voxelOmissionThreshold = 0;
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "template.nii";
-        //'WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "MR_Gd.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spleen_56.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        return LoadAFileForTheHeader(voxelOmissionThreshold);
+        return LoadAFile(false, voxelOmissionThreshold);
     }
 
-    public void LoadLiverData()
+    public string LoadLiverFile()
     {
         int voxelOmissionThreshold = 0;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";        
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
-        LoadAFile(false, voxelOmissionThreshold);
+        return LoadAFile(false, voxelOmissionThreshold);
     }
 
-    public string LoadLiverFileHeader()
-    {
-        int voxelOmissionThreshold = 0;
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
-        return LoadAFileForTheHeader(voxelOmissionThreshold);
-    }
-
-    public void LoadBrainFile()
+    public string LoadBrainFile()
     {
         int voxelOmissionThreshold = 18;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        LoadAFile(false, voxelOmissionThreshold);
-    }
-
-    public string LoadBrainFileHeader()
-    {
-        int voxelOmissionThreshold = 18;
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
-        return LoadAFileForTheHeader(voxelOmissionThreshold);
-    }
-
-    private string LoadAFileForTheHeader(int voxelOmissionThreshold)
-    {
-        // Use Steaming Assets folder to load the file
-        string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
-
-        // Load in one voxel model, currently support types are .txt and .nii files.
-        // If more types need supporting, will need additional SourceData loader implementations.
-        // Note, currently the getHeader method returns either a Nifti.NET.Nifti or string[] as appropriate.
-        Debug.Log("Last file loaded: " + fileLastLoaded);
-        Debug.Log("Settings datafile name: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
-        if (!fileLastLoaded.Equals(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName))
-        {
-            fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
-            Debug.Log("Loading file: " + fileLastLoaded);            
-            loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold);
-            WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);   
-            niftiFile = (Nifti.NET.Nifti)loader.GetHeader();
-        }
-        
-        string retString = "<br>Dimensions: x(" + niftiFile.Dimensions[0] + ")/ y(" + niftiFile.Dimensions[1] + ")/ z(" + niftiFile.Dimensions[2] + ") <br>Filename: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
-        Debug.Log("RETSTRING: "+retString);   
-
-        return retString;
+        return LoadAFile(false, voxelOmissionThreshold);
     }
 
     private string ByteToString(byte[] source)
@@ -143,7 +88,7 @@ public class MenuHandler : MonoBehaviour
         }
     }
 
-    private void LoadAFile(bool hasSegmentLayers, int voxelOmissionThreshold)
+    private string LoadAFile(bool hasSegmentLayers, int voxelOmissionThreshold)
     {
         // Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
@@ -181,6 +126,11 @@ public class MenuHandler : MonoBehaviour
         DetermineInitialCameraLocation();
 
         Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
+
+        string retString = "<br>Dimensions: x(" + niftiFile.Dimensions[0] + ")/ y(" + niftiFile.Dimensions[1] + ")/ z(" + niftiFile.Dimensions[2] + ") <br>Filename: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
+        Debug.Log("RETSTRING: " + retString);
+
+        return retString;
     }
 
     private void DetermineInitialCameraLocation()
@@ -199,7 +149,7 @@ public class MenuHandler : MonoBehaviour
         Debug.Log("Camera will be pointed at:" + WorldManager.Instance.worldSettings.intialCameraPosition);
     }
 
-public void LoadZoom()
+    public void LoadZoom()
     {
         SceneManager.LoadScene("Zooming");
     }

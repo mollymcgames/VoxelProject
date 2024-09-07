@@ -67,7 +67,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                         if (heartText == null)
                         {
                             loadingData = true;
-                            heartText = WorldManager.Instance.menuHandler.LoadHeartFileHeader();
+                            heartText = WorldManager.Instance.menuHandler.LoadHeartFile();
                             heartText = "Heart!<br>" + heartText;
                         }
                         popupText.text = heartText;                        
@@ -82,7 +82,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                         if (liverText == null)
                         {
                             loadingData = true;
-                            liverText = WorldManager.Instance.menuHandler.LoadLiverFileHeader();
+                            liverText = WorldManager.Instance.menuHandler.LoadLiverFile();
                             liverText = "Liver!<br>" + liverText;
                         }
                         popupText.text = liverText;
@@ -97,7 +97,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                         if (brainText == null)
                         {
                             loadingData = true;
-                            brainText = WorldManager.Instance.menuHandler.LoadBrainFileHeader();
+                            brainText = WorldManager.Instance.menuHandler.LoadBrainFile();
                             brainText = "Brain!<br>" + brainText;
                         }
                         popupText.text = brainText;

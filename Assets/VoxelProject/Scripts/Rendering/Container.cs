@@ -37,6 +37,7 @@ public class Container : MonoBehaviour
     float distanceToCamera = 0f;
     float maxDistance = 200f;
     private int visibilityThreshold = 0;
+    private bool sparseVoxels = false;
 
     Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
@@ -100,6 +101,7 @@ public class Container : MonoBehaviour
 
     public void GenerateMesh()
     {
+        sparseVoxels = WorldManager.Instance.worldSettings.sparseVoxels;
         voxelsSelected = 0;
         meshCounter = 0;
         faceVertices = new Vector3Int[4];
@@ -123,22 +125,22 @@ public class Container : MonoBehaviour
 
     float grayScaleValue = 0f;
 
-    private int AddVoxelIntoRenderMesh(Vector3Int voxelPosition, Voxel voxel)
+    private void AddVoxelIntoRenderMesh(Vector3Int voxelPosition, Voxel voxel)
     {
         if (voxelPosition.x < 0 || voxelPosition.y < 0 || voxelPosition.z < 0)
         {
-            return voxelsSelected;
+            return;
         }
 
         // Skip this voxel if it's below the visibility threshold
         if (voxel.colorGrayScale <= visibilityThreshold)
         {
-            return voxelsSelected;
+            return;
         }
 
         if (checkVoxelIsSolid(voxelPosition, visibleVoxels) == false)
         {
-            return voxelsSelected;
+            return;
         }
 
         if (grayScaleMode)
@@ -177,7 +179,7 @@ public class Container : MonoBehaviour
                 meshData.triangles.Add(meshCounter++);
             }
         }
-        return voxelsSelected++;
+        voxelsSelected++;
     }
 
     float AdjustGrayscale(float originalGrayscale, float distance)
@@ -295,7 +297,12 @@ public class Container : MonoBehaviour
     }
 
     private bool checkVoxelIsSolid(Vector3Int voxelPosition, Dictionary<Vector3Int, Voxel> visibleVoxels)
-    {        
+    {
+        if (sparseVoxels == true)
+        {
+            return true;
+        }
+
         for (int i=0; i<directions.Length;i++ )
         {
             if (!visibleVoxels.TryGetValue(voxelPosition + directions[i], out outVoxel))
