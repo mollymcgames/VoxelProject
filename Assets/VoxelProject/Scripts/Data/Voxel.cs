@@ -8,7 +8,7 @@ using UnityEngine;
 /**
 * A VoxelCell represents information about a particular type of cell.
 */
-public struct Voxel
+public class Voxel
 {
     public readonly int colorGrayScale;
 

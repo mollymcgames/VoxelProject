@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 //using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -249,12 +250,14 @@ public class Container : MonoBehaviour
         // This will hold the voxels that are ultimately doing to be visible.
         visibleVoxels = new Dictionary<Vector3Int, Voxel>(worldVoxels.Count, new FastVector3IntComparer());
 
-        foreach (var chunk in worldChunks)
+        foreach (var chunk in worldChunks.Values.ToList<Chunk>())
         {
-            if (frustrumCullingCalculator.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
+            //if (frustrumCullingCalculator.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
+            if (frustrumCullingCalculator.IsChunkInView(ref chunk.bounds)) //camera, chunkPosition, chunkDimensions))
             {
                 // Only check individual voxels within the chunk if the chunk is visible
-                TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
+                //TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
+                TraverseVisibleChunk(ref camera, chunk.chunkPosition, ref visibleVoxels);
                 chunksOnDisplay++;
             }
         }
