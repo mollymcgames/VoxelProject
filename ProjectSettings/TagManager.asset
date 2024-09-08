@@ -12,6 +12,7 @@ TagManager:
   - Heart
   - Liver
   - SegmentOne
+  - Spine
   layers:
   - Default
   - TransparentFX

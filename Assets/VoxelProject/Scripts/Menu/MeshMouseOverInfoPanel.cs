@@ -17,7 +17,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
     private bool hasMouseExited = false;
     public bool loadingData = false;
 
-    string brainText, liverText, heartText = null;
+    string brainText, liverText, heartText, spineText = null;
 
     private void Start()
     {
@@ -42,7 +42,11 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
             // Set the boolean to true if the tag is "Brain"
             hasMouseExited = true;
         }
-
+        if (gameObject.CompareTag("Spine"))
+        {
+            // Set the boolean to true if the tag is "Spine"
+            hasMouseExited = true;
+        }
     }
 
     void Update()
@@ -101,6 +105,21 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                             brainText = "Brain!<br>" + brainText;
                         }
                         popupText.text = brainText;
+                    }
+                    else if (hit.collider.gameObject.CompareTag("Spine"))
+                    {
+                        popupText.text = "Loading Spine data, please wait...";
+
+                        // Show the panel
+                        popupPanel.SetActive(true);
+
+                        if (spineText == null)
+                        {
+                            loadingData = true;
+                            spineText = WorldManager.Instance.menuHandler.LoadSpineFile();
+                            spineText = "Spine!<br>" + spineText;
+                        }
+                        popupText.text = spineText;
                     }
 
                     // Set isMouseOver to true and reset the hide timer

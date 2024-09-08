@@ -44,6 +44,7 @@ public class VisibilityThreshold : MonoBehaviour
 
         if (sparseVoxels != null)
         {
+            sparseVoxels.isOn = WorldManager.Instance.worldSettings.sparseVoxels;
             sparseVoxels.onValueChanged.AddListener(OnToggleSparseVoxels);
         }
     }

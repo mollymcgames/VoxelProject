@@ -55,8 +55,17 @@ public class MenuHandler : MonoBehaviour
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "MR_Gd.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spleen_56.nii";
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lungs.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "heart.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
+        return LoadAFile(false, voxelOmissionThreshold);
+    }
+
+    public string LoadSpineFile()
+    {
+        int voxelOmissionThreshold = 0;
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spine.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
+        WorldManager.Instance.worldSettings.sparseVoxels = true;
         return LoadAFile(false, voxelOmissionThreshold);
     }
 
