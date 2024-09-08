@@ -57,6 +57,7 @@ public class MenuHandler : MonoBehaviour
         //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "heart.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
+        WorldManager.Instance.worldSettings.sparseVoxels = false;
         return LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -74,6 +75,7 @@ public class MenuHandler : MonoBehaviour
         int voxelOmissionThreshold = 0;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";        
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
+        WorldManager.Instance.worldSettings.sparseVoxels = false;
         return LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -82,6 +84,7 @@ public class MenuHandler : MonoBehaviour
         int voxelOmissionThreshold = 18;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
+        WorldManager.Instance.worldSettings.sparseVoxels = false;
         return LoadAFile(false, voxelOmissionThreshold);
     }
 
