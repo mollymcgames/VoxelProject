@@ -49,10 +49,17 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
         }
     }
 
+    private bool processingUpdate = false;
+
     void Update()
     {
+        if (processingUpdate)
+            return;
+
         if (loadingData == false)
         {
+            processingUpdate = true;
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -63,6 +70,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                 {
                     if (hit.collider.gameObject.CompareTag("Heart"))
                     {
+                        loadingData = true;
                         popupText.text = "Loading Heart data, please wait...";
 
                         // Show the panel
@@ -70,14 +78,14 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
                         if (heartText == null)
                         {
-                            loadingData = true;
-                            heartText = WorldManager.Instance.menuHandler.LoadHeartFile();
+                            heartText = WorldManager.Instance.menuHandler.LoadHeartHeader();
                             heartText = "Heart!<br>" + heartText;
                         }
                         popupText.text = heartText;                        
                     }
                     else if (hit.collider.gameObject.CompareTag("Liver"))
                     {
+                        loadingData = true;
                         popupText.text = "Loading Liver data, please wait...";
 
                         // Show the panel
@@ -85,14 +93,14 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
                         if (liverText == null)
                         {
-                            loadingData = true;
-                            liverText = WorldManager.Instance.menuHandler.LoadLiverFile();
+                            liverText = WorldManager.Instance.menuHandler.LoadLiverHeader();
                             liverText = "Liver!<br>" + liverText;
                         }
                         popupText.text = liverText;
                     }
                     else if (hit.collider.gameObject.CompareTag("Brain"))
                     {
+                        loadingData = true;
                         popupText.text = "Loading Brain data, please wait...";
 
                         // Show the panel
@@ -100,14 +108,14 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
                         if (brainText == null)
                         {
-                            loadingData = true;
-                            brainText = WorldManager.Instance.menuHandler.LoadBrainFile();
+                            brainText = WorldManager.Instance.menuHandler.LoadBrainHeader();
                             brainText = "Brain!<br>" + brainText;
                         }
                         popupText.text = brainText;
                     }
                     else if (hit.collider.gameObject.CompareTag("Spine"))
                     {
+                        loadingData = true;
                         popupText.text = "Loading Spine data, please wait...";
 
                         // Show the panel
@@ -115,8 +123,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
                         if (spineText == null)
                         {
-                            loadingData = true;
-                            spineText = WorldManager.Instance.menuHandler.LoadSpineFile();
+                            spineText = WorldManager.Instance.menuHandler.LoadSpineHeader();
                             spineText = "Spine!<br>" + spineText;
                         }
                         popupText.text = spineText;
@@ -126,6 +133,7 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
                     hideTimer = 0f;
                 }
             }
+            processingUpdate = false;
         }        
 
         // If the mouse is not over the mesh, start the hide timer

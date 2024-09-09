@@ -3,16 +3,20 @@ using UnityEngine;
 
 public class SourceDataLoader : ASourceDataLoader
 {
-    private static Nifti.NET.Nifti niftiFile = null;
-    private static Nifti.NET.Nifti niftiSegmentFile = null;
+    private Nifti.NET.Nifti niftiFile = null;
+    private Nifti.NET.Nifti niftiSegmentFile = null;
+    private NiftiHandler niftiHandler = null;
+    private string niftiFilePath = null;
 
-    public SourceDataLoader(int voxelOmissionThreshold) { 
+    public SourceDataLoader(int voxelOmissionThreshold, string niftiFilePath)
+    { 
         this.voxelOmissionThreshold = voxelOmissionThreshold;
+        this.niftiHandler = new NiftiHandler();
+        this.niftiFilePath = niftiFilePath;
     }
     
     public override Dictionary<Vector3Int, Voxel> LoadSourceData(string filepath)
     {
-        Debug.Log("Loading nii source data...:" + filepath);
         LoadNiftiFile(filepath);
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelMeshCenter = CalculateCenter(niftiFile.Dimensions[0], niftiFile.Dimensions[1], niftiFile.Dimensions[2]);
         CreateVoxelsArray();
@@ -22,6 +26,10 @@ public class SourceDataLoader : ASourceDataLoader
 
     public override object GetHeader()
     {
+        if (niftiFile == null)
+        {
+            niftiFile = niftiHandler.ReadNiftiFileOnly(niftiFilePath);
+        }
         return niftiFile;
     }
     
@@ -58,14 +66,14 @@ public class SourceDataLoader : ASourceDataLoader
     {
         Debug.Log("Data being read in and loaded into Dictionary...");
         // Read the voxel data
-        voxelDictionary = NiftiHandler.ReadNiftiData(niftiFile, X, Y, Z, voxelOmissionThreshold);
+        voxelDictionary = niftiHandler.ReadNiftiData(X, Y, Z, voxelOmissionThreshold);
         Debug.Log("Data now read in and Dictionary created. Size: "+voxelDictionary.Count);
     }
 
     private Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
     {
         // Load the NIfTI file
-        return NiftiHandler.ReadNiftiFile(niftiFilePath);
+        return niftiHandler.ReadNiftiFile(niftiFilePath);
     }
 
 }

@@ -252,7 +252,6 @@ public class Container : MonoBehaviour
 
         foreach (var chunk in worldChunks.Values.ToList<Chunk>())
         {
-            //if (frustrumCullingCalculator.IsChunkInView(ref chunk.Value.bounds)) //camera, chunkPosition, chunkDimensions))
             if (frustrumCullingCalculator.IsChunkInView(ref chunk.bounds)) //camera, chunkPosition, chunkDimensions))
             {
                 // Only check individual voxels within the chunk if the chunk is visible

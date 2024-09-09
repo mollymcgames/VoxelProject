@@ -2,44 +2,63 @@ using System.Collections.Generic;
 using Nifti.NET;
 using UnityEngine;
 
-public class NiftiHandler : MonoBehaviour
-{      
-    public static Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
-    {
-        // Load the NIfTI file
-        Nifti.NET.Nifti tempNifti = NiftiFile.Read(niftiFilePath);
+public class NiftiHandler
+{
+    private Nifti.NET.Nifti niftiFile = null;
 
-        float calMin = tempNifti.Header.cal_min;
-        float calMax = tempNifti.Header.cal_max;
+    public Nifti.NET.Nifti ReadNiftiFileOnly(string niftiFilePath)
+    {
+        if (niftiFilePath != null && niftiFile == null)
+        {
+            // Load the NIfTI file
+            niftiFile = NiftiFile.Read(niftiFilePath);
+        }
+        return niftiFile;
+    }
+
+    public Nifti.NET.Nifti ReadNiftiFile(string niftiFilePath)
+    {        
+        if (niftiFilePath != null && niftiFile == null)
+        {
+            ReadNiftiFileOnly(niftiFilePath);
+        }
+
+        float calMin = niftiFile.Header.cal_min;
+        float calMax = niftiFile.Header.cal_max;
         if (calMax <= 0)
         {
             int index = 0;
-            foreach (var item in tempNifti.Data)
+            foreach (var item in niftiFile.Data)
             {
-                if (tempNifti.Data[index] < calMin)
-                    calMin = (float)tempNifti.Data[index];
+                if (niftiFile.Data[index] < calMin)
+                    calMin = (float)niftiFile.Data[index];
 
-                if (tempNifti.Data[index] > calMax)
-                    calMax = (float)tempNifti.Data[index];
+                if (niftiFile.Data[index] > calMax)
+                    calMax = (float)niftiFile.Data[index];
 
                 index++;
             }
         }
-        tempNifti.Header.cal_min = calMin;
-        tempNifti.Header.cal_max = calMax;
-        Debug.Log("CAL MIN onload: " + tempNifti.Header.cal_min);
-        Debug.Log("CAL MAX onload: " + tempNifti.Header.cal_max);
+        niftiFile.Header.cal_min = calMin;
+        niftiFile.Header.cal_max = calMax;
+        Debug.Log("CAL MIN onload: " + niftiFile.Header.cal_min);
+        Debug.Log("CAL MAX onload: " + niftiFile.Header.cal_max);
 
-        return tempNifti;
+        return niftiFile;
     }
 
-    public static Dictionary<Vector3Int, Voxel> ReadNiftiData(Nifti.NET.Nifti niftiData, int width, int height, int depth, int niiVoxelOmissionThreshold)
+    public Dictionary<Vector3Int, Voxel> ReadNiftiData(int width, int height, int depth, int niiVoxelOmissionThreshold)
     {
-        float calMin = niftiData.Header.cal_min;
-        float calMax = niftiData.Header.cal_max;
+        if (niftiFile == null)
+        {
+            return null;
+        }
+
+        float calMin = niftiFile.Header.cal_min;
+        float calMax = niftiFile.Header.cal_max;
         Debug.Log("CAL MIN: " + calMin);
         Debug.Log("CAL MAX: " + calMax);
-        Debug.Log("AUX FILE: " + ByteToString(niftiData.Header.aux_file));
+        Debug.Log("AUX FILE: " + ByteToString(niftiFile.Header.aux_file));
 
         int numVoxels = width * height * depth;
 
@@ -54,12 +73,12 @@ public class NiftiHandler : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    if ((byte)niftiData.Data[index] >= (byte)niiVoxelOmissionThreshold)
+                    if ((byte)niftiFile.Data[index] >= (byte)niiVoxelOmissionThreshold)
                     {                        
                         // Convert the number to a string to easily access each digit
                         // Different NII files represent colours in different ways. Decision here is to make everything in the range
                         // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
-                        int colorGreyScale = ((int)((float)(niftiData.Data[index] / calMax) * 254) % 254);                        
+                        int colorGreyScale = ((int)((float)(niftiFile.Data[index] / calMax) * 254) % 254);                        
                         voxelDictionary.Add(new Vector3Int(x, y, z), new Voxel(colorGreyScale, new Vector3Int(x, y, z)));
                         voxelsLoaded++;
                     }
@@ -73,7 +92,7 @@ public class NiftiHandler : MonoBehaviour
         return voxelDictionary;
     }
 
-    private static string ByteToString(byte[] source)
+    private string ByteToString(byte[] source)
     {
         try
         {

@@ -94,8 +94,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
 
             voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
             voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(Int32.Parse(parts[3].Replace("#", "")) , true, new Vector3Int(x, y, z));
-
-            // fff voxelDictionary.Add(new Vector3Int(x, y, z), new Voxel(colorGreyScale, new Vector3Int(x, y, z)));
         }
 
         WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
