@@ -42,7 +42,7 @@ public class CustomCursorHandler : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit))
-        {
+        {            
             // Check if the object hit has the specified tag
             if (hit.collider.CompareTag(targetTag))
             {
