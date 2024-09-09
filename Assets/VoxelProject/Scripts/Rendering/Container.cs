@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
-//using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -32,14 +31,12 @@ public class Container : MonoBehaviour
 
     private Coroutine distanceCheckCoroutine;
 
-    // Update loop interval to check the camera distance
-    private float checkInterval = 0.1f;
-    float distanceToCamera = 0f;
     float maxDistance = 200f;
     private int visibilityThreshold = 0;
     private bool sparseVoxels = false;
 
     Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
+    private int chunksOnDisplay = 0;
 
     int meshCounter = 0;
     int voxelsSelected = 0;
@@ -122,8 +119,6 @@ public class Container : MonoBehaviour
         }
         WorldManager.Instance.voxelsSelected = voxelsSelected;
     }
-
-    float grayScaleValue = 0f;
 
     private void AddVoxelIntoRenderMesh(Vector3Int voxelPosition, Voxel voxel)
     {
@@ -240,8 +235,6 @@ public class Container : MonoBehaviour
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
-
-    private int chunksOnDisplay = 0;
 
     private Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {

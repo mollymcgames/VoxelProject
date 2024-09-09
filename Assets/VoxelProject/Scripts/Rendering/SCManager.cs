@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class SCManager : MonoBehaviour
 {
-    private float updateInterval = 0.5f;
     private float timeSinceLastUpdate = 0f;
     public bool isZooming = false;
     public bool reRenderingMesh = false;

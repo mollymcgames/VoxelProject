@@ -161,13 +161,13 @@ public class MenuHandler : MonoBehaviour
         // Note, currently the getHeader method returns either a Nifti.NET.Nifti or string[] as appropriate.
         Debug.Log("Last file loaded: " + fileLastLoaded);
         Debug.Log("Settings datafile name: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
-        if (!fileLastLoaded.Equals(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName))
-        {
+        //if (!fileLastLoaded.Equals(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName))
+        //{
             fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
             Debug.Log("Loading file: " + fileLastLoaded);
             loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold);
             WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-        }
+        //}
 
         WorldManager.Instance.worldSettings.maxWidthX = loader.X;
         WorldManager.Instance.worldSettings.maxHeightY = loader.Y;

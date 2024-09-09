@@ -29,7 +29,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         // Load the text file
         string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
 
-        int index = 0;
         foreach (var segmentVoxelLine in segmentVoxels)
         {
             // Skip empty lines and comments
@@ -72,7 +71,6 @@ public abstract class ASourceDataLoader : ISourceDataLoader
         // Load the text file
         string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
 
-        int index = 0;
         foreach (var segmentVoxelLine in segmentVoxels)
         {
             if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#")) continue; // Skip empty lines and comments

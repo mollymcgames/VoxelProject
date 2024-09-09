@@ -14,17 +14,16 @@ public class SourceDataTextFileLoaderAsDictionary
     private int minY = 0;
     private int minZ = 0;
 
+    string[] voxelFileLines = null;
+
+    public int X = 0;
+    public int Y = 0;
+    public int Z = 0;
+
     public SourceDataTextFileLoaderAsDictionary(int chunkSize)
     {
         this.chunkSize = chunkSize;
     }
-
-    string[] voxelFileLines = null;
-
-    Voxel[] voxelData = null;
-    public int X = 0;
-    public int Y = 0;
-    public int Z = 0;
 
     public Dictionary<Vector3Int, Chunk> LoadSourceData(string filepath)
     {
@@ -55,8 +54,7 @@ public class SourceDataTextFileLoaderAsDictionary
         Debug.Log("DICTIONARY depth:" + Z);
 
         return ConstructChunks(voxelDataList);
-
-      }
+    }
   
     private Dictionary<Vector3Int, Chunk> ConstructChunks(Dictionary<Vector3Int, Voxel> sourceData)
     {
@@ -80,7 +78,6 @@ public class SourceDataTextFileLoaderAsDictionary
         }
         return chunks;
     }
-
 
     public string[] ReadVoxelTextFile(string voxelTextFilePath)
     {

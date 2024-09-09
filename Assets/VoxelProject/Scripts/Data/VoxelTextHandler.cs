@@ -21,7 +21,6 @@ public class VoxelTextHandler : MonoBehaviour
 
         Dictionary<Vector3Int, Voxel> voxelDataList = new Dictionary<Vector3Int, Voxel>(numVoxels, new FastVector3IntComparer());
 
-        int index = 0;
         foreach (var line in lines)
         {
             // Skip empty lines and comments

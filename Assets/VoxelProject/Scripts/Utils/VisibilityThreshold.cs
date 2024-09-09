@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class VisibilityThreshold : MonoBehaviour
 {
-    //Set up the maximum and minimum values the Slider can return (you can change these)
-    float max = 0;
-    float min = 254;
 
     public Slider visibilityThresholdSlider;
     public Toggle invertVisibility;

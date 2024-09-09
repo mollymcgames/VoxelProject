@@ -19,6 +19,8 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
 
     string brainText, liverText, heartText, spineText = null;
 
+    private bool processingUpdate = false;
+
     private void Start()
     {
         // Initially hide the panel
@@ -48,8 +50,6 @@ public class MeshMouseOverInfoPanel : MonoBehaviour
             hasMouseExited = true;
         }
     }
-
-    private bool processingUpdate = false;
 
     void Update()
     {
