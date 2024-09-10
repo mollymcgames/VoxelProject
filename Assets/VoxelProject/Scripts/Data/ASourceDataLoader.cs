@@ -5,10 +5,7 @@ using System.IO;
 
 public abstract class ASourceDataLoader : ISourceDataLoader
 {
-    public VoxelCell[,,] voxelData = null;
-    //public VoxelGrid voxelGrid = null;
-
-    public int chunkSize = 0;
+    public Dictionary<Vector3Int, Voxel> voxelDictionary = null;
 
     public int maxX = 0;
     public int maxY = 0;
@@ -17,30 +14,28 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     public int minY = 0;
     public int minZ = 0;
 
-    public int widthX = 0;
-    public int heightY = 0;
-    public int depthZ = 0;
+    public int X = 0;
+    public int Y = 0;
+    public int Z = 0;
 
-    public ASourceDataLoader(int chunkSize)
+    public int voxelOmissionThreshold = 0;
+
+    public abstract Dictionary<Vector3Int, Voxel> LoadSourceData(string filepath);
+
+    public Dictionary<Vector3Int, Voxel> LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
     {
-        this.chunkSize = chunkSize;
-    }
-
-    public abstract VoxelCell[,,] LoadSourceData(string filepath);
-
-    //public abstract VoxelGrid LoadSourceDataGrid(string filepath);
-
-    public VoxelCell[,,] LoadVoxelSegmentDefinitionFile(int segmentLayer, string voxelSegmentDefinitionFilePath)
-    {
-        VoxelCell nextSegmentVoxel;
+        Voxel nextSegmentVoxel;
 
         // Load the text file
         string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
 
-        int index = 0;
         foreach (var segmentVoxelLine in segmentVoxels)
         {
-            if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#")) continue; // Skip empty lines and comments
+            // Skip empty lines and comments
+            if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#"))
+            {
+                continue;
+            }
 
             var parts = segmentVoxelLine.Split(',');
             if (parts.Length != 4)
@@ -56,14 +51,11 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 continue;
             }
 
-            nextSegmentVoxel = voxelData[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
-            voxelData[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
-            // TODO nextSegmentVoxel.isHotVoxel = true;
-            // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
-            // TODO voxelData[x, y, z] = nextSegmentVoxel;
+            voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(Int32.Parse(parts[3].Replace("#", "")), true);// x, y, z, parts[3].Replace("#", ""), true);
         }
 
-        return voxelData;
+        return voxelDictionary;
     }
 
     public abstract object GetHeader();
@@ -72,14 +64,13 @@ public abstract class ASourceDataLoader : ISourceDataLoader
     // e.g.
     // 10,10,20,#FF0000
     // 10,20,20,#FF00FF
-    public VoxelCell[,,] LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
+    public Dictionary<Vector3Int, Voxel> LoadVoxelSegmentDefinitionFileExtra(string voxelSegmentDefinitionFilePath)
     {
-        VoxelCell nextSegmentVoxel;
+        Voxel nextSegmentVoxel;
 
         // Load the text file
         string[] segmentVoxels = File.ReadAllLines(voxelSegmentDefinitionFilePath);
 
-        int index = 0;
         foreach (var segmentVoxelLine in segmentVoxels)
         {
             if (string.IsNullOrWhiteSpace(segmentVoxelLine) || segmentVoxelLine.StartsWith("#")) continue; // Skip empty lines and comments
@@ -90,6 +81,7 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 Debug.LogError($"Invalid line format: {segmentVoxelLine}");
                 continue;
             }
+
             if (!int.TryParse(parts[0], out int x) ||
                 !int.TryParse(parts[1], out int y) ||
                 !int.TryParse(parts[2], out int z))
@@ -98,44 +90,51 @@ public abstract class ASourceDataLoader : ISourceDataLoader
                 continue;
             }
 
-            nextSegmentVoxel = voxelData[x, y, z]; // = new VoxelCell(z, y, x, parts[3]); // Assign the parsed color color as the voxel color
-            voxelData[x, y, z] = new VoxelCell(x, y, z, parts[3].Replace("#", ""), true);
-            // TODO nextSegmentVoxel.isHotVoxel = true;
-            // TODO nextSegmentVoxel.addHotVoxelColourRGB(Convert.ToInt32(parts[3].Replace("#", ""), 16));
-            // TODO voxelData[x, y, z] = nextSegmentVoxel;
+            voxelDictionary.TryGetValue(new Vector3Int(x, y, z), out nextSegmentVoxel);
+            voxelDictionary[new Vector3Int(x, y, z)] = new Voxel(Int32.Parse(parts[3].Replace("#", "")) , true, new Vector3Int(x, y, z));
         }
 
-        return voxelData;
+        WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
+
+        return voxelDictionary;
     }
 
-    /*public Dictionary<Vector3Int, VoxelChunk> ConstructChunks(List<Voxel> sourceData)
+    public Vector3Int CalculateCenter(int x, int y, int z)
     {
-        Debug.Log("Data now read in, data list size: " + sourceData.Count);
-        Debug.Log("Creating chunks of size [" + chunkSize + "] cubed.");
+        int centerX = (int)Math.Round(x / 2.0);
+        int centerY = (int)Math.Round(y / 2.0);
+        int centerZ = (int)Math.Round(z / 2.0);
 
-        Dictionary<Vector3Int, VoxelChunk> chunks = new Dictionary<Vector3Int, VoxelChunk>();
+        return new Vector3Int(centerX, centerY, centerZ);
+    }
+
+    public Dictionary<Vector3Int, Chunk> ConstructChunks(Dictionary<Vector3Int, Voxel> voxelDictionary)
+    {
+        Vector3Int chunkCoordinates;
+        Debug.Log("Data now read in, data list size: " + voxelDictionary.Count);
+        Debug.Log("Creating chunks of size [" + WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize + "] cubed.");
+
+        // Assuming the number of Chunks is going to be smaller than the straight voxels!
+        Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>(voxelDictionary.Count/4);
 
         int voxelsProcessed = 0;
-        foreach (Voxel nextVoxelElement in sourceData)
+        foreach (var nextVoxelElement in voxelDictionary)
         {
-            Vector3Int chunkCoordinates = VoxelChunk.GetChunkCoordinates(nextVoxelElement.worldPosition, chunkSize);
+            chunkCoordinates = Chunk.GetChunkCoordinates(nextVoxelElement.Key, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
 
             // Create new chunk if it doesn't exist
             if (!chunks.ContainsKey(chunkCoordinates))
             {
-                Debug.Log("Creating new Chunk at worldPosition: " + chunkCoordinates);
-                chunks[chunkCoordinates] = new VoxelChunk(chunkCoordinates);
+                chunks[chunkCoordinates] = new Chunk(chunkCoordinates, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
             }
 
             // Add voxel to the corresponding chunk
-            // MEMORY SAVER: If we know the coordinates, which we're using as a chunk index, why do we
-            // need to save the coordinates twice (i.e. in the voxel object)?
-            chunks[chunkCoordinates].AddVoxel(nextVoxelElement);
+            chunks[chunkCoordinates].AddVoxel(nextVoxelElement.Key, nextVoxelElement.Value);
             voxelsProcessed++;
         }
         Debug.Log("Voxels processed:" + voxelsProcessed);
         Debug.Log("Number of chunks created: " + chunks.Count);
         return chunks;
-    }*/
+    }
 
 }

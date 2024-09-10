@@ -1,0 +1,31 @@
+#pragma kernel CSMain
+
+StructuredBuffer<float3> voxelPositions;
+RWStructuredBuffer<int> visibilityResults;
+float4x4 viewProjectionMatrix;
+int numVoxels;
+
+[numthreads(256, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= numVoxels)
+        return;
+
+    float4 voxelPos = float4(voxelPositions[id.x], 1.0f);
+    float4 clipPos = mul(viewProjectionMatrix, voxelPos);
+
+    // Perform perspective division to get NDC
+    clipPos /= clipPos.w;
+
+    // Check if the voxel is inside the frustum
+    if (clipPos.x >= -1.0f && clipPos.x <= 1.0f &&
+        clipPos.y >= -1.0f && clipPos.y <= 1.0f &&
+        clipPos.z >= 0.0f && clipPos.z <= 1.0f)
+    {
+        visibilityResults[id.x] = 1;
+    }
+    else
+    {
+        visibilityResults[id.x] = 0;
+    }
+}

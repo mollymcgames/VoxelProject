@@ -1,7 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 public class SCManager : MonoBehaviour
 {
+    private float timeSinceLastUpdate = 0f;
+    public bool isZooming = false;
+    public bool reRenderingMesh = false;
+
     [HideInInspector]
     public Container container;
     
@@ -23,22 +28,38 @@ public class SCManager : MonoBehaviour
         GameObject cont = new GameObject("Container");
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
-        container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);
+        container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);        
 
         ComputeManager.Instance.GenerateVoxelData(ref container, 0);
     }
 
-    void Update(){
+    void Update() 
+    {
+        // Accumulate time since last update
+        timeSinceLastUpdate += Time.deltaTime;
+
         // key is 0 for now, will be changed to a more appropriate key later
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            Debug.Log("0 key pressed, generating voxel data.");
-            ComputeManager.Instance.GenerateVoxelData(ref container, 0);
-        } else if (Input.GetKeyDown(KeyCode.Alpha1))
+            Debug.Log("0 key pressed, regenerating voxel data.");
+            ComputeManager.Instance.RefreshVoxels(ref container, 0);
+            return;
+        } 
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("1 key pressed, generating voxel data.");
-            ComputeManager.Instance.GenerateVoxelData(ref container, 1);
+            Debug.Log("1 key pressed, regenerating voxel data.");
+            ComputeManager.Instance.RefreshVoxels(ref container, 1);
+            return;
         }
-        //ComputeManager.Instance.GenerateVoxelData(ref container, 0);
+
+        // Only auto update if toggle is on
+        if (WorldManager.Instance.worldSettings.autoRefresh && SCManager.Instance.reRenderingMesh == false)
+        {
+            // Call the custom update method
+            ComputeManager.Instance.GenerateVoxelData(ref container, 0);
+            
+            // Reset the timer
+            timeSinceLastUpdate = 0f;
+        }
     }
 }

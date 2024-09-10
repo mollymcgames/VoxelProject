@@ -14,8 +14,8 @@ RWStructuredBuffer<uint> count;
 float3 chunkPosition;
 float3 seedOffset;
 
-int containerSizeX;
-int containerSizeY;
+uint3 containerSizeX;
+uint3 containerSizeY;
 
 bool generateCaves;
 bool forceFloor;
@@ -32,13 +32,13 @@ int subSurfaceVoxelID;
 
 int flattenCoord(uint3 idx)
 {
-    return idx.x + (idx.y * (containerSizeX + 3)) + (idx.z * (containerSizeX + 3) * (containerSizeY + 1));
+    return idx.x + (idx.y * (containerSizeX + (uint3) 3)) + (idx.z * (containerSizeX + (uint3) 3) * (containerSizeY + (uint3) 1));
 }
 
 [numthreads(8, 8, 8)]
 void FillArray(uint3 id : SV_DispatchThreadID)
 {
-    if (any(id.xz > containerSizeX + 2))
+    if (any(id.xz > containerSizeX + (uint3)2))
         return;
 
     float3 pos = id + chunkPosition + seedOffset;
@@ -56,7 +56,7 @@ void FillArray(uint3 id : SV_DispatchThreadID)
         return;
     }
 
-    bool isSurfaceBlock = id.y >= roundHeight - 3;
+    bool isSurfaceBlock = id.y >= (uint3) roundHeight - (uint3) 3;
 
     vox.ID = isSurfaceBlock ? surfaceVoxelID : subSurfaceVoxelID;
 

@@ -1,0 +1,33 @@
+#pragma kernel CSMain
+
+// Structured buffer for voxel positions
+StructuredBuffer<float3> voxelPositions;
+
+// Output buffer for visibility results
+RWStructuredBuffer<int> cullingResults;
+
+float4 _PlaneLeft;
+float4 _PlaneRight;
+float4 _PlaneBottom;
+float4 _PlaneTop;
+float4 _PlaneNear;
+float4 _PlaneFar;
+
+[numthreads(64, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    int voxelIndex = id.x;
+    float3 voxelPosition = voxelPositions[voxelIndex];
+
+    bool inFrustum = true;
+
+    inFrustum &= dot(float4(voxelPosition, 1.0), _PlaneLeft) > 0;
+    inFrustum &= dot(float4(voxelPosition, 1.0), _PlaneRight) > 0;
+    inFrustum &= dot(float4(voxelPosition, 1.0), _PlaneBottom) > 0;
+    inFrustum &= dot(float4(voxelPosition, 1.0), _PlaneTop) > 0;
+    inFrustum &= dot(float4(voxelPosition, 1.0), _PlaneNear) > 0;
+    inFrustum &= dot(float4(voxelPosition, 1.0), _PlaneFar) > 0;
+
+    // Store 1 if visible, 0 otherwise
+    cullingResults[voxelIndex] = inFrustum ? 1 : 0;
+}

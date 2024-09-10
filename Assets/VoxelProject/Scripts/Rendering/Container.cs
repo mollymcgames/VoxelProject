@@ -1,12 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
+using System.Linq;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(MeshCollider))]
 public class Container : MonoBehaviour
 {
+    Dictionary<Vector3Int, Voxel> visibleVoxels = null;
+    Dictionary<Vector3Int, Voxel> worldVoxels = null;
+    Dictionary<Vector3Int, Chunk> worldChunks = null;
+
+    private static readonly Vector3Int[] directions = new Vector3Int[]
+    {
+        Vector3Int.forward, Vector3Int.back,
+        Vector3Int.left, Vector3Int.right,
+        Vector3Int.up, Vector3Int.down
+    };
+
+    public Camera mainCamera;
+
     public Vector3 containerPosition;
 
     public NoiseBuffer data;
@@ -16,12 +29,49 @@ public class Container : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
 
+    private Coroutine distanceCheckCoroutine;
+
+    float maxDistance = 200f;
+    private int visibilityThreshold = 0;
+    private bool sparseVoxels = false;
+
+    Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
+    private int chunksOnDisplay = 0;
+
+    int meshCounter = 0;
+    int voxelsSelected = 0;
+    private VoxelColor voxelColor;
+    private Color voxelColorAlpha;
+    private Vector2 voxelSmoothness;
+    private Vector3Int[] faceVertices = new Vector3Int[4];
+    private Vector2[] faceUVs = new Vector2[4];
+    private FrustumCulling frustrumCullingCalculator;
+
+    private Voxel outVoxel;
+    private bool grayScaleMode = true;
+
+    private float nearClippingDistance = WorldManager.Instance.worldSettings.nearClippingDistance;
+
     public void Initialize(Material mat, Vector3 position)
     {
+        worldVoxels = WorldManager.Instance.voxelDictionary;
+        worldChunks = WorldManager.Instance.voxelChunks;
+
+        // Aim the camera at the most central position in all the chunks.
+        mainCamera = Camera.main;
+        Camera.main.transform.position = WorldManager.Instance.worldSettings.intialCameraPosition;
+        Camera.main.transform.LookAt(WorldManager.Instance.worldSettings.intialCameraPosition);
+
         ConfigureComponents();
         data = ComputeManager.Instance.GetNoiseBuffer();
         meshRenderer.sharedMaterial = mat;
         containerPosition = position;
+
+        // Pre-calculate the Frustrum planes so that it isn't calculated each loop!
+        frustrumCullingCalculator = new FrustumCulling(mainCamera, 8);
+
+        // Create a color vector that represents a metallic gleam
+        voxelSmoothness = new Vector2(0.0f, 0.0f);
     }
 
     public void ClearData()
@@ -31,95 +81,127 @@ public class Container : MonoBehaviour
 
     public void RenderMesh()
     {
+        visibilityThreshold = WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold;
+        grayScaleMode = WorldManager.Instance.worldSettings.grayScaleMode;
+        sparseVoxels = WorldManager.Instance.worldSettings.sparseVoxels;
+        SCManager.Instance.reRenderingMesh = true;
         meshData.ClearData();
         GenerateMesh();
         UploadMesh();
+        SCManager.Instance.reRenderingMesh = false;     
+    }
+
+    public void ReRenderMesh()
+    {
+        RenderMesh();
+        Debug.Log("voxel generation done!");
     }
 
     public void GenerateMesh()
-    {
-        Vector3Int voxelBlockPosition;
-        Voxel block;
+    {        
+        voxelsSelected = 0;
+        meshCounter = 0;
+        faceVertices = new Vector3Int[4];
+        faceUVs = new Vector2[4];
 
-        int counter = 0;
-        Vector3Int[] faceVertices = new Vector3Int[4];
-        Vector2[] faceUVs = new Vector2[4];
+        Dictionary<Vector3Int, Voxel> visibleVoxels = GetVisibleVoxels(mainCamera);
 
-        VoxelColor voxelColor;
-        Color voxelColorAlpha;
-        Vector2 voxelSmoothness;
+        // Pre-allocate capacity to avoid resizing lists
+        meshData.vertices.Capacity = visibleVoxels.Count * 24; // 6 faces * 4 vertices per face
+        meshData.triangles.Capacity = visibleVoxels.Count * 36; // 6 faces * 6 indices per face
+        meshData.UVs.Capacity = visibleVoxels.Count * 24;
+        meshData.UVs2.Capacity = visibleVoxels.Count * 24;
+        meshData.colors.Capacity = visibleVoxels.Count * 24;
 
-        foreach (VoxelCell nextVoxel in WorldManager.Instance.sourceData)
+        foreach (var nextVoxel in visibleVoxels.Values.ToList<Voxel>())
         {
-            voxelBlockPosition = new Vector3Int(nextVoxel.x, nextVoxel.y, nextVoxel.z);
-            if (nextVoxel.x < 0 || nextVoxel.y < 0 || nextVoxel.z < 0)
+            AddVoxelIntoRenderMesh(nextVoxel.position, nextVoxel);
+        }
+        WorldManager.Instance.voxelsSelected = voxelsSelected;
+    }
+
+    private void AddVoxelIntoRenderMesh(Vector3Int voxelPosition, Voxel voxel)
+    {
+        if (voxelPosition.x < 0 || voxelPosition.y < 0 || voxelPosition.z < 0)
+        {
+            return;
+        }
+
+        // Skip this voxel if it's below the visibility threshold
+        if (voxel.colorGrayScale <= visibilityThreshold)
+        {
+            return;
+        }
+
+        if (checkVoxelIsSolid(voxel, visibleVoxels) == false)
+        {
+            return;
+        }
+
+        if (grayScaleMode)
+        {
+            voxelColorAlpha = voxel.colorInGrayScale();
+        }
+        else
+        {
+            voxelColorAlpha = voxel.color();
+        }
+        voxelColorAlpha.a = 1;
+
+        if (voxel.isSegmentVoxel)
+        {
+            CreateClickableVoxel(voxelPosition);
+        }
+
+        // Iterate over each face direction
+        for (int i = 0; i < 6; i++)
+        {
+            // Collect the appropriate vertices from the default vertices and add the block Position
+            for (int j = 0; j < 4; j++)
             {
-                continue;
+                faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelPosition;
+                faceUVs[j] = voxelUVs[j];
             }
 
-            // Skip this voxel if it's below the visibility threshold
-            if (int.Parse(nextVoxel.color) <= WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold)
-                continue;
-
-            // original
-            /*            block = this[voxelBlockPosition];
-                        //Only check on solid blocks
-                        if (!block.isSolid)
-                        {
-                            Debug.Log("Non solid block encountered (Loop-"+breaker+")! [" + nextVoxel.x + "," + nextVoxel.z + "," + nextVoxel.z + "]");
-                            continue;
-                        }*/
-
-            float grayScaleValue = float.Parse(nextVoxel.color)/255f;
-            voxelColor = new VoxelColor(grayScaleValue,grayScaleValue,grayScaleValue);
-            voxelColorAlpha = voxelColor.color;
-            voxelColorAlpha.a = 1;
-            voxelSmoothness = new Vector2(voxelColor.metallic, voxelColor.smoothness);
-
-
-            if (nextVoxel.isSegmentVoxel)
-            {             
-                CreateClickableVoxel(new Vector3Int(nextVoxel.x,nextVoxel.y,nextVoxel.z));
-            }
-
-            //Iterate over each face direction
-            for (int i = 0; i < 6; i++)
+            // Batch adding vertices, UVs, and triangles
+            for (int j = 0; j < 6; j++)
             {
-                //Check if there's a solid block against this face
-                //if (checkVoxelIsSolid(voxelBlockPosition + voxelFaceChecks[i]))
-                // if (checkVoxelIsSolid(voxelBlockPosition))                
-                //     continue;
-                //if ( float.Parse(nextVoxel.color) < 18)
-                //    continue;
-
-                //Draw this face
-
-                //Collect the appropriate vertices from the default vertices and add the block position
-                for (int j = 0; j < 4; j++)
-                {
-                    faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelBlockPosition;
-                    faceUVs[j] = voxelUVs[j];
-                }
-
-                for (int j = 0; j < 6; j++)
-                {
-                    meshData.vertices.Add(faceVertices[voxelTris[i, j]]);
-                    meshData.UVs.Add(faceUVs[voxelTris[i, j]]);
-                    meshData.colors.Add(voxelColorAlpha);
-                    meshData.UVs2.Add(voxelSmoothness);
-
-                    meshData.triangles.Add(counter++);
-
-                }
+                int vertexIndex = voxelTris[i, j];
+                meshData.vertices.Add(faceVertices[vertexIndex]);
+                meshData.UVs.Add(faceUVs[vertexIndex]);
+                meshData.colors.Add(voxelColorAlpha);
+                meshData.UVs2.Add(voxelSmoothness);
+                meshData.triangles.Add(meshCounter++);
             }
         }
+        voxelsSelected++;
+    }
+
+    float AdjustGrayscale(float originalGrayscale, float distance)
+    {
+        // Clamp the distance to the range [0, maxDistance]
+        distance = Mathf.Clamp(distance, 0, maxDistance);
+
+        // Normalize the distance to the range [0, 1]
+        float normalizedDistance = distance / maxDistance;
+
+        // Target grayscale value at minimum distance (e.g., closer to white)
+        float targetGrayscaleValue = 254f;
+
+        // Blend the original grayscale value with the target grayscale value based on the normalized distance
+        float adjustedGrayscale = Mathf.Lerp(originalGrayscale, targetGrayscaleValue, 1 - normalizedDistance);
+
+        return adjustedGrayscale;
     }
 
     void CreateClickableVoxel(Vector3Int clickableVoxelPosition)
     {
+        string voxelTag = "SegmentOne";
+
         // Create a new GameObject for the clickable voxel
         GameObject voxel = new GameObject("Voxel");
         voxel.transform.position = clickableVoxelPosition;
+        voxel.tag = voxelTag;
 
         // Add a BoxCollider to the voxel
         BoxCollider boxCollider = voxel.AddComponent<BoxCollider>();
@@ -127,6 +209,10 @@ public class Container : MonoBehaviour
 
         VoxelClickHandler clickHandler = voxel.AddComponent<VoxelClickHandler>();
         clickHandler.sceneToLoad = "Zooming";
+
+        // Set the cursor handler so that we get a nice cursor when mouseover/out.
+        CustomCursorHandler cch = voxel.AddComponent<CustomCursorHandler>();
+        cch.targetTag = voxelTag;
 
         // Set the voxel GameObject as a child of the original mesh GameObject for organization
         voxel.transform.parent = this.transform;
@@ -137,44 +223,91 @@ public class Container : MonoBehaviour
         meshData.UploadMesh();
 
         if (meshRenderer == null)
+        {
             ConfigureComponents();
+        }
 
         meshFilter.mesh = meshData.mesh;
-        if (meshData.vertices.Count > 3)
-            meshCollider.sharedMesh = meshData.mesh;
     }
 
     private void ConfigureComponents()
     {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
-        meshCollider = GetComponent<MeshCollider>();
-        meshCollider.convex = false;
     }
-    public bool checkVoxelIsSolid(Vector3 point)
+
+    private Dictionary<Vector3Int, Voxel> GetVisibleVoxels(Camera camera)
     {
-        if (point.y + 2 < 0 || (point.x > WorldManager.WorldSettings.maxWidthX + 2) || (point.z > WorldManager.WorldSettings.maxDepthZ + 2))
+        chunksOnDisplay = 0;
+
+        // This will hold the voxels that are ultimately doing to be visible.
+        visibleVoxels = new Dictionary<Vector3Int, Voxel>(worldVoxels.Count, new FastVector3IntComparer());
+
+        foreach (var chunk in worldChunks.Values.ToList<Chunk>())
+        {
+            if (frustrumCullingCalculator.IsChunkInView(ref chunk.bounds)) //camera, chunkPosition, chunkDimensions))
+            {
+                // Only check individual voxels within the chunk if the chunk is visible
+                //TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
+                TraverseVisibleChunk(ref camera, chunk.chunkPosition, ref visibleVoxels);
+                chunksOnDisplay++;
+            }
+        }
+
+        // Traverse(camera, visibleVoxels);
+
+        frustrumCullingCalculator.DropFrustrumPlanes();
+
+        WorldManager.Instance.chunksOnDisplay = chunksOnDisplay;
+        
+        return visibleVoxels;
+    }
+
+    private void TraverseVisibleChunk(ref Camera camera, Vector3Int chunkPosition, ref Dictionary<Vector3Int, Voxel> visibleVoxels)
+    {       
+        Chunk chunkValue = null;
+        if (worldChunks.TryGetValue(chunkPosition, out chunkValue) == false)
+            return;
+        
+        foreach (var nextVoxelInChunk in chunkValue.voxels.Values.ToList<Voxel>())
+        {
+            if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.position, nearClippingDistance))
+            {
+                visibleVoxels[nextVoxelInChunk.position] = nextVoxelInChunk;
+            }
+        }
+
+    }
+
+    private void Traverse(Camera camera, Dictionary<Vector3Int, Voxel> visibleVoxels)
+    {
+        foreach (var nextVoxel in worldVoxels)
+        {
+            if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxel.Key, nearClippingDistance))
+            {
+                visibleVoxels[nextVoxel.Key] = nextVoxel.Value;
+            }
+        }
+    }
+
+    private bool checkVoxelIsSolid(Voxel voxelPosition, Dictionary<Vector3Int, Voxel> visibleVoxels)
+    {
+        if (sparseVoxels == true)
+        {
             return true;
-        else
-            // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
-            return true; // Temp!!! this[point].isSolid;
-    }
-
-    // We can make use of an array of Vector locations, used as an index - need to update the NoiseBuffer class.
-    public Voxel this[int index]
-    {
-        get
-        {
-            return data[index];
         }
 
-        set
+        for (int i = 0; i < directions.Length; i++)
         {
-            data[index] = value;
+            // Check if the neighboring voxel is missing (or not visible)
+            if (!visibleVoxels.TryGetValue(voxelPosition.position + directions[i], out var outVoxel))
+            {
+                // If any neighbor is missing, the voxel is visible
+                return true;
+            }
         }
+        return false;
     }
-
-    #region Mesh Data
 
     public struct MeshData
     {
@@ -190,11 +323,11 @@ public class Container : MonoBehaviour
         {
             if (!Initialized)
             {
-                vertices = new List<Vector3>();
-                triangles = new List<int>();
-                UVs = new List<Vector2>();
-                UVs2 = new List<Vector2>();
-                colors = new List<Color>();
+                vertices = new List<Vector3>(WorldManager.Instance.voxelDictionary.Count);
+                triangles = new List<int>(WorldManager.Instance.voxelDictionary.Count);
+                UVs = new List<Vector2>(WorldManager.Instance.voxelDictionary.Count);
+                UVs2 = new List<Vector2>(WorldManager.Instance.voxelDictionary.Count);
+                colors = new List<Color>(WorldManager.Instance.voxelDictionary.Count);
 
                 Initialized = true;
                 mesh = new Mesh();
@@ -212,27 +345,34 @@ public class Container : MonoBehaviour
         }
         public void UploadMesh(bool sharedVertices = false)
         {
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            try
+            {
+                mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
-            mesh.SetVertices(vertices);
-            mesh.SetTriangles(triangles, 0, false);
-            mesh.SetColors(colors);
+                mesh.SetVertices(vertices);
+                mesh.SetTriangles(triangles, 0, false);
+                mesh.SetColors(colors);
 
-            mesh.SetUVs(0, UVs);
-            mesh.SetUVs(2, UVs2);
+                mesh.SetUVs(0, UVs);
+                mesh.SetUVs(2, UVs2);
 
-            mesh.Optimize();
+                mesh.Optimize();
 
-            mesh.RecalculateNormals();
+                mesh.RecalculateNormals();
 
-            mesh.RecalculateBounds();
+                mesh.RecalculateBounds();
 
-            mesh.UploadMeshData(false);
+                mesh.UploadMeshData(false);
+            } 
+            catch (Exception e)
+            {
+                Debug.LogError(e.ToString());
+                Debug.Log("Error: colors="+colors.Count);
+                Debug.Log("Error: vertices=" + vertices.Count);
+            }
         }
     }
-    #endregion
 
-    #region Static Variables
     static readonly Vector3Int[] voxelVertices = new Vector3Int[8]
     {
             new Vector3Int(0,0,0),//0
@@ -283,6 +423,5 @@ public class Container : MonoBehaviour
             {0,1,2,1,3,2},
             {0,2,3,0,3,1},
     };
-    #endregion
 }
 

@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class LiverLoader : MonoBehaviour
 {
+    public CustomCursorHandler cch;
+
     void OnMouseDown() {
-        WorldManager.Instance.menuHandler.LoadLiverData();
+        cch.RestoreDefaultCursor();
+        WorldManager.Instance.menuHandler.LoadLiverFile();
         WorldManager.Instance.menuHandler.LoadNextScene();
     }
 }

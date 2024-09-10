@@ -11,6 +11,7 @@ public class CustomCursorHandler : MonoBehaviour
     {
         // Store the default cursor texture (if you need to revert to it)
         defaultCursor = CursorTexture();
+        customCursor = Resources.Load<Texture2D>("cursor-pointer");
     }
 
     void Update()
@@ -21,10 +22,17 @@ public class CustomCursorHandler : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (gameObject.CompareTag(targetTag))
-        {
-            Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
-        }
+        RestoreDefaultCursor();
+    }
+
+    public void RestoreDefaultCursor()
+    {
+        Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+    }
+
+    void OnMouseOver()
+    {
+        CheckForHover();
     }
 
     void CheckForHover()
@@ -34,23 +42,13 @@ public class CustomCursorHandler : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit))
-        {
+        {            
             // Check if the object hit has the specified tag
             if (hit.collider.CompareTag(targetTag))
             {
                 // Change the cursor to the custom cursor
                 Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.Auto);
             }
-            else
-            {
-                // Revert to the default cursor
-                Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
-            }
-        }
-        else
-        {
-            // Revert to the default cursor if nothing is hit
-            Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
         }
     }
 

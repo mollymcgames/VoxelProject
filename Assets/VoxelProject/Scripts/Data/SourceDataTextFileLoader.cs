@@ -1,86 +1,63 @@
 using Nifti.NET;
-using System.Collections;
-using Unity.VisualScripting;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
-using UnityEngine.Analytics;
 
-public class SourceDataTextFileLoader : MonoBehaviour
+public class SourceDataTextFileLoader : ASourceDataLoader
 {
-    public void Awake()
+    public SourceDataTextFileLoader(int voxelOmissionThreshold)
     {
-        DontDestroyOnLoad(this);
+        this.voxelOmissionThreshold = voxelOmissionThreshold;
     }
 
     private static SourceDataTextFileLoader _instance;
 
-    void Start()
+    private string[] voxelFileLines = null;
+
+    Dictionary<Vector3Int, Voxel> voxelData = null;
+
+    public override Dictionary<Vector3Int, Voxel> LoadSourceData(string filepath)
     {
-        if (_instance != null)
-        {
-            if (_instance != this)
-                Destroy(this);
-        }
-        else
-        {
-            _instance = this;
-        }
+        Debug.Log("Loading TEXTFILE source data...");
+        voxelDictionary = LoadVoxelFile(filepath);
+        Debug.Log("The data has this many voxels: "+voxelDictionary.Count);
+
+        WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
+        Debug.Log("The data has this many chunks: " + WorldManager.Instance.voxelChunks.Count);
+
+        return voxelDictionary;
     }
 
-    public static SourceDataTextFileLoader Instance
+    public override object GetHeader()
     {
-        get
-        {
-            if (_instance == null)
-                _instance = FindFirstObjectByType<SourceDataTextFileLoader>();
-            return _instance;
-        }
+        Nifti.NET.Nifti returnNiftiObject = new Nifti.NET.Nifti();
+        returnNiftiObject.Dimensions = new int[3];        
+        returnNiftiObject.Dimensions[0] = X;
+        returnNiftiObject.Dimensions[1] = Y;
+        returnNiftiObject.Dimensions[2] = Z;
+
+        return returnNiftiObject;
     }
 
-    static string[] voxelFileLines = null;
-
-    static VoxelCell[] voxelData = null;
-    public static int widthX = 0;
-    public static int heightY = 0;
-    public static int depthZ = 0;
-
-    public static VoxelCell[] LoadSourceData()
-    {
-        Debug.Log("Loading source data...");
-        //use streaming assets for the file path
-        return LoadVoxelFile("Assets/Resources/blue.txt");
-    }
-
-    public static VoxelCell[] LoadSourceData(string filepath)
-    {
-        Debug.Log("Loading source data...");
-        return LoadVoxelFile(filepath);
-    }    
-
-
-    public static string[] GetHeader()
-    {
-        return voxelFileLines;
-    }
-    
-
-    public static VoxelCell[] LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
+    public Dictionary<Vector3Int, Voxel> LoadVoxelFile(string voxelFilePath = "Assets/Resources/z.txt")
     {
         // Load default file
         voxelFileLines = VoxelTextHandler.ReadVoxelTextFile(voxelFilePath);
 
         // Get the dimensions
-        widthX = 255;//voxelFileLines.Dimensions[0];
-        heightY = 255;//voxelFileLines.Dimensions[1];
-        depthZ = 255;//voxelFileLines.Dimensions[2];
+        X = 255;
+        Y = 255;
+        Z = 255;
 
 
-        Debug.Log("NII width:" + widthX);
-        Debug.Log("NII height:" + heightY);
-        Debug.Log("NII depth:" + depthZ);
+        Debug.Log("TEXTFILE width:" + X);
+        Debug.Log("TEXTFILE height:" + Y);
+        Debug.Log("TEXTFILE depth:" + Z);
 
         // Read the voxel data
-        voxelData = VoxelTextHandler.ReadVoxelData(voxelFileLines, widthX, heightY, depthZ);
-        Debug.Log("Data now read in");
+        voxelData = VoxelTextHandler.ReadVoxelData(voxelFileLines, X, Y, Z);
+        Debug.Log("TEXTFILE Data now read in");
 
         return voxelData;
     }

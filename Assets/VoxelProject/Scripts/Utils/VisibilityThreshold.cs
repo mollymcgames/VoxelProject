@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class VisibilityThreshold : MonoBehaviour
 {
-    //Set up the maximum and minimum values the Slider can return (you can change these)
-    float max = 0;
-    float min = 254;
 
     public Slider visibilityThresholdSlider;
+    public Toggle invertVisibility;
+    public Toggle enableAutoRefresh;
+    public Toggle grayScaleMode;
+    public Toggle sparseVoxels;
     private float lastSliderValue;
     public TMP_Text visibilityThresholdValue;
     private bool sliderChanged;
@@ -22,9 +23,55 @@ public class VisibilityThreshold : MonoBehaviour
             visibilityThresholdSlider.onValueChanged.AddListener(OnSliderValueChanged);
             lastSliderValue = visibilityThresholdSlider.value;
         }
+
+        if (invertVisibility != null)
+        {
+            invertVisibility.onValueChanged.AddListener(OnToggleChangedVisibility);
+        }
+
+        if (enableAutoRefresh != null)
+        {
+            enableAutoRefresh.onValueChanged.AddListener(OnToggleChangedRefresh);
+        }
+
+        if (grayScaleMode != null)
+        {
+            grayScaleMode.onValueChanged.AddListener(OnToggleGrayScaleMode);
+        }
+
+        if (sparseVoxels != null)
+        {
+            sparseVoxels.isOn = WorldManager.Instance.worldSettings.sparseVoxels;
+            sparseVoxels.onValueChanged.AddListener(OnToggleSparseVoxels);
+        }
+    }
+
+    void OnToggleChangedVisibility(bool change)
+    {
+        callCoRoutine();
+    }
+
+    void OnToggleChangedRefresh(bool change)
+    {
+        WorldManager.Instance.worldSettings.autoRefresh = !WorldManager.Instance.worldSettings.autoRefresh;
+    }
+
+    void OnToggleGrayScaleMode(bool change)
+    {
+        WorldManager.Instance.worldSettings.grayScaleMode = !WorldManager.Instance.worldSettings.grayScaleMode;
+    }
+
+    void OnToggleSparseVoxels(bool change)
+    {
+        WorldManager.Instance.worldSettings.sparseVoxels = !WorldManager.Instance.worldSettings.sparseVoxels;
     }
 
     void OnSliderValueChanged(float value)
+    {
+        callCoRoutine();
+    }
+
+    private void callCoRoutine()
     {
         sliderChanged = true;
 
@@ -56,8 +103,16 @@ public class VisibilityThreshold : MonoBehaviour
     {
         visibilityThresholdValue.text = visibilityThresholdSlider.value.ToString();
 
-        //Update the camera's field of view to be the variable returning from the Slider
-        WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = (int)lastSliderValue; // (int)m_visibilityThreshold;
+        if (invertVisibility.isOn)
+        {
+            //Update the camera's field of view to be the variable returning from the Slider        
+            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = 254 - (int)lastSliderValue;
+        }
+        else
+        {
+            //Update the camera's field of view to be the variable returning from the Slider        
+            WorldManager.Instance.voxelMeshConfigurationSettings.visibilityThreshold = (int)lastSliderValue;
+        }
     }
 
 }

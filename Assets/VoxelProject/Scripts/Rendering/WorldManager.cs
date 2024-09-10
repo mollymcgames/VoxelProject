@@ -1,32 +1,33 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
 {
     // Vector3Int's are used as they use up less memory than floats and also
-
     [Header("Voxel Mesh Settings")]
     [SerializeField]
     public VoxelMeshConfigurationSettings voxelMeshConfigurationSettings;
 
     public Material worldMaterial;
     public VoxelColor[] WorldColors;
-    public WorldSettings worldSettings;    
-    public VoxelCell[,,] sourceData;
-    public int voxelsSelected = 0;
+    public WorldSettings worldSettings;
 
-    //[HideInInspector]
-    // CULLING public VoxelGrid voxelGrid = null;
+    // The Vector3Int based dictionary to store Voxels by vector location
+    public Dictionary<Vector3Int,Voxel> voxelDictionary;
+
+    // The Vector3Int based dictionary to store chunks by vector location
+    public Dictionary<Vector3Int, Chunk> voxelChunks;
+
+    public int voxelsSelected = 0;
+    public int chunksOnDisplay = 0;
 
     public MenuHandler menuHandler;
 
+    public static WorldSettings WorldSettings;
+    private static WorldManager _instance;
+
     void Start()
     {
-/*        if (animator == null)
-            animator = GameObject.Find("Transition").GetComponent<Animator>();*/
-
         if (_instance != null)
         {
             if (_instance != this)
@@ -38,11 +39,8 @@ public class WorldManager : MonoBehaviour
             DontDestroyOnLoad(this);
         }
 
-        WorldSettings = worldSettings;        
+        WorldSettings = worldSettings;
     }
-
-    public static WorldSettings WorldSettings;
-    private static WorldManager _instance;
 
     public static WorldManager Instance
     {
@@ -53,25 +51,6 @@ public class WorldManager : MonoBehaviour
             return _instance;
         }
     }
-
-/*    public Chunk GetChunkAt(Vector3 globalPosition)
-    {
-        // Calculate the chunk's starting worldPosition based on the global worldPosition
-        Vector3Int chunkCoordinates = new Vector3Int(
-            Mathf.FloorToInt(globalPosition.x / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
-            Mathf.FloorToInt(globalPosition.y / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize,
-            Mathf.FloorToInt(globalPosition.z / WorldManager.Instance.worldSettings.chunkSize) * WorldManager.Instance.worldSettings.chunkSize
-        );
-
-        // Retrieve and return the chunk at the calculated worldPosition
-        if (chunks.TryGetValue(chunkCoordinates, out Chunk chunk))
-        {
-            return chunk;
-        }
-
-        // Return null if no chunk exists at the worldPosition
-        return null;
-    }*/
 }
 
 
@@ -83,5 +62,9 @@ public class WorldSettings
     public int maxWidthX = 0;
     public int maxDepthZ = 0;
     public int maxHeightY = 0;
-    public int chunkSize = 32;
+    public float nearClippingDistance = 85f;
+    public bool autoRefresh = false;
+    public bool grayScaleMode = true;
+    public bool sparseVoxels = false;
+    public Vector3Int intialCameraPosition = Vector3Int.zero;
 }

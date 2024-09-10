@@ -337,8 +337,9 @@ GameObject:
   - component: {fileID: 1517145013}
   - component: {fileID: 1517145012}
   - component: {fileID: 1517145015}
-  - component: {fileID: 1517145016}
   - component: {fileID: 1517145018}
+  - component: {fileID: 1517145019}
+  - component: {fileID: 1517145020}
   m_Layer: 0
   m_Name: OuterWorldManager
   m_TagString: Untagged
@@ -371,33 +372,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e65ef4e51bde8429033f2ff79c2aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldMaterial: {fileID: 2100000, guid: d41578d92bc26b04bb2355aed476d2cb, type: 2}
-  WorldColors:
-  - color: {r: 0, g: 0.4716981, b: 0.016664108, a: 0}
-    metallic: 0.2
-    smoothness: 0.8
-  - color: {r: 0.5471698, g: 0.29994953, b: 0, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 0.18257429, g: 0.46226418, b: 0.05015131, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 0, g: 0, b: 0, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 0.990566, g: 0.06074228, b: 0.11166651, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
-  - color: {r: 1, g: 1, b: 1, a: 0}
-    metallic: 0.6
-    smoothness: 0.2
+  worldMaterial: {fileID: 0}
+  WorldColors: []
   worldSettings:
-    containerSize: 128
+    containerSize: 16
     maxHeight: 128
     maxWidthX: 0
     maxDepthZ: 0
     maxHeightY: 0
-    chunkSize: 32
+    nearClippingDistance: 85
+    autoRefresh: 0
   container: {fileID: 0}
 --- !u!4 &1517145014
 Transform:
@@ -453,19 +437,6 @@ MonoBehaviour:
   chunkInnerSize: 2
   chunkFieldOfViewMultiplierInner: 5
   chunkFieldOfViewMultiplierOuter: 3
---- !u!114 &1517145016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517145011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42f48e3324e6b9344a172c7309701fd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  noiseShader: {fileID: 7200000, guid: 2f02a6167301c774d83b7600a477ddac, type: 3}
 --- !u!65 &1517145018
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -487,6 +458,57 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1517145019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517145011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42f48e3324e6b9344a172c7309701fd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noiseShader: {fileID: 7200000, guid: 2f02a6167301c774d83b7600a477ddac, type: 3}
+--- !u!114 &1517145020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517145011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb72617ab6612345b1d94885ceb5014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voxelMeshConfigurationSettings:
+    voxelDataFileName: 
+    voxelDataSegmentFileName: 
+    voxelSegmentLayers: []
+    voxelChunkSize: 16
+    voxelChunkFieldOfViewMultiplier: 1
+    standardVoxelSize: {x: 1, y: 1, z: 1}
+    voxelMeshCenter: {x: 0, y: 0, z: 0}
+    voxelMeshContainerTagName: Untagged
+    domainOffsetX: 0
+    domainOffsetY: 0
+    domainOffsetZ: 0
+    sceneTargetName: 
+    visibilityThreshold: 1
+  worldMaterial: {fileID: 0}
+  WorldColors: []
+  worldSettings:
+    containerSize: 16
+    maxHeight: 128
+    maxWidthX: 0
+    maxDepthZ: 0
+    maxHeightY: 0
+    nearClippingDistance: 85
+    autoRefresh: 0
+  voxelsSelected: 0
+  menuHandler: {fileID: 0}
 --- !u!1 &1520396887
 GameObject:
   m_ObjectHideFlags: 0
