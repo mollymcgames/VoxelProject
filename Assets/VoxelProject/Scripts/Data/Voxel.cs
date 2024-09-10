@@ -5,9 +5,7 @@ using static UnityEngine.Rendering.DebugUI;
 using Unity.VisualScripting;
 using UnityEngine;
 
-/**
-* A VoxelCell represents information about a particular type of cell.
-*/
+//Class to represent a single voxel
 public class Voxel
 {
     public readonly int colorGrayScale;

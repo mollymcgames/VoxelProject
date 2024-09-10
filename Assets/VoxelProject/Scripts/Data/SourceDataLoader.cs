@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Loads the source data from a Nifti file
 public class SourceDataLoader : ASourceDataLoader
 {
     private Nifti.NET.Nifti niftiFile = null;
-    private Nifti.NET.Nifti niftiSegmentFile = null;
     private NiftiHandler niftiHandler = null;
     private string niftiFilePath = null;
 
@@ -46,20 +46,6 @@ public class SourceDataLoader : ASourceDataLoader
         Debug.Log("NII width:" + X);
         Debug.Log("NII height:" + Y);
         Debug.Log("NII depth:" + Z);
-    }
-
-    private void LoadNiftiSegmentFile(string filePath)
-    {
-        // Load default file
-        niftiSegmentFile = ReadNiftiFile(filePath);
-
-        // Get the dimensions
-        X = niftiSegmentFile.Dimensions[0];
-        Y = niftiSegmentFile.Dimensions[1];
-        Z = niftiSegmentFile.Dimensions[2];
-
-        // Rebuild chunks
-        WorldManager.Instance.voxelChunks = ConstructChunks(voxelDictionary);
     }
 
     private void CreateVoxelsArray()

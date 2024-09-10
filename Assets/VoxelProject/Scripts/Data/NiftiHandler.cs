@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using Nifti.NET;
 using UnityEngine;
 
+// This is an important class to handle the Nifti file. It is used to read the Nifti file and convert it into a dictionary of voxels.
 public class NiftiHandler
 {
-    private Nifti.NET.Nifti niftiFile = null;
+    private Nifti.NET.Nifti niftiFile = null; //Stores the Nifti file
 
+    // Reads the Nifti file 
     public Nifti.NET.Nifti ReadNiftiFileOnly(string niftiFilePath)
     {
+        //Check if the file path is valid and the file is not already loaded
         if (niftiFilePath != null && niftiFile == null)
         {
             // Load the NIfTI file
@@ -22,12 +25,14 @@ public class NiftiHandler
         {
             ReadNiftiFileOnly(niftiFilePath);
         }
-
+        //calculate the calibrated min and max values of the data
         float calMin = niftiFile.Header.cal_min;
         float calMax = niftiFile.Header.cal_max;
         if (calMax <= 0)
         {
             int index = 0;
+            //Reason why loading is slower is due to going through the entire file to find the min and max cal values,
+            // to calculate the greyscale value of each voxel.
             foreach (var item in niftiFile.Data)
             {
                 if (niftiFile.Data[index] < calMin)
@@ -39,7 +44,8 @@ public class NiftiHandler
                 index++;
             }
         }
-        niftiFile.Header.cal_min = calMin;
+        //overwrite the cal min and max values from worked out values
+        niftiFile.Header.cal_min = calMin; 
         niftiFile.Header.cal_max = calMax;
         Debug.Log("CAL MIN onload: " + niftiFile.Header.cal_min);
         Debug.Log("CAL MAX onload: " + niftiFile.Header.cal_max);
@@ -75,12 +81,10 @@ public class NiftiHandler
                 {
                     if ((byte)niftiFile.Data[index] >= (byte)niiVoxelOmissionThreshold)
                     {                        
-                        // Convert the number to a string to easily access each digit
-                        // Different NII files represent colours in different ways. Decision here is to make everything in the range
-                        // 0 to 254, this way greyscale will be the default but it can be turned into RGB if needed.
-                        int colorGreyScale = ((int)((float)(niftiFile.Data[index] / calMax) * 254) % 254);                        
+                        // Scale the voxel intensity to a 0-254 range (greyscale) and store it in the voxel
+                        int colorGreyScale = (int)(niftiFile.Data[index] / calMax * 254) % 254;                        
                         voxelDictionary.Add(new Vector3Int(x, y, z), new Voxel(colorGreyScale, new Vector3Int(x, y, z)));
-                        voxelsLoaded++;
+                        voxelsLoaded++; // Increment the number of voxels loaded to keep track of the voxels loaded
                     }
                     index++;
                 }
@@ -92,6 +96,7 @@ public class NiftiHandler
         return voxelDictionary;
     }
 
+    //Convert byte array to string to show the file name
     private string ByteToString(byte[] source)
     {
         try

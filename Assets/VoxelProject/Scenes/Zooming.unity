@@ -334,7 +334,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1517145014}
-  - component: {fileID: 1517145013}
   - component: {fileID: 1517145012}
   - component: {fileID: 1517145015}
   - component: {fileID: 1517145018}
@@ -360,29 +359,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noiseShader: {fileID: 7200000, guid: 2f02a6167301c774d83b7600a477ddac, type: 3}
---- !u!114 &1517145013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517145011}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e65ef4e51bde8429033f2ff79c2aa4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldMaterial: {fileID: 0}
-  WorldColors: []
-  worldSettings:
-    containerSize: 16
-    maxHeight: 128
-    maxWidthX: 0
-    maxDepthZ: 0
-    maxHeightY: 0
-    nearClippingDistance: 85
-    autoRefresh: 0
-  container: {fileID: 0}
 --- !u!4 &1517145014
 Transform:
   m_ObjectHideFlags: 0
@@ -507,7 +483,11 @@ MonoBehaviour:
     maxHeightY: 0
     nearClippingDistance: 85
     autoRefresh: 0
+    grayScaleMode: 1
+    sparseVoxels: 0
+    intialCameraPosition: {x: 0, y: 0, z: 0}
   voxelsSelected: 0
+  chunksOnDisplay: 0
   menuHandler: {fileID: 0}
 --- !u!1 &1520396887
 GameObject:

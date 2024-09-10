@@ -1272,7 +1272,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1171129835}
-  - component: {fileID: 1171129834}
   - component: {fileID: 1171129837}
   - component: {fileID: 1171129838}
   m_Layer: 0
@@ -1282,32 +1281,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1171129834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171129833}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e65ef4e51bde8429033f2ff79c2aa4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldMaterial: {fileID: 2100000, guid: e8294481300e5844abcc6eaf40cda598, type: 2}
-  WorldColors: []
-  worldSettings:
-    containerSize: 16
-    maxHeight: 128
-    maxWidthX: 0
-    maxDepthZ: 0
-    maxHeightY: 0
-    nearClippingDistance: 105
-    autoRefresh: 0
-    grayScaleMode: 1
-    sparseVoxels: 0
-    intialCameraPosition: {x: 0, y: 0, z: 0}
-  container: {fileID: 0}
 --- !u!4 &1171129835
 Transform:
   m_ObjectHideFlags: 0
