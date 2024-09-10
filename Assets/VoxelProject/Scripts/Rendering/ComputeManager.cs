@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+//Heavily based upon original tutorial code
 public class ComputeManager : MonoBehaviour
 {
     public ComputeShader noiseShader;
@@ -15,22 +16,21 @@ public class ComputeManager : MonoBehaviour
     private int yThreads;
     private int zThreads;
     
-    private Container voxelContainer;
+    private Container voxelContainer; //Reference to the container holding the voxel data
 
     public void Initialize(int count = 256)
     {
+        //Calculate the number of threads per dimension for the compute shader
         xThreads = WorldManager.Instance.worldSettings.maxWidthX / 8 + 1;
         yThreads = WorldManager.Instance.worldSettings.maxHeightY / 8;
         zThreads = WorldManager.Instance.worldSettings.maxDepthZ / 8;
 
-        Debug.Log("XTHREADS: " + xThreads);
-        Debug.Log("YTHREADS: " + yThreads);
-        Debug.Log("ZTHREADS: " + zThreads);
-
+        //Set the voxel container dimensions for the compute shader
         noiseShader.SetInt("containerSizeX", WorldManager.Instance.worldSettings.maxWidthX);
         noiseShader.SetInt("containerSizeY", WorldManager.Instance.worldSettings.maxHeightY);
         noiseShader.SetInt("containerSizeZ", WorldManager.Instance.worldSettings.maxDepthZ);
 
+        //Create the initial noise buffers
         for (int i = 0; i < count; i++)
         {
             CreateNewNoiseBuffer();
@@ -98,6 +98,7 @@ public class ComputeManager : MonoBehaviour
         });
     }
 
+    //Clear the voxel data in the buffer
     private void ClearVoxelData(NoiseBuffer buffer)
     {
         buffer.countBuffer.SetData(new int[] { 0 });
@@ -109,7 +110,8 @@ public class ComputeManager : MonoBehaviour
     {
         DisposeAllBuffers();
     }
-
+    
+    //Disposes all buffers to free up GPU memory when the application is closed
     public void DisposeAllBuffers()
     {
         foreach (NoiseBuffer buffer in allNoiseComputeBuffers)
@@ -150,6 +152,7 @@ public struct NoiseBuffer
         Initialized = true;
     }
 
+    //Disposes the buffers to free up GPU memory when they're no longer needed
     public void Dispose()
     {
         countBuffer?.Dispose();
@@ -158,16 +161,17 @@ public struct NoiseBuffer
         Initialized = false;
     }
 
+    //Indexer to access individual voxel data by index
     public VoxelOriginal this[int index]
     {
         get
         {
-            return voxelArray[index];
+            return voxelArray[index]; //Get voxel at specified index
         }
 
         set
         {
-            voxelArray[index] = value;
+            voxelArray[index] = value; //Set voxel at specified index
         }
     }
 }

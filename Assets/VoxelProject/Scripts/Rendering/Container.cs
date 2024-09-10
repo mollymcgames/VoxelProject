@@ -5,12 +5,16 @@ using System.Linq;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
+
+// The most important class in the project as it is effectively the voxel engine
 public class Container : MonoBehaviour
 {
-    Dictionary<Vector3Int, Voxel> visibleVoxels = null;
-    Dictionary<Vector3Int, Voxel> worldVoxels = null;
-    Dictionary<Vector3Int, Chunk> worldChunks = null;
+    //Dictionaries to hold the voxel data
+    Dictionary<Vector3Int, Voxel> visibleVoxels = null; //Voxels currently visible to the camera
+    Dictionary<Vector3Int, Voxel> worldVoxels = null; //All voxels in the world
+    Dictionary<Vector3Int, Chunk> worldChunks = null; //All chunks in the world
 
+    // Directions used for checking neighboring voxels (forward, back, left, right, up, down)
     private static readonly Vector3Int[] directions = new Vector3Int[]
     {
         Vector3Int.forward, Vector3Int.back,
@@ -18,36 +22,30 @@ public class Container : MonoBehaviour
         Vector3Int.up, Vector3Int.down
     };
 
-    public Camera mainCamera;
+    public Camera mainCamera; //Reference to the main camera
 
-    public Vector3 containerPosition;
+    public Vector3 containerPosition; //Position of the container
 
-    public NoiseBuffer data;
+    public NoiseBuffer data; //Reference to the noise buffer data
     private MeshData meshData = new MeshData();
 
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
-    private MeshCollider meshCollider;
 
-    private Coroutine distanceCheckCoroutine;
-
-    float maxDistance = 200f;
+    // float maxDistance = 200f;
     private int visibilityThreshold = 0;
     private bool sparseVoxels = false;
 
-    Vector3 chunkDimensions = new Vector3(WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize, WorldManager.Instance.voxelMeshConfigurationSettings.voxelChunkSize);
     private int chunksOnDisplay = 0;
 
     int meshCounter = 0;
     int voxelsSelected = 0;
-    private VoxelColor voxelColor;
     private Color voxelColorAlpha;
     private Vector2 voxelSmoothness;
     private Vector3Int[] faceVertices = new Vector3Int[4];
     private Vector2[] faceUVs = new Vector2[4];
     private FrustumCulling frustrumCullingCalculator;
 
-    private Voxel outVoxel;
     private bool grayScaleMode = true;
 
     private float nearClippingDistance = WorldManager.Instance.worldSettings.nearClippingDistance;
@@ -97,14 +95,16 @@ public class Container : MonoBehaviour
         Debug.Log("voxel generation done!");
     }
 
+    //Generates nesg data based on currently visible voxels
+
     public void GenerateMesh()
     {        
-        voxelsSelected = 0;
-        meshCounter = 0;
+        voxelsSelected = 0; //Reset the number of voxels selected
+        meshCounter = 0; //Reset the mesh counter
         faceVertices = new Vector3Int[4];
         faceUVs = new Vector2[4];
 
-        Dictionary<Vector3Int, Voxel> visibleVoxels = GetVisibleVoxels(mainCamera);
+        Dictionary<Vector3Int, Voxel> visibleVoxels = GetVisibleVoxels(mainCamera); //Retrieve the visible voxels based on the camera position
 
         // Pre-allocate capacity to avoid resizing lists
         meshData.vertices.Capacity = visibleVoxels.Count * 24; // 6 faces * 4 vertices per face
@@ -112,6 +112,8 @@ public class Container : MonoBehaviour
         meshData.UVs.Capacity = visibleVoxels.Count * 24;
         meshData.UVs2.Capacity = visibleVoxels.Count * 24;
         meshData.colors.Capacity = visibleVoxels.Count * 24;
+
+        //Iterate over each visible voxel and add it to the render mesh
 
         foreach (var nextVoxel in visibleVoxels.Values.ToList<Voxel>())
         {
@@ -127,17 +129,17 @@ public class Container : MonoBehaviour
             return;
         }
 
-        // Skip this voxel if it's below the visibility threshold
+        // Skip voxels that are below the visibility threshold
         if (voxel.colorGrayScale <= visibilityThreshold)
         {
             return;
         }
 
-        if (checkVoxelIsSolid(voxel, visibleVoxels) == false)
+        if (checkVoxelIsSolid(voxel, visibleVoxels) == false) //Check if the voxel is solid (i.e., has at least one neighbor)
         {
             return;
         }
-
+        // Determine the voxel color based on the grayscale value
         if (grayScaleMode)
         {
             voxelColorAlpha = voxel.colorInGrayScale();
@@ -146,24 +148,24 @@ public class Container : MonoBehaviour
         {
             voxelColorAlpha = voxel.color();
         }
-        voxelColorAlpha.a = 1;
+        voxelColorAlpha.a = 1; //Set the alpha value to 1 (fully opaque)
 
         if (voxel.isSegmentVoxel)
         {
             CreateClickableVoxel(voxelPosition);
         }
 
-        // Iterate over each face direction
+        // Iterate over each face direction to construct the voxel mesh
         for (int i = 0; i < 6; i++)
         {
-            // Collect the appropriate vertices from the default vertices and add the block Position
+            // Collect the vertices and UVs for the face
             for (int j = 0; j < 4; j++)
             {
                 faceVertices[j] = voxelVertices[voxelVertexIndex[i, j]] + voxelPosition;
                 faceUVs[j] = voxelUVs[j];
             }
 
-            // Batch adding vertices, UVs, and triangles
+            // Add the vertices, UVs, and colors to the mesh data
             for (int j = 0; j < 6; j++)
             {
                 int vertexIndex = voxelTris[i, j];
@@ -177,22 +179,22 @@ public class Container : MonoBehaviour
         voxelsSelected++;
     }
 
-    float AdjustGrayscale(float originalGrayscale, float distance)
-    {
-        // Clamp the distance to the range [0, maxDistance]
-        distance = Mathf.Clamp(distance, 0, maxDistance);
+    // float AdjustGrayscale(float originalGrayscale, float distance)
+    // {
+    //     // Clamp the distance to the range [0, maxDistance]
+    //     distance = Mathf.Clamp(distance, 0, maxDistance);
 
-        // Normalize the distance to the range [0, 1]
-        float normalizedDistance = distance / maxDistance;
+    //     // Normalize the distance to the range [0, 1]
+    //     float normalizedDistance = distance / maxDistance;
 
-        // Target grayscale value at minimum distance (e.g., closer to white)
-        float targetGrayscaleValue = 254f;
+    //     // Target grayscale value at minimum distance (e.g., closer to white)
+    //     float targetGrayscaleValue = 254f;
 
-        // Blend the original grayscale value with the target grayscale value based on the normalized distance
-        float adjustedGrayscale = Mathf.Lerp(originalGrayscale, targetGrayscaleValue, 1 - normalizedDistance);
+    //     // Blend the original grayscale value with the target grayscale value based on the normalized distance
+    //     float adjustedGrayscale = Mathf.Lerp(originalGrayscale, targetGrayscaleValue, 1 - normalizedDistance);
 
-        return adjustedGrayscale;
-    }
+    //     return adjustedGrayscale;
+    // }
 
     void CreateClickableVoxel(Vector3Int clickableVoxelPosition)
     {
@@ -248,13 +250,11 @@ public class Container : MonoBehaviour
             if (frustrumCullingCalculator.IsChunkInView(ref chunk.bounds)) //camera, chunkPosition, chunkDimensions))
             {
                 // Only check individual voxels within the chunk if the chunk is visible
-                //TraverseVisibleChunk(ref camera, chunk.Key, ref visibleVoxels);
                 TraverseVisibleChunk(ref camera, chunk.chunkPosition, ref visibleVoxels);
                 chunksOnDisplay++;
             }
         }
 
-        // Traverse(camera, visibleVoxels);
 
         frustrumCullingCalculator.DropFrustrumPlanes();
 
@@ -308,7 +308,7 @@ public class Container : MonoBehaviour
         }
         return false;
     }
-
+    //Mesh data structure to hold the mesh data
     public struct MeshData
     {
         public Mesh mesh;
@@ -343,6 +343,7 @@ public class Container : MonoBehaviour
                 mesh.Clear();
             }
         }
+        //Uploads the mesh data to the GPU
         public void UploadMesh(bool sharedVertices = false)
         {
             try
@@ -406,6 +407,7 @@ public class Container : MonoBehaviour
             {2,3,6,7},
     };
 
+    //UVs for the voxel faces
     static readonly Vector2[] voxelUVs = new Vector2[4]
     {
             new Vector2(0,0),
@@ -414,6 +416,7 @@ public class Container : MonoBehaviour
             new Vector2(1,1)
     };
 
+    //Triangle indices for the voxel faces
     static readonly int[,] voxelTris = new int[6, 6]
     {
             {0,2,3,0,3,1},

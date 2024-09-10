@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 public class MenuHandler : MonoBehaviour
 {
     private ASourceDataLoader loader = null;
-    private string fileLastLoaded = "";
-    private Nifti.NET.Nifti niftiFile = null;
+
+    private string fileLastLoaded = ""; // Used to store the last file loaded, to prevent reloading the same file.
+
+    private Nifti.NET.Nifti niftiFile = null; // Used to store the header data for the nifti file.
 
     public float transitionDelayTime = 1.0f;
-    private Animator animator;
+    private Animator animator; //Animator for the transition effect (fade in/out)
 
     [HideInInspector]
     public string voxelFileFormat = "nii";
@@ -21,6 +23,7 @@ public class MenuHandler : MonoBehaviour
         SceneManager.LoadScene("World");        
     }
 
+    //Loads the next scene (world) with the selected file and animation
     public void LoadWorldScene()
     {
         animator = GameObject.Find("Transition").GetComponent<Animator>();
@@ -42,33 +45,26 @@ public class MenuHandler : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    //Loads a pre-configured heart voxel file 
     public void LoadHeartFile()
     {
-        int voxelOmissionThreshold = 0;
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "ircad_e01_liver.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "JHU-WhiteMatter-labels-2mm.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_007.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "voxtest.txt";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "male_torso.txt";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "template.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "la_014.nii";        
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "MR_Gd.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spleen_56.nii";
-        //WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "lung.nii";
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "heart.nii";
+        int voxelOmissionThreshold = 2;
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "natbrainlab.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = false;
         LoadAFile(false, voxelOmissionThreshold);
     }
 
+    //Loads the heart file header
     public string LoadHeartHeader()
     {
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "heart.nii";
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "natbrainlab.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = true;
         return LoadHeaderOnly();
     }
 
+    //Loads a pre-configured spine voxel file
     public void LoadSpineFile()
     {
         int voxelOmissionThreshold = 0;
@@ -77,7 +73,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.worldSettings.sparseVoxels = true;
         LoadAFile(false, voxelOmissionThreshold);
     }
-
+    //Loads the spine file header
     public string LoadSpineHeader()
     {
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spine.nii";
@@ -187,6 +183,8 @@ public class MenuHandler : MonoBehaviour
         Debug.Log("Loaded world dimensions: " + WorldManager.Instance.worldSettings.maxWidthX + ", " + WorldManager.Instance.worldSettings.maxHeightY + ", " + WorldManager.Instance.worldSettings.maxDepthZ);
     }
 
+    //Determines the initial camera position based on the world dimensions
+
     private void DetermineInitialCameraLocation()
     {
         Vector3Int minCorner = new Vector3Int(int.MaxValue, int.MaxValue, int.MaxValue);
@@ -205,7 +203,7 @@ public class MenuHandler : MonoBehaviour
 
     public void LoadZoom()
     {
-        SceneManager.LoadScene("Zooming");
+        SceneManager.LoadScene("Zooming"); //The blood cell scene
     }
 
     public void BackButton()
