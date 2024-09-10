@@ -29,22 +29,21 @@ public class Container : MonoBehaviour
     public NoiseBuffer data; //Reference to the noise buffer data
     private MeshData meshData = new MeshData();
 
-    private MeshRenderer meshRenderer;
-    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer; // Reference to the mesh renderer
+    private MeshFilter meshFilter; // Reference to the mesh filter
 
-    // float maxDistance = 200f;
-    private int visibilityThreshold = 0;
-    private bool sparseVoxels = false;
+    private int visibilityThreshold = 0; //Threshold for voxel visibility slider
+    private bool sparseVoxels = false; //Toggle value for sparse voxels (where the voxels are scattered like the spine)
 
-    private int chunksOnDisplay = 0;
+    private int chunksOnDisplay = 0; //Initialise how many chunks are currently visible
 
-    int meshCounter = 0;
+    int meshCounter = 0; //Counter for the mesh vertices
     int voxelsSelected = 0;
     private Color voxelColorAlpha;
     private Vector2 voxelSmoothness;
     private Vector3Int[] faceVertices = new Vector3Int[4];
     private Vector2[] faceUVs = new Vector2[4];
-    private FrustumCulling frustrumCullingCalculator;
+    private FrustumCulling frustumCullingCalculator; //Frustrum culling calculator
 
     private bool grayScaleMode = true;
 
@@ -66,7 +65,7 @@ public class Container : MonoBehaviour
         containerPosition = position;
 
         // Pre-calculate the Frustrum planes so that it isn't calculated each loop!
-        frustrumCullingCalculator = new FrustumCulling(mainCamera, 8);
+        frustumCullingCalculator = new FrustumCulling(mainCamera, 8);
 
         // Create a color vector that represents a metallic gleam
         voxelSmoothness = new Vector2(0.0f, 0.0f);
@@ -95,7 +94,7 @@ public class Container : MonoBehaviour
         Debug.Log("voxel generation done!");
     }
 
-    //Generates nesg data based on currently visible voxels
+    //Generates mesh data based on currently visible voxels
 
     public void GenerateMesh()
     {        
@@ -179,22 +178,6 @@ public class Container : MonoBehaviour
         voxelsSelected++;
     }
 
-    // float AdjustGrayscale(float originalGrayscale, float distance)
-    // {
-    //     // Clamp the distance to the range [0, maxDistance]
-    //     distance = Mathf.Clamp(distance, 0, maxDistance);
-
-    //     // Normalize the distance to the range [0, 1]
-    //     float normalizedDistance = distance / maxDistance;
-
-    //     // Target grayscale value at minimum distance (e.g., closer to white)
-    //     float targetGrayscaleValue = 254f;
-
-    //     // Blend the original grayscale value with the target grayscale value based on the normalized distance
-    //     float adjustedGrayscale = Mathf.Lerp(originalGrayscale, targetGrayscaleValue, 1 - normalizedDistance);
-
-    //     return adjustedGrayscale;
-    // }
 
     void CreateClickableVoxel(Vector3Int clickableVoxelPosition)
     {
@@ -220,20 +203,22 @@ public class Container : MonoBehaviour
         voxel.transform.parent = this.transform;
     }
 
-    public void UploadMesh()
+    public void UploadMesh() //Sends the mesh data(verts, tris, UVs, colors) to the GPU
     {
         meshData.UploadMesh();
 
+        //Prevent null reference exceptions
         if (meshRenderer == null)
         {
             ConfigureComponents();
         }
 
-        meshFilter.mesh = meshData.mesh;
+        meshFilter.mesh = meshData.mesh; //assign the newly created mesh to the mesh filter
     }
 
     private void ConfigureComponents()
     {
+        //Needs the components to be assigned on the game object
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
@@ -247,18 +232,16 @@ public class Container : MonoBehaviour
 
         foreach (var chunk in worldChunks.Values.ToList<Chunk>())
         {
-            if (frustrumCullingCalculator.IsChunkInView(ref chunk.bounds)) //camera, chunkPosition, chunkDimensions))
+            if (frustumCullingCalculator.IsChunkInView(ref chunk.bounds)) //Check if the chunk is visible
             {
                 // Only check individual voxels within the chunk if the chunk is visible
                 TraverseVisibleChunk(ref camera, chunk.chunkPosition, ref visibleVoxels);
-                chunksOnDisplay++;
+                chunksOnDisplay++; //Increments the number of chunks on display
             }
         }
 
-
-        frustrumCullingCalculator.DropFrustrumPlanes();
-
-        WorldManager.Instance.chunksOnDisplay = chunksOnDisplay;
+        frustumCullingCalculator.DropFrustrumPlanes(); //Clear the frustum planes when not in use
+        WorldManager.Instance.chunksOnDisplay = chunksOnDisplay; //Stats for panel
         
         return visibleVoxels;
     }
@@ -266,30 +249,22 @@ public class Container : MonoBehaviour
     private void TraverseVisibleChunk(ref Camera camera, Vector3Int chunkPosition, ref Dictionary<Vector3Int, Voxel> visibleVoxels)
     {       
         Chunk chunkValue = null;
+        //If the chunk is not found in the dictionary, exit the method early
         if (worldChunks.TryGetValue(chunkPosition, out chunkValue) == false)
             return;
-        
+        //Iterate over each voxel in the chunk (converted to a list from the voxel dictionary)
         foreach (var nextVoxelInChunk in chunkValue.voxels.Values.ToList<Voxel>())
         {
-            if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.position, nearClippingDistance))
+            //Check if the voxel is within the camera's frustum (visible area) using the frustrum culling calculator
+            if (frustumCullingCalculator.IsVoxelInView(camera, nextVoxelInChunk.position, nearClippingDistance))
             {
+                //If the voxel is within the frustum, add it to the visible voxels dictionary
                 visibleVoxels[nextVoxelInChunk.position] = nextVoxelInChunk;
             }
         }
 
     }
-
-    private void Traverse(Camera camera, Dictionary<Vector3Int, Voxel> visibleVoxels)
-    {
-        foreach (var nextVoxel in worldVoxels)
-        {
-            if (frustrumCullingCalculator.IsVoxelInView(camera, nextVoxel.Key, nearClippingDistance))
-            {
-                visibleVoxels[nextVoxel.Key] = nextVoxel.Value;
-            }
-        }
-    }
-
+    //Check if the voxel is solid (i.e., has at least one neighbor) as not worth rendering if its hidden
     private bool checkVoxelIsSolid(Voxel voxelPosition, Dictionary<Vector3Int, Voxel> visibleVoxels)
     {
         if (sparseVoxels == true)
@@ -344,6 +319,7 @@ public class Container : MonoBehaviour
             }
         }
         //Uploads the mesh data to the GPU
+        //Based off voxel tutorials
         public void UploadMesh(bool sharedVertices = false)
         {
             try
@@ -373,7 +349,8 @@ public class Container : MonoBehaviour
             }
         }
     }
-
+    //Based off voxel tutorials, theese are tables that define the triangles and vertices of the voxel faces and are used to contruct the elements of the voxel mesh,
+    //that is rendered to the screen
     static readonly Vector3Int[] voxelVertices = new Vector3Int[8]
     {
             new Vector3Int(0,0,0),//0

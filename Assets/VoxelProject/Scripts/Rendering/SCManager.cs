@@ -44,12 +44,6 @@ public class SCManager : MonoBehaviour
             Debug.Log("0 key pressed, regenerating voxel data.");
             ComputeManager.Instance.RefreshVoxels(ref container, 0);
             return;
-        } 
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Debug.Log("1 key pressed, regenerating voxel data.");
-            ComputeManager.Instance.RefreshVoxels(ref container, 1);
-            return;
         }
 
         // Only auto update if toggle is on

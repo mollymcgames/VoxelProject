@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Controls the camera movement in the scene
 public class FlyCamera : MonoBehaviour
 {
     public float movementSpeed = 10f;
