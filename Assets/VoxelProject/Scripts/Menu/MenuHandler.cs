@@ -52,6 +52,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "natbrainlab.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = false;
+        WorldManager.Instance.worldSettings.grayScaleMode = true;
         LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -67,10 +68,11 @@ public class MenuHandler : MonoBehaviour
     //Loads a pre-configured spine voxel file
     public void LoadSpineFile()
     {
-        int voxelOmissionThreshold = 0;
+        int voxelOmissionThreshold = 1;
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "spine.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = true;
+        WorldManager.Instance.worldSettings.grayScaleMode = true;
         LoadAFile(false, voxelOmissionThreshold);
     }
     //Loads the spine file header
@@ -88,6 +90,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";        
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
         WorldManager.Instance.worldSettings.sparseVoxels = false;
+        WorldManager.Instance.worldSettings.grayScaleMode = true;        
         LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -105,6 +108,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "avg152T1_LR_nifti.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = false;
+        WorldManager.Instance.worldSettings.grayScaleMode = true;
         LoadAFile(false, voxelOmissionThreshold);
     }
 
