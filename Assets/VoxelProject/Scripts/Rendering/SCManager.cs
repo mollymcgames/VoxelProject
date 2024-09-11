@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+//Manages the scene and the container object.
 public class SCManager : MonoBehaviour
 {
     private float timeSinceLastUpdate = 0f;
@@ -25,7 +26,7 @@ public class SCManager : MonoBehaviour
     void Start() 
     {
         ComputeManager.Instance.Initialize(1);
-        GameObject cont = new GameObject("Container");
+        GameObject cont = new GameObject("Container"); //Container draws the voxel data
         cont.transform.parent = transform;
         container = cont.AddComponent<Container>();
         container.Initialize(WorldManager.Instance.worldMaterial, Vector3.zero);        

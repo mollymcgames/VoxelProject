@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+//This class is used to load the source data from a text file and store it in a dictionary.
+//Used by zooming scene to load the source data from a text file.
 public class SourceDataTextFileLoaderAsDictionary
 {
     public int chunkSize = 0;

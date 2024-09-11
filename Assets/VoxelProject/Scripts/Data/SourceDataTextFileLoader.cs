@@ -1,17 +1,14 @@
-using Nifti.NET;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
+//This class inherits from ASourceDataLoader which is an abstract class that implements the ISourceDataLoader interface.
+//Used by zooming scene to load the source data from a text file.
 public class SourceDataTextFileLoader : ASourceDataLoader
 {
     public SourceDataTextFileLoader(int voxelOmissionThreshold)
     {
-        this.voxelOmissionThreshold = voxelOmissionThreshold;
+        this.voxelOmissionThreshold = voxelOmissionThreshold; //The level at which voxels are omitted (not displayed)
     }
-
-    private static SourceDataTextFileLoader _instance;
 
     private string[] voxelFileLines = null;
 

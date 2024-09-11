@@ -11,7 +11,7 @@ public class SourceDataLoader : ASourceDataLoader
     public SourceDataLoader(int voxelOmissionThreshold, string niftiFilePath)
     { 
         this.voxelOmissionThreshold = voxelOmissionThreshold;
-        this.niftiHandler = new NiftiHandler();
+        this.niftiHandler = ScriptableObject.CreateInstance<NiftiHandler>();
         this.niftiFilePath = niftiFilePath;
     }
     

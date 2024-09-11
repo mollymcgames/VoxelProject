@@ -8,7 +8,7 @@ using UnityEngine;
  */
 public class Chunk
 {
-    public Bounds bounds;
+    public Bounds bounds; // Unity Bounds for quick Frustrum visibility calculations
 
     public Vector3Int chunkPosition { get; private set; }
     public Dictionary<Vector3Int, Voxel> voxels { get; private set; }
@@ -28,10 +28,11 @@ public class Chunk
 
     public static Vector3Int GetChunkCoordinates(Vector3 voxelPosition, int chunkSize)
     {
-        // Calculate chunk coordinates
-        int chunkX = Mathf.FloorToInt((float)voxelPosition.x / chunkSize)*chunkSize;
-        int chunkY = Mathf.FloorToInt((float)voxelPosition.y / chunkSize)*chunkSize;
-        int chunkZ = Mathf.FloorToInt((float)voxelPosition.z / chunkSize)*chunkSize;
+        // Calculate the chunk coordinates
+        // This is done by dividing the voxel position by the chunk size, then rounding down to the nearest whole number.
+        int chunkX = Mathf.FloorToInt(voxelPosition.x / chunkSize)*chunkSize;
+        int chunkY = Mathf.FloorToInt(voxelPosition.y / chunkSize)*chunkSize;
+        int chunkZ = Mathf.FloorToInt(voxelPosition.z / chunkSize)*chunkSize;
 
         return new Vector3Int(chunkX, chunkY, chunkZ);
     }

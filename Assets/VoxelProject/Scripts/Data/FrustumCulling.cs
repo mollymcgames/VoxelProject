@@ -1,7 +1,4 @@
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class FrustumCulling
 {
@@ -18,6 +15,9 @@ public class FrustumCulling
     // Thresholds for detecting significant movement or rotation
     private float positionThreshold = 0.1f; // Position threshold
     private float rotationThreshold = 1.0f; //Rotation threshold
+
+    private bool inFrustum = false; //Flag to check if the voxel is within the frustum
+    private float distanceToCamera = 0f; //Distance from the camera to the voxel
 
     public FrustumCulling(Camera camera, int size)
     {
@@ -39,14 +39,13 @@ public class FrustumCulling
         planes = null; //Clear the planes array when not in use
     }
 
+    // Check if the chunk is in view
     public bool IsChunkInView(ref Bounds bounds)
     {
         return GeometryUtility.TestPlanesAABB(planes, bounds);
     }
 
-    private bool inFrustum = false;
-    private float distanceToCamera = 0f;
-
+    // Check if the voxel is in view
     public bool IsVoxelInView(Camera camera, Vector3Int position, float nearClippingDistance)
     {
         inFrustum = false; //Reset the inFrustum flag

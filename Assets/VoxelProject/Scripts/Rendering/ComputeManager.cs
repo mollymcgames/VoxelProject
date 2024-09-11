@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 //Heavily based upon original tutorial code
+//Important class to manage the compute shader and the buffers used to generate voxel data
 public class ComputeManager : MonoBehaviour
 {
     public ComputeShader noiseShader;

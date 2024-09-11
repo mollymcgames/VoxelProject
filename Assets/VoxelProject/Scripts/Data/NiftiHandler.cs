@@ -3,7 +3,7 @@ using Nifti.NET;
 using UnityEngine;
 
 // This is an important class to handle the Nifti file. It is used to read the Nifti file and convert it into a dictionary of voxels.
-public class NiftiHandler
+public class NiftiHandler: ScriptableObject
 {
     private Nifti.NET.Nifti niftiFile = null; //Stores the Nifti file
 

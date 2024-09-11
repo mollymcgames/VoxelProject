@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Used in the world scene to manage the visibility threshold slider.
 public class VisibilityThreshold : MonoBehaviour
 {
 

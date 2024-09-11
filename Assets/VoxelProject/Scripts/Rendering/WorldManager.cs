@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Settings for the world
 public class WorldManager : MonoBehaviour
 {
     // Vector3Int's are used as they use up less memory than floats and also
@@ -9,7 +10,7 @@ public class WorldManager : MonoBehaviour
     public VoxelMeshConfigurationSettings voxelMeshConfigurationSettings;
 
     public Material worldMaterial;
-    public VoxelColor[] WorldColors;
+    // public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;
 
     // The Vector3Int based dictionary to store Voxels by vector location

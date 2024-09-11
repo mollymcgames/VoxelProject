@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//Deals with the mesh transparency, used in the zooming scene
 public class MeshTransparency : MonoBehaviour
 {
     public GameObject mesh;

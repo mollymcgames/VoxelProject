@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//Class for the cursor handler
 public class CustomCursorHandler : MonoBehaviour
 {
     public Texture2D customCursor; // The custom cursor texture

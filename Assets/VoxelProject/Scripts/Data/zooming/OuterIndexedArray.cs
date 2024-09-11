@@ -2,7 +2,9 @@ using System;
 using UnityEngine;
 
 [System.Serializable]
-public class IndexedArray<T> where T : struct
+
+//This class is used in the zooming scene for indexing the array of voxels.
+public class OuterIndexedArray<T> where T : struct
 {
     private bool initialized = false;
 
@@ -14,12 +16,12 @@ public class IndexedArray<T> where T : struct
     [HideInInspector]
     private Vector3Int size;
 
-    public IndexedArray()
+    public OuterIndexedArray()
     {
-        Create(WorldManager.WorldSettings.maxWidthX, WorldManager.WorldSettings.maxHeightY, WorldManager.WorldSettings.maxDepthZ);
+        Create(OuterWorldManager.WorldSettings.maxWidthX, OuterWorldManager.WorldSettings.maxHeightY, OuterWorldManager.WorldSettings.maxDepthZ);
     }
 
-    public IndexedArray(int sizeX, int sizeY, int sizeZ)
+    public OuterIndexedArray(int sizeX, int sizeY, int sizeZ)
     {
         Create(sizeX, sizeY, sizeZ);
     }
@@ -64,27 +66,26 @@ public class IndexedArray<T> where T : struct
         {
             Vector3 unityCoords = coord;
 
-            if (unityCoords.x < 0 || unityCoords.x > size.x ||
-                unityCoords.y < 0 || unityCoords.y > size.y ||
-                unityCoords.z < 0 || unityCoords.z > size.z)
-            {
-                Debug.LogError($"Coordinates GET out of bounds! {coord}");
-                return default(T);
-            }
-            return array[IndexFromCoord(coord)];
+            // Adjust coordinates to wrap around the array
+            unityCoords.x = (unityCoords.x % size.x + size.x) % size.x;
+            unityCoords.y = (unityCoords.y % size.y + size.y) % size.y;
+            unityCoords.z = (unityCoords.z % size.z + size.z) % size.z;
+
+            return array[IndexFromCoord(unityCoords)];            
         }
         set
         {
             Vector3 unityCoords = (coord);
 
-            if (unityCoords.x < 0 || unityCoords.x >= size.x ||
-                unityCoords.y < 0 || unityCoords.y >= size.y ||
-                unityCoords.z < 0 || unityCoords.z >= size.z)
-            {
-                Debug.LogError($"Coordinates SET out of bounds! {coord}");
-                return;
-            }
             array[IndexFromCoord(coord)] = value;
+
+            // Adjust coordinates to wrap around the array
+            unityCoords.x = (unityCoords.x % size.x + size.x) % size.x;
+            unityCoords.y = (unityCoords.y % size.y + size.y) % size.y;
+            unityCoords.z = (unityCoords.z % size.z + size.z) % size.z;
+
+            array[IndexFromCoord(unityCoords)] = value;            
+            
         }
     }
 

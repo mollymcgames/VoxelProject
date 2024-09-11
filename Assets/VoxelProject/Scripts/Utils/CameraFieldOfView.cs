@@ -2,10 +2,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Manages the field of view of the Camera in the world scene 
 public class CameraFieldOfView : MonoBehaviour
 {
-    // This is the field of view that the Camera has
-    float m_FieldOfView;
+    float m_FieldOfView = 60.0f; //The current field of view that the camera has 
     public float sensitivity = 0.1f; // Sensitivity of mouse movement
     private bool isDragging = false;
     private float lastMouseY;
@@ -15,18 +15,12 @@ public class CameraFieldOfView : MonoBehaviour
     float min = 20.0f;
 
     public Slider fovSlider;
-    public TMP_Text fovValue;
-    private float lastSliderValue;
-    
+    public TMP_Text fovValue;    
 
-    void Start()
-    {
-        // Start the Camera field of view at 60
-        m_FieldOfView = 60.0f;
-    }
 
     void Update()
     {
+        //Checks if zooming is allowed
         if (SCManager.Instance.isZooming == false)
         {
             // Check if the mouse wheel button is pressed
@@ -49,9 +43,10 @@ public class CameraFieldOfView : MonoBehaviour
                 float deltaY = lastMouseY - mouseY;
                 m_FieldOfView += deltaY * sensitivity;
                 m_FieldOfView = Mathf.Clamp(m_FieldOfView, min, max);
-                lastMouseY = mouseY;
+                lastMouseY = mouseY; //Update the last Y position for the next frame
             }
 
+            // Apply the calculated FOV to the camera only if it has changed
             if (Camera.main.fieldOfView != m_FieldOfView)
             {
                 Camera.main.fieldOfView = m_FieldOfView;

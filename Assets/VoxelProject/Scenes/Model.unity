@@ -1552,7 +1552,6 @@ MonoBehaviour:
   voxelMeshConfigurationSettings:
     voxelDataFileName: 
     voxelDataSegmentFileName: 
-    voxelSegmentLayers: []
     voxelChunkSize: 16
     voxelChunkFieldOfViewMultiplier: 3
     standardVoxelSize: {x: 1, y: 1, z: 1}
@@ -1561,10 +1560,8 @@ MonoBehaviour:
     domainOffsetX: 0
     domainOffsetY: 0
     domainOffsetZ: 0
-    sceneTargetName: 
     visibilityThreshold: 1
   worldMaterial: {fileID: 2100000, guid: e8294481300e5844abcc6eaf40cda598, type: 2}
-  WorldColors: []
   worldSettings:
     containerSize: 16
     maxHeight: 128

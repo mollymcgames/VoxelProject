@@ -1,9 +1,11 @@
 using System;
 using System.IO;
-using Unity.Collections;
+// using Unity.Collections;
 using UnityEngine;
 
 [System.Serializable]
+
+// This class is used to store the configuration settings for the VoxelMesh.
 public class VoxelMeshConfigurationSettings
 {
     [Header("Voxel Data Filename")]
@@ -11,8 +13,8 @@ public class VoxelMeshConfigurationSettings
     public string voxelDataFileName = "";
     public string voxelDataSegmentFileName = "";
 
-    [Header("Voxel Segment Layers")]
-    public string[] voxelSegmentLayers;
+    // [Header("Voxel Segment Layers")]
+    // public string[] voxelSegmentLayers;
        
     [Header("Voxel Configuration Attributes")]
     [Range(1, 64)]
@@ -30,7 +32,7 @@ public class VoxelMeshConfigurationSettings
     public int domainOffsetY = 0;
     public int domainOffsetZ = 0;
 
-    public string sceneTargetName;
+    // public string sceneTargetName;
 
     //[HideInInspector]
     public int visibilityThreshold = 1;
