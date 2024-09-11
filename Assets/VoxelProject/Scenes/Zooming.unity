@@ -879,7 +879,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1857960312}
         m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
-        m_MethodName: BackToWorldButton
+        m_MethodName: BackButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -217,4 +217,10 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
         SceneManager.LoadScene("World");
     }
+
+    public void BackToMenuButton()
+    {
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
+        SceneManager.LoadScene("MainMenu");
+    }
 }
