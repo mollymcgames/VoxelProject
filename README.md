@@ -1,10 +1,10 @@
 # VoxelProject
 ## Introduction
-This project visualises the output of an MRI scan in NiFti (NII) format. A Nifti file represents an MRI scan in the form of Voxels of data.  The visualisation is achieved by rendering the Voxels as 'Minecraft' style Voxels on screen that allow the user to close in, and dig through to see the inner layers of the scan.
+VoxelProject visualises MRI scan outputs in NiFti (NII) format. A Nifti file represents an MRI scan in the form of Voxels of data. The visualisation is achieved by rendering the Voxels as 'Minecraft' style Voxels on screen that allow the user to close in, and dig through to see the inner layers of the scan.
 
 ## Pre-requisites
-- Unity 2023.1.20f1 or newer
-- Visual Studio Community *or* Visual Studio Code
+- Unity 2023.1.20f1+
+- Visual Studio Community / Visual Studio Code
 - The Unity packages listed in `packages-lock.json`
 
 ### External unity packages
@@ -26,11 +26,12 @@ Hovering over a clickable area will load the associated Nifti file from disk and
 
 Clicking one of the areas will then switch scenes, load and render the initial view of the selected Nifti file.
 
-Use the `ASDW` keys, along with the mouse, and the `E` and `SPACE` keys to navigate around the rendered Voxel model.
+Controls:
+- Move: `ASDW` keys + mouse
+- Fly: `E` and `SPACE`
+- Force refresh: Press `0`
 
-You'll notice it doesn't change much. This is because, for performance reasons, by default "auto-refresh" is disabled. So press the `0` key to force a refresh. 
-
-Depending on how close or far from the Voxel model will cause different Voxel chunks to be rendered.
+Distance from the Voxel model will cause different Voxel chunks to be rendered.
 
 ### Other controls
 On the top right of the display area are additional controls and options.
@@ -38,7 +39,6 @@ On the top right of the display area are additional controls and options.
 - **Visibility Threshold**: Moving this slider will progressively hide Voxels that fall below a certain colour visibility threshold. This helps to see different details in the Voxel model.  (Don't forget to press `0` to reload!)
 - **Visibility Inversion**: Toggling this will invert the visibility threshold, providing an alternative way to see different details in the Voxel model.  (Don't forget to press `0` to reload!)
 - **Field of View**: This slider changes the Field of View of the camera. This provides an alternative view of seeing more of the selected Voxel model.
-- **Automatic refresh**: Toggling this will enable/disable automatic rendering. When enabled, the model will constantly redraw, selecting visible Voxels in relation to the where the camera is pointed. **WARNING**: Using this mode is very resource intensive, so use with care.
 
 ### Supported files
 - NIFTI files that follow the [NIFTI standard](https://nifti.nimh.nih.gov/).
@@ -60,8 +60,7 @@ For now, changing a Voxel model is a manual task and has to be done in the code.
 - Add a 'refresh now' button (that appears when auto-refresh is disabled.)
 
 ### Performance
-- Performance when auto-refresh is enabled is generally quite slow. Finding additional methods to speed up the processing loop would be good.
-  - Updating the visible voxel selection code so that voxels at the BACK of the selected voxels are hidden will help.
+  - Updating the visible voxel selection code so that voxels at the back of the selected voxels are hidden will help.
   - Using `parallel.ForEach` might help, although there are challenges making sure the Unity Mesh is used in a thread safe manner that doesn't just create additional code locks/waits.
   - Investigating if an alternative way of selecting and looping through the voxels is possible, as a `foreach` loop over thousands to millions of Voxels is demonstrably slow.
 - Nii file loading time, currently starts to get slow in proportion to the size of the MRI scan area. Can the file be loaded on demand perhaps as the model is rendered?
