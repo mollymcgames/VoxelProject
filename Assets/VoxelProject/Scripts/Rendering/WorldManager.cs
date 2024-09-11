@@ -67,4 +67,6 @@ public class WorldSettings
     public bool grayScaleMode = true;
     public bool sparseVoxels = false;
     public Vector3Int intialCameraPosition = Vector3Int.zero;
+    public int voxelOmissionThreshold = 0;
+    public int previousVoxelOmissionThreshold = 0;
 }

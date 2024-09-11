@@ -71,8 +71,12 @@ public class VoxelClickHandler : MonoBehaviour
                     // Check if the hit object is this voxel
                     if (hitDown.collider.gameObject == gameObject)
                     {
-                        // Load the specified scene
-                        animator = GameObject.Find("Transition").GetComponent<Animator>();
+                        // Save previous voxel file and omission thresholds before switching scenes so that it can be reloaded later.
+                        WorldManager.Instance.voxelMeshConfigurationSettings.previousVoxelDataFileName = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
+                        WorldManager.Instance.worldSettings.previousVoxelOmissionThreshold = WorldManager.Instance.worldSettings.voxelOmissionThreshold;
+
+                    // Load the specified scene
+                    animator = GameObject.Find("Transition").GetComponent<Animator>();
                         animator.SetTrigger("TriggerTransition");
                         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
                         SceneManager.LoadScene(sceneToLoad);

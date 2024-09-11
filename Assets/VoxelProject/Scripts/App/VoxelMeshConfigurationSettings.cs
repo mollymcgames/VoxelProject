@@ -9,6 +9,7 @@ public class VoxelMeshConfigurationSettings
     [Header("Voxel Data Filename")]
     //Use streaming assets for the file path. e.g. "blue.txt" "voxtest.txt"
     public string voxelDataFileName = "";
+    public string previousVoxelDataFileName = "";
     public string voxelDataSegmentFileName = "";
 
     [Header("Voxel Segment Layers")]

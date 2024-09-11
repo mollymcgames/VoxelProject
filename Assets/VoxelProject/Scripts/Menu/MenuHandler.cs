@@ -53,6 +53,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = false;
         WorldManager.Instance.worldSettings.grayScaleMode = true;
+        WorldManager.Instance.worldSettings.voxelOmissionThreshold = voxelOmissionThreshold;
         LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -73,6 +74,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = true;
         WorldManager.Instance.worldSettings.grayScaleMode = true;
+        WorldManager.Instance.worldSettings.voxelOmissionThreshold = voxelOmissionThreshold;
         LoadAFile(false, voxelOmissionThreshold);
     }
     //Loads the spine file header
@@ -90,7 +92,8 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";        
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
         WorldManager.Instance.worldSettings.sparseVoxels = false;
-        WorldManager.Instance.worldSettings.grayScaleMode = true;        
+        WorldManager.Instance.worldSettings.grayScaleMode = true;
+        WorldManager.Instance.worldSettings.voxelOmissionThreshold = voxelOmissionThreshold;
         LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -109,6 +112,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = false;
         WorldManager.Instance.worldSettings.grayScaleMode = true;
+        WorldManager.Instance.worldSettings.voxelOmissionThreshold = voxelOmissionThreshold;
         LoadAFile(false, voxelOmissionThreshold);
     }
 
@@ -218,7 +222,11 @@ public class MenuHandler : MonoBehaviour
 
     public void BackToWorldButton()
     {
-        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "";
+        // Save previous voxel file before switching scenes so that it can be reloaded later.
+        WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = WorldManager.Instance.voxelMeshConfigurationSettings.previousVoxelDataFileName;
+        WorldManager.Instance.worldSettings.voxelOmissionThreshold = WorldManager.Instance.worldSettings.previousVoxelOmissionThreshold;
+
+        LoadAFile(false, WorldManager.Instance.worldSettings.voxelOmissionThreshold);
         SceneManager.LoadScene("World");
     }
 

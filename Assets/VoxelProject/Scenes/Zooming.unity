@@ -461,6 +461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   voxelMeshConfigurationSettings:
     voxelDataFileName: 
+    previousVoxelDataFileName: 
     voxelDataSegmentFileName: 
     voxelSegmentLayers: []
     voxelChunkSize: 16
@@ -486,6 +487,8 @@ MonoBehaviour:
     grayScaleMode: 1
     sparseVoxels: 0
     intialCameraPosition: {x: 0, y: 0, z: 0}
+    voxelOmissionThreshold: 0
+    previousVoxelOmissionThreshold: 0
   voxelsSelected: 0
   chunksOnDisplay: 0
   menuHandler: {fileID: 0}
@@ -879,7 +882,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1857960312}
         m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
-        m_MethodName: BackButton
+        m_MethodName: BackToWorldButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
