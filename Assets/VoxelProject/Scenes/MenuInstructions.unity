@@ -1075,20 +1075,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '- "Grey Scale Mode" button toggles between grey scale and artificial colour
-    mode.
-
-    - "Visibility slider" will hide darker voxels and provide an alternative
-    view. The Invert button toggles this so brigher voxels are hidden.
-
-    - "FoV
-    slider" zooms the camera in and out.
-
-    - "Auto Refresh" button toggles the
-    auto refresh mode. Note on larger voxel models this can affect performance.
-
-    -
-    "Sparse voxels" skips the voxel neighbour scanning check.'
+  m_text: "- \"Grey Scale Mode\" button toggles between grey scale and artificial
+    colour mode.\n- Visibility slider:\nChange the slider to hide darker voxels and
+    provide an alternative view. \n- Invert Button:\n Invert button toggles the visibility
+    slider so brigher voxels are hidden.\n- FoV slider:\n zooms the camera in and
+    out.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1151,7 +1142,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -49.150597, y: -41.22751, z: -705.93256, w: -189.70116}
+  m_margin: {x: -49.150597, y: -41.22751, z: -705.93256, w: -200.68405}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1630,9 +1621,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'With a body part loaded, use ADSW to move around the scene, using the
-    mouse and the E and SPACE keys to adjust your angle and height.  Auto refresh
-    of the model is disabled by default, press the 0 key to refesh the voxels once.
+  m_text: 'With a voxel model loaded, use ADSW and Shift to move around the scene,
+    using the mouse and the SPACE key to adjust your angle and height.
+
+    Press
+    the 0 key to refesh the voxel view.
 
 '
   m_isRightToLeft: 0
@@ -2158,7 +2151,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1406383492}
   - component: {fileID: 1406383494}
-  - component: {fileID: 1406383493}
+  - component: {fileID: 1406383495}
   m_Layer: 5
   m_Name: InScene
   m_TagString: Untagged
@@ -2182,10 +2175,18 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.7634, y: 208.1607}
+  m_AnchoredPosition: {x: 7, y: 208.1607}
   m_SizeDelta: {x: 759.9731, y: 201.8331}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1406383493
+--- !u!222 &1406383494
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406383491}
+  m_CullTransparentMesh: 1
+--- !u!114 &1406383495
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2194,7 +2195,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1406383491}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -2205,21 +2206,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: a9009683443cfe641bd831b40221b0e8, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
---- !u!222 &1406383494
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1406383491}
-  m_CullTransparentMesh: 1
+  m_Sprite: {fileID: 21300000, guid: 6e764bf5adcdf23429f503e5cff688f3, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1580554061
 GameObject:
   m_ObjectHideFlags: 0
