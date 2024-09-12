@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-// using Unity.Collections;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,9 +11,6 @@ public class VoxelMeshConfigurationSettings
     //Use streaming assets for the file path. e.g. "blue.txt" "voxtest.txt"
     public string voxelDataFileName = "";
     public string voxelDataSegmentFileName = "";
-
-    // [Header("Voxel Segment Layers")]
-    // public string[] voxelSegmentLayers;
        
     [Header("Voxel Configuration Attributes")]
     [Range(1, 64)]
@@ -25,16 +21,14 @@ public class VoxelMeshConfigurationSettings
     public Vector3Int standardVoxelSize = new Vector3Int(1, 1, 1);
     public Vector3Int voxelMeshCenter;
 
-    [TagOptions()]
+    [TagOptions()] //Links to the tag options attribute
     public string voxelMeshContainerTagName;
 
     public int domainOffsetX = 0;
     public int domainOffsetY = 0;
     public int domainOffsetZ = 0;
 
-    // public string sceneTargetName;
 
-    //[HideInInspector]
     public int visibilityThreshold = 1;
 
     [HideInInspector]

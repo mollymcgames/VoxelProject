@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomPropertyDrawer(typeof(TagOptionsAttribute))]
+
+//Shows the options in the tag dropdown - attatched to world manager via tag options attribute
 public class TagOptionsDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

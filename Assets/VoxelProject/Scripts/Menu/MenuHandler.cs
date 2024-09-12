@@ -10,11 +10,8 @@ public class MenuHandler : MonoBehaviour
 
     private Nifti.NET.Nifti niftiFile = null; // Used to store the header data for the nifti file.
 
-    public float transitionDelayTime = 1.0f;
     private Animator animator; //Animator for the transition effect (fade in/out)
 
-    [HideInInspector]
-    public string voxelFileFormat = "nii";
 
     public void LoadNextScene()
     {
@@ -53,7 +50,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = false;
         WorldManager.Instance.worldSettings.grayScaleMode = true;
-        LoadAFile(false, voxelOmissionThreshold);
+        LoadAFile(voxelOmissionThreshold);
     }
 
     //Loads the heart file header
@@ -73,7 +70,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = true;
         WorldManager.Instance.worldSettings.grayScaleMode = true;
-        LoadAFile(false, voxelOmissionThreshold);
+        LoadAFile(voxelOmissionThreshold);
     }
     //Loads the spine file header
     public string LoadSpineHeader()
@@ -91,10 +88,10 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = "rkT1-hot-voxels.csv";
         WorldManager.Instance.worldSettings.sparseVoxels = false;
         WorldManager.Instance.worldSettings.grayScaleMode = true;        
-        LoadAFile(false, voxelOmissionThreshold);
+        LoadAFile(voxelOmissionThreshold);
     }
 
-    public string LoadLiverHeader()
+    public string LoadLiverHeader() 
     {
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName = "rkT1.nii";
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
@@ -109,7 +106,7 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataSegmentFileName = null;
         WorldManager.Instance.worldSettings.sparseVoxels = false;
         WorldManager.Instance.worldSettings.grayScaleMode = true;
-        LoadAFile(false, voxelOmissionThreshold);
+        LoadAFile(voxelOmissionThreshold);
     }
 
     public string LoadBrainHeader()
@@ -119,7 +116,8 @@ public class MenuHandler : MonoBehaviour
         WorldManager.Instance.worldSettings.sparseVoxels = true;
         return LoadHeaderOnly();
     }
-
+    
+    //Useful for debugging purposes as converts byte array to string
     private string ByteToString(byte[] source)
     {
         try
@@ -151,7 +149,7 @@ public class MenuHandler : MonoBehaviour
         return retString;
     }
 
-    private void LoadAFile(bool hasSegmentLayers, int voxelOmissionThreshold)
+    private void LoadAFile(int voxelOmissionThreshold)
     {
         // Use Steaming Assets folder to load the file
         string niftiFilePath = Path.Combine(Application.streamingAssetsPath, WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
@@ -161,15 +159,13 @@ public class MenuHandler : MonoBehaviour
         // Note, currently the getHeader method returns either a Nifti.NET.Nifti or string[] as appropriate.
         Debug.Log("Last file loaded: " + fileLastLoaded);
         Debug.Log("Settings datafile name: " + WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName);
-        //if (!fileLastLoaded.Equals(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName))
-        //{
-            fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
-            Debug.Log("Loading file: " + fileLastLoaded);
-            loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold);
-            WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
-        //}
 
-        WorldManager.Instance.worldSettings.maxWidthX = loader.X;
+        fileLastLoaded = WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFileName;
+        Debug.Log("Loading file: " + fileLastLoaded);
+        loader = DataLoaderUtils.LoadDataFile(voxelOmissionThreshold); //Load the data file
+        WorldManager.Instance.voxelDictionary = loader.LoadSourceData(WorldManager.Instance.voxelMeshConfigurationSettings.voxelDataFilePath);
+        //Overall voxel model dimensions (including light and dark voxels)
+        WorldManager.Instance.worldSettings.maxWidthX = loader.X; 
         WorldManager.Instance.worldSettings.maxHeightY = loader.Y;
         WorldManager.Instance.worldSettings.maxDepthZ = loader.Z;
 

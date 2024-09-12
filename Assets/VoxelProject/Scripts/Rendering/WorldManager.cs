@@ -10,7 +10,6 @@ public class WorldManager : MonoBehaviour
     public VoxelMeshConfigurationSettings voxelMeshConfigurationSettings;
 
     public Material worldMaterial;
-    // public VoxelColor[] WorldColors;
     public WorldSettings worldSettings;
 
     // The Vector3Int based dictionary to store Voxels by vector location
@@ -27,8 +26,10 @@ public class WorldManager : MonoBehaviour
     public static WorldSettings WorldSettings;
     private static WorldManager _instance;
 
+    //In the Start we implement a Singleton pattern to ensure that only one instance of the WorldManager is created
     void Start()
     {
+        //Ensures only one instance of the WolrdManager is active
         if (_instance != null)
         {
             if (_instance != this)
@@ -46,7 +47,7 @@ public class WorldManager : MonoBehaviour
     public static WorldManager Instance
     {
         get
-        {
+        {   //If the instance is null, we find the first object of type WorldManager
             if (_instance == null)
                 _instance = FindFirstObjectByType<WorldManager>();
             return _instance;

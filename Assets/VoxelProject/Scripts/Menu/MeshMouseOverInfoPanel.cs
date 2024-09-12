@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 
+//Class that shows the information panel when the mouse is over a mesh
 public class MeshMouseOverInfoPanel : MonoBehaviour
 {
     // Reference to the panel GameObjects
